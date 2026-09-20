@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — Renewables Vault</title>
+<script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;margin:0;padding:0;}
+.nav-wrap{position:fixed;top:0;width:100%;z-index:50;background:rgba(7,23,12,.92);
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,0.10);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;height:68px;
+  display:flex;align-items:center;justify-content:space-between;}
+.nav-links{display:flex;gap:24px;}
+.nav-links a{font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;}
+.nav-links a:hover{color:#4ADE80;}
+.footer-wrap{background:#031107;border-top:1px solid rgba(74,222,128,0.08);padding:48px;}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;
+  align-items:flex-start;flex-wrap:wrap;gap:24px;}
+.footer-links a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:20px;}
+.btn-lime{{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:13px 28px;
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;
+  transition:opacity .15s;width:100%;display:block;text-align:center;}}
+.btn-lime:hover{{opacity:.88;}}
+.btn-lime:disabled{{opacity:.5;cursor:not-allowed;}}
+.form-field{{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
+  padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;transition:border .15s;
+  font-family:'Inter',sans-serif;}}
+.form-field:focus{{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,0.08);}}
+.form-label{{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#2C7C3B;display:block;margin-bottom:6px;}}
+.card{{background:#fff;border-radius:12px;border:1px solid #d1e8d8;padding:28px;}}
+.step-done{{background:#dcfce7;color:#166534;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;}}
+.step-next{{background:#dbeafe;color:#1d4ed8;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}}
+.step-grey{{background:#f3f4f6;color:#9ca3af;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}}
+@media(max-width:768px){{.nav-links{{display:none;}}.nav-inner{{padding:0 20px;}}
+  .footer-wrap{{padding:40px 20px;}}}}
+</style>
+<style>
+body{background:#0f1f14;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+.admin-card{background:#162a1d;border:1px solid rgba(74,222,128,0.20);border-radius:16px;
+  padding:48px;max-width:560px;width:100%;}
+.code-box{background:#0f1f14;border:1px solid rgba(74,222,128,0.30);border-radius:10px;
+  padding:24px;text-align:center;margin-top:24px;}
+.copy-btn{background:transparent;border:1px solid #4ADE80;color:#4ADE80;border-radius:6px;
+  padding:8px 20px;cursor:pointer;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;
+  margin-top:12px;}
+.copy-btn:hover{background:rgba(74,222,128,0.10);}
+</style>
+</head>
+<body>
+<div class="admin-card" id="loginCard">
+  <div style="text-align:center;margin-bottom:36px;">
+    <img src="logo.png" alt="Renewables Vault" style="height:44px;width:auto;margin-bottom:20px;">
+    <h1 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 8px;">Admin — KYC Approval</h1>
+    <p style="font-size:14px;color:#869486;margin:0;">Restricted access — RV team only</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <div>
+      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+                    color:#4ADE80;display:block;margin-bottom:6px;">Admin Password</label>
+      <input type="password" id="adminPass" placeholder="Enter admin password"
+        style="width:100%;background:#0f1f14;border:1px solid rgba(74,222,128,0.20);border-radius:6px;
+               padding:12px 14px;color:#d4e8d6;font-size:14px;outline:none;font-family:'Inter',sans-serif;"
+        onkeydown="if(event.key==='Enter')checkPass()">
+    </div>
+    <div id="loginErr" style="display:none;background:#fef2f2;border-radius:6px;padding:10px;
+         font-size:13px;color:#dc2626;text-align:center;"></div>
+    <button onclick="checkPass()"
+      style="background:#4ADE80;color:#0f1f14;font-weight:700;border:none;border-radius:6px;
+             padding:13px;cursor:pointer;font-size:15px;font-family:'Inter',sans-serif;">
+      Login
+    </button>
+  </div>
+</div>
+
+<div class="admin-card" id="approvalCard" style="display:none;">
+  <div style="text-align:center;margin-bottom:32px;">
+    <img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;margin-bottom:16px;">
+    <h1 style="font-size:20px;font-weight:700;color:#fff;margin:0 0 6px;">KYC Approval Tool</h1>
+    <p style="font-size:13px;color:#869486;margin:0;">
+      Enter a verified investor's email to generate their approval code.
+    </p>
+  </div>
+
+  <!-- How it works -->
+  <div style="background:#0f1f14;border-radius:10px;padding:20px;margin-bottom:28px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+                color:#4ADE80;margin-bottom:12px;">How to use this tool</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="background:#4ADE80;color:#0f1f14;width:20px;height:20px;border-radius:50%;
+             display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</div>
+        <div style="font-size:13px;color:#bccabb;">Receive investor registration email</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="background:#4ADE80;color:#0f1f14;width:20px;height:20px;border-radius:50%;
+             display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</div>
+        <div style="font-size:13px;color:#bccabb;">Email investor requesting KYC documents (passport + proof of investor status)</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="background:#4ADE80;color:#0f1f14;width:20px;height:20px;border-radius:50%;
+             display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</div>
+        <div style="font-size:13px;color:#bccabb;">Review documents → if approved, generate code below</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="background:#4ADE80;color:#0f1f14;width:20px;height:20px;border-radius:50%;
+             display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</div>
+        <div style="font-size:13px;color:#bccabb;">Email the code to the investor — they enter it on their dashboard to unlock deal access</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Code generator -->
+  <div>
+    <label style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+                  color:#4ADE80;display:block;margin-bottom:6px;">Investor Email Address</label>
+    <input type="email" id="invEmail" placeholder="investor@company.com"
+      style="width:100%;background:#0f1f14;border:1px solid rgba(74,222,128,0.20);border-radius:6px;
+             padding:12px 14px;color:#d4e8d6;font-size:14px;outline:none;font-family:'Inter',sans-serif;
+             margin-bottom:12px;"
+      onkeydown="if(event.key==='Enter')generateCode()">
+    <button onclick="generateCode()"
+      style="width:100%;background:#4ADE80;color:#0f1f14;font-weight:700;border:none;border-radius:6px;
+             padding:13px;cursor:pointer;font-size:15px;font-family:'Inter',sans-serif;">
+      Generate Approval Code
+    </button>
+  </div>
+
+  <div id="codeResult" style="display:none;" class="code-box">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+                color:#4ADE80;margin-bottom:12px;">Approval Code for <span id="codeEmail"></span></div>
+    <div id="codeValue"
+      style="font-size:36px;font-weight:700;color:#fff;letter-spacing:.15em;font-family:monospace;"></div>
+    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+    <div id="copyConfirm" style="font-size:12px;color:#4ADE80;margin-top:8px;display:none;">
+      ✓ Copied to clipboard
+    </div>
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(74,222,128,0.12);text-align:left;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+                  color:#4ADE80;margin-bottom:10px;">Email to send the investor:</div>
+      <div id="emailTemplate"
+        style="font-size:13px;color:#bccabb;line-height:1.7;white-space:pre-wrap;
+               background:#07170c;border-radius:8px;padding:16px;"></div>
+      <button class="copy-btn" onclick="copyEmail()" style="margin-top:10px;">Copy Email</button>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;text-align:center;">
+    <button onclick="document.getElementById('approvalCard').style.display='none';
+                     document.getElementById('loginCard').style.display='block';"
+      style="font-size:12px;color:#869486;background:none;border:none;cursor:pointer;">
+      Logout
+    </button>
+  </div>
+</div>
+
+<script>
+var ADMIN_PASS = 'RVault2026!';
+var SECRET = 'RV_RENEWABLES_VAULT_2026';
+var currentCode = '';
+var currentEmail = '';
+var currentEmailBody = '';
+
+function checkPass() {
+  var p = document.getElementById('adminPass').value;
+  if(p === ADMIN_PASS) {
+    document.getElementById('loginCard').style.display='none';
+    document.getElementById('approvalCard').style.display='block';
+  } else {
+    var e = document.getElementById('loginErr');
+    e.style.display='block';
+    e.textContent='Incorrect password. Please try again.';
+  }
+}
+
+function genCode(email) {
+  var s = email.toLowerCase().trim() + SECRET;
+  var h = 0;
+  for(var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; }
+  var code = Math.abs(h).toString(36).toUpperCase();
+  while(code.length<8){ code='0'+code; }
+  return code.substring(0,8);
+}
+
+function generateCode() {
+  var email = document.getElementById('invEmail').value.trim();
+  if(!email || !email.includes('@')) {
+    alert('Please enter a valid email address.'); return;
+  }
+  currentEmail = email;
+  currentCode  = genCode(email);
+
+  currentEmailBody = [
+    'Subject: Your Renewables Vault Investor Access — Approved',
+    '',
+    'Dear [Investor Name],',
+    '',
+    'Thank you for completing the KYC verification process for Renewables Vault.',
+    '',
+    'Your investor profile has been reviewed and approved. You can now access',
+    'our current deal opportunities by logging into your dashboard and entering',
+    'the approval code below.',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'YOUR APPROVAL CODE: ' + currentCode,
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'To unlock your access:',
+    '1. Go to renewablesvault.com and log in',
+    '2. On your dashboard, click "Enter Approval Code"',
+    '3. Enter the code above',
+    '4. Your deal access will be unlocked immediately',
+    '',
+    'We look forward to discussing current opportunities with you.',
+    '',
+    'Best regards,',
+    'Mina Ibrahim',
+    'Founder & CEO, Renewables Vault',
+    'contact@renewablesvault.com'
+  ].join('\n');
+
+  document.getElementById('codeEmail').textContent = email;
+  document.getElementById('codeValue').textContent  = currentCode;
+  document.getElementById('emailTemplate').textContent = currentEmailBody;
+  document.getElementById('codeResult').style.display = 'block';
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(currentCode).then(function(){
+    document.getElementById('copyConfirm').style.display='block';
+    setTimeout(function(){document.getElementById('copyConfirm').style.display='none';},2000);
+  });
+}
+
+function copyEmail() {
+  navigator.clipboard.writeText(currentEmailBody).then(function(){
+    alert('Email template copied to clipboard');
+  });
+}
+
+document.addEventListener('keydown',function(e){if(e.key==='Enter')checkPass();});
+</script>
+</body>
+</html>

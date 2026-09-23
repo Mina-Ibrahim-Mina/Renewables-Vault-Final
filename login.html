@@ -5,7 +5,6 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-
 <style>
 *{box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
@@ -20,23 +19,21 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;
   align-items:flex-start;flex-wrap:wrap;gap:24px;}
 .footer-links a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:20px;}
-.btn-lime{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:13px;
-  border:none;cursor:pointer;font-size:15px;width:100%;font-family:'Inter',sans-serif;}
-.btn-lime:hover{opacity:.88;}
+.btn{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:13px;
+  border:none;cursor:pointer;font-size:15px;width:100%;font-family:'Inter',sans-serif;
+  transition:opacity .15s;}
+.btn:hover{opacity:.88;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
 .field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
   padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;font-family:'Inter',sans-serif;}
 .field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,0.08);}
 .lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   color:#2C7C3B;display:block;margin-bottom:6px;}
 .err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
-  font-size:13px;color:#dc2626;display:none;margin-top:12px;}
-.ok{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:16px;
-  font-size:14px;color:#166534;display:none;margin-top:12px;line-height:1.6;}
-@media(max-width:768px){.nav-links{display:none;}.nav-inner{padding:0 20px;}
-  .footer-wrap{padding:40px 20px;}}
-</style>
-</head><body>
-<nav class="nav-wrap">
+  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
+@media(max-width:768px){.nav-links{display:none;}.nav-inner{padding:0 20px;}}
+</style></head>
+<body><nav class="nav-wrap">
   <div class="nav-inner">
     <a href="index.html"><img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;"></a>
     <div class="nav-links"><a href="about.html">About</a><a href="how-it-works.html">How It Works</a><a href="rare.html">Our Approach</a><a href="impact.html">Impact</a><a href="investors.html">For Investors</a><a href="developers.html">For Developers</a><a href="contact.html">Contact</a></div>
@@ -50,92 +47,108 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 <div style="padding-top:68px;">
 <section style="padding:80px 48px;min-height:80vh;background:#fff;">
 <div style="max-width:420px;margin:0 auto;">
-  <div style="text-align:center;margin-bottom:36px;">
-    <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-      color:#4ADE80;display:block;margin-bottom:10px;">Welcome Back</span>
-    <h1 style="font-size:28px;font-weight:700;color:#1A472A;margin:0 0 8px;">Log In</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0;">Access your Renewables Vault account.</p>
-  </div>
 
   <!-- NORMAL LOGIN -->
-  <div id="loginForm">
-    <div style="display:flex;flex-direction:column;gap:16px;">
-      <div><label class="lbl">Email Address</label>
-           <input class="field" id="l_email" type="email" placeholder="you@company.com"></div>
-      <div><label class="lbl">Password</label>
-           <input class="field" id="l_pass" type="password" placeholder="Your password"
-             onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <div class="err" id="l_err"></div>
-      <button class="btn-lime" onclick="doLogin()">Log In</button>
+  <div id="loginView">
+    <div style="text-align:center;margin-bottom:36px;">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+        color:#4ADE80;display:block;margin-bottom:10px;">Welcome Back</span>
+      <h1 style="font-size:28px;font-weight:700;color:#1A472A;margin:0 0 8px;">Log In</h1>
+      <p style="font-size:15px;color:#6b7280;margin:0;">Access your Renewables Vault account.</p>
     </div>
-    <div style="text-align:center;margin-top:20px;">
-      <a href="#" onclick="showForgot();return false;"
-         style="font-size:13px;color:#2C7C3B;text-decoration:none;font-weight:600;">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label class="lbl">Email Address</label>
+        <input class="field" id="l_email" type="email" placeholder="you@company.com">
+      </div>
+      <div>
+        <label class="lbl">Password</label>
+        <input class="field" id="l_pass" type="password" placeholder="Your password"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="err" id="l_err"></div>
+      <button class="btn" onclick="doLogin()">Log In</button>
+    </div>
+    <div style="text-align:center;margin-top:16px;display:flex;justify-content:center;gap:20px;">
+      <a href="#" onclick="showView('recoveryView');return false;"
+         style="font-size:13px;color:#2C7C3B;font-weight:600;text-decoration:none;">
         Forgot password?
       </a>
+      <span style="color:#d1e8d8;font-size:13px;">|</span>
+      <a href="register.html" style="font-size:13px;color:#6b7280;text-decoration:none;">
+        New user? Register →
+      </a>
     </div>
-    <p style="text-align:center;font-size:14px;color:#9ca3af;margin-top:12px;">
-      Don't have an account?
-      <a href="register.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Register →</a>
-    </p>
   </div>
 
-  <!-- RECOVERY CODE LOGIN -->
-  <div id="recoveryForm" style="display:none;">
-    <div style="background:#f0f5f2;border-radius:10px;padding:20px;margin-bottom:24px;
-                border-left:3px solid #2C7C3B;">
-      <div style="font-size:14px;font-weight:700;color:#1A472A;margin-bottom:6px;">
-        Recover your account
-      </div>
-      <p style="font-size:13px;color:#6b7280;margin:0;line-height:1.6;">
-        Enter your email below to request a recovery code from our team.
-        We will email you the code within 24 hours.
+  <!-- RECOVERY VIEW -->
+  <div id="recoveryView" style="display:none;">
+    <a href="#" onclick="showView('loginView');return false;"
+       style="font-size:13px;color:#6b7280;text-decoration:none;
+              display:flex;align-items:center;gap:6px;margin-bottom:28px;">
+      <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span> Back to login
+    </a>
+    <div style="text-align:center;margin-bottom:28px;">
+      <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Reset Your Password</h2>
+      <p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">
+        Enter your email and the recovery code from
+        <a href="forgot-password.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">
+          forgot-password page
+        </a>.
       </p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:16px;">
-      <div><label class="lbl">Email Address</label>
-           <input class="field" id="r_email" type="email" placeholder="you@company.com"></div>
 
-      <!-- Step 2: Enter recovery code (shown after request sent) -->
-      <div id="codeSection" style="display:none;">
+    <!-- Step 1: Get code first -->
+    <div style="background:#f0f5f2;border-radius:10px;padding:16px;margin-bottom:20px;
+                display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" style="color:#2C7C3B;font-size:22px;">info</span>
+      <div style="font-size:13px;color:#374151;line-height:1.5;">
+        Don't have a recovery code?
+        <a href="forgot-password.html" style="color:#2C7C3B;font-weight:700;text-decoration:none;">
+          Get it here →
+        </a>
+        <br>(Takes 10 seconds, no email needed)
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label class="lbl">Email Address</label>
+        <input class="field" id="r_email" type="email" placeholder="your@email.com">
+      </div>
+      <div>
         <label class="lbl">Recovery Code</label>
         <input class="field" id="r_code" type="text" placeholder="e.g. RC-AB12CD"
           style="letter-spacing:.1em;font-weight:700;text-transform:uppercase;">
-        <div style="font-size:12px;color:#9ca3af;margin-top:6px;">
-          Enter the recovery code Mina emailed you.
-        </div>
       </div>
-
       <div class="err" id="r_err"></div>
-      <div class="ok" id="r_ok"></div>
-
-      <button class="btn-lime" id="r_btn" onclick="requestRecovery()">
-        Request Recovery Code
-      </button>
-    </div>
-    <div style="text-align:center;margin-top:16px;">
-      <a href="#" onclick="showLogin();return false;"
-         style="font-size:13px;color:#6b7280;text-decoration:none;">
-        ← Back to login
-      </a>
+      <button class="btn" onclick="verifyCode()">Verify &amp; Continue</button>
     </div>
   </div>
 
-  <!-- NEW PASSWORD FORM (shown after recovery code verified) -->
-  <div id="newPassForm" style="display:none;">
-    <div style="background:#f0fdf4;border-radius:10px;padding:16px;margin-bottom:24px;
-                border-left:3px solid #4ADE80;">
-      <div style="font-size:14px;font-weight:700;color:#166534;">
-        ✓ Identity verified — set your new password
+  <!-- NEW PASSWORD VIEW -->
+  <div id="newPassView" style="display:none;">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="width:52px;height:52px;background:#dcfce7;border-radius:50%;
+           display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+        <span class="material-symbols-outlined" style="color:#16a34a;font-size:26px;">verified</span>
       </div>
+      <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">
+        Identity Verified
+      </h2>
+      <p style="font-size:14px;color:#6b7280;margin:0;">Set your new password below.</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:16px;">
-      <div><label class="lbl">New Password</label>
-           <input class="field" id="np_pass" type="password" placeholder="Create new password"></div>
-      <div><label class="lbl">Confirm New Password</label>
-           <input class="field" id="np_pass2" type="password" placeholder="Repeat new password"></div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label class="lbl">New Password</label>
+        <input class="field" id="np1" type="password" placeholder="At least 6 characters">
+      </div>
+      <div>
+        <label class="lbl">Confirm New Password</label>
+        <input class="field" id="np2" type="password" placeholder="Repeat new password">
+      </div>
       <div class="err" id="np_err"></div>
-      <button class="btn-lime" onclick="setNewPassword()">Save New Password</button>
+      <button class="btn" onclick="savePassword()">Save &amp; Log In</button>
     </div>
   </div>
 
@@ -143,10 +156,31 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 </section>
 
 <script>
-var W3F = '615b6c70-27cb-4e3d-a889-b332649aeef0';
-var SEC = 'RV_RENEWABLES_VAULT_2026';
-var REC = 'RV_RECOVERY_2026';
-var recoveredEmail = '';
+
+function genRecovery(email) {
+  var s = email.toLowerCase().trim() + 'RV_RECOVERY_2026';
+  var h = 0;
+  for (var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; }
+  var c = Math.abs(h).toString(36).toUpperCase();
+  while(c.length<6){c='0'+c;}
+  return 'RC-'+c.substring(0,6);
+}
+function genApproval(email) {
+  var s = email.toLowerCase().trim() + 'RV_RENEWABLES_VAULT_2026';
+  var h = 0;
+  for (var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; }
+  var c = Math.abs(h).toString(36).toUpperCase();
+  while(c.length<8){c='0'+c;}
+  return c.substring(0,8);
+}
+
+var verifiedEmail = '';
+
+function showView(id) {
+  ['loginView','recoveryView','newPassView'].forEach(function(v) {
+    document.getElementById(v).style.display = v===id ? 'block' : 'none';
+  });
+}
 
 // ── Normal login ──────────────────────────────────────────────────────────────
 function doLogin() {
@@ -155,110 +189,51 @@ function doLogin() {
   var err   = document.getElementById('l_err');
   err.style.display = 'none';
 
-  if (!email || !pass) {
+  if (!email||!pass) {
     err.style.display='block'; err.textContent='Please enter your email and password.'; return;
   }
   var users = JSON.parse(localStorage.getItem('rv_users')||'[]');
   var user  = users.find(function(u){return u.email===email && u.password===pass;});
+
   if (!user) {
     err.style.display='block';
-    err.textContent='Incorrect email or password. If you forgot your password, click "Forgot password?" below.';
+    err.innerHTML = 'Incorrect email or password. ' +
+      '<a href="#" onclick="showView('recoveryView');return false;" ' +
+      'style="color:#dc2626;font-weight:700;">Forgot password?</a>';
     return;
   }
   localStorage.setItem('rv_user', JSON.stringify(user));
-  window.location.href = user.type==='investor' ? 'dashboard-investor.html' : 'dashboard-developer.html';
+  window.location.href = user.type==='investor'
+    ? 'dashboard-investor.html' : 'dashboard-developer.html';
 }
 
-// ── Show/hide forms ───────────────────────────────────────────────────────────
-function showForgot() {
-  document.getElementById('loginForm').style.display    = 'none';
-  document.getElementById('recoveryForm').style.display = 'block';
-}
-function showLogin() {
-  document.getElementById('loginForm').style.display    = 'block';
-  document.getElementById('recoveryForm').style.display = 'none';
-  document.getElementById('newPassForm').style.display  = 'none';
-}
+// ── Verify recovery code ──────────────────────────────────────────────────────
+function verifyCode() {
+  var email = document.getElementById('r_email').value.trim();
+  var code  = document.getElementById('r_code').value.trim().toUpperCase();
+  var err   = document.getElementById('r_err');
+  err.style.display = 'none';
 
-// ── Generate recovery code (same logic as admin) ──────────────────────────────
-function genRecovery(email) {
-  var s = email.toLowerCase().trim() + REC;
-  var h = 0;
-  for (var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; }
-  var c = Math.abs(h).toString(36).toUpperCase();
-  while(c.length<6){c='0'+c;}
-  return 'RC-'+c.substring(0,6);
-}
-
-// ── Request recovery ──────────────────────────────────────────────────────────
-function requestRecovery() {
-  var email  = document.getElementById('r_email').value.trim();
-  var code   = document.getElementById('r_code').value.trim().toUpperCase();
-  var err    = document.getElementById('r_err');
-  var ok     = document.getElementById('r_ok');
-  var btn    = document.getElementById('r_btn');
-  var codeSection = document.getElementById('codeSection');
-  err.style.display = 'none'; ok.style.display = 'none';
-
-  if (!email) {
-    err.style.display='block'; err.textContent='Please enter your email address.'; return;
+  if (!email||!code) {
+    err.style.display='block'; err.textContent='Please enter both your email and recovery code.'; return;
   }
 
-  // If code section is visible, verify the code
-  if (codeSection.style.display !== 'none') {
-    var expected = genRecovery(email);
-    if (code === expected) {
-      // Verified — show new password form
-      recoveredEmail = email;
-      document.getElementById('recoveryForm').style.display = 'none';
-      document.getElementById('newPassForm').style.display  = 'block';
-    } else {
-      err.style.display='block';
-      err.textContent='Incorrect recovery code. Please check the email we sent and try again.';
-    }
+  var expected = genRecovery(email);
+  if (code !== expected) {
+    err.style.display='block';
+    err.innerHTML = 'Incorrect recovery code. ' +
+      '<a href="forgot-password.html" style="color:#dc2626;font-weight:700;">Get your code here →</a>';
     return;
   }
 
-  // Check user exists
-  var users = JSON.parse(localStorage.getItem('rv_users')||'[]');
-  var exists = users.find(function(u){return u.email===email;});
-
-  btn.disabled=true; btn.textContent='Sending...';
-
-  // Send notification to Mina
-  fetch('https://api.web3forms.com/submit', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({
-      access_key: W3F,
-      subject: 'Password Reset Request — ' + email,
-      name: email,
-      email: email,
-      message: [
-        'PASSWORD RESET REQUEST',
-        '======================',
-        'Email: ' + email,
-        'Account found: ' + (exists ? 'Yes' : 'No — user may need to re-register'),
-        'Date: ' + new Date().toLocaleString(),
-        '======================',
-        'ACTION: Go to renewablesvault.com/admin.html',
-        'Find this user and click "Recovery Code" to get their code.',
-        'Email it to them so they can reset their password.'
-      ].join('\n')
-    })
-  }).finally(function() {
-    btn.disabled=false; btn.textContent='Verify Recovery Code';
-    ok.style.display='block';
-    ok.innerHTML = '<strong>Request sent.</strong> Mina will email your recovery code within 24 hours.<br>' +
-      'Once you receive it, enter your email and recovery code above.';
-    codeSection.style.display = 'block';
-  });
+  verifiedEmail = email;
+  showView('newPassView');
 }
 
-// ── Set new password ──────────────────────────────────────────────────────────
-function setNewPassword() {
-  var p1  = document.getElementById('np_pass').value;
-  var p2  = document.getElementById('np_pass2').value;
+// ── Save new password ─────────────────────────────────────────────────────────
+function savePassword() {
+  var p1  = document.getElementById('np1').value;
+  var p2  = document.getElementById('np2').value;
   var err = document.getElementById('np_err');
   err.style.display = 'none';
 
@@ -270,29 +245,25 @@ function setNewPassword() {
   }
 
   // Update password in localStorage
-  var users = JSON.parse(localStorage.getItem('rv_users')||'[]');
-  var updated = false;
+  var users   = JSON.parse(localStorage.getItem('rv_users')||'[]');
+  var found   = false;
   for (var i=0;i<users.length;i++) {
-    if (users[i].email === recoveredEmail) {
-      users[i].password = p1; updated = true;
+    if (users[i].email === verifiedEmail) {
+      users[i].password = p1; found = true;
     }
   }
 
-  if (updated) {
+  if (found) {
     localStorage.setItem('rv_users', JSON.stringify(users));
-    // Log them in automatically
-    var user = users.find(function(u){return u.email===recoveredEmail;});
-    if (user) {
-      localStorage.setItem('rv_user', JSON.stringify(user));
-      window.location.href = user.type==='investor'
-        ? 'dashboard-investor.html' : 'dashboard-developer.html';
-    }
+    var user = users.find(function(u){return u.email===verifiedEmail;});
+    localStorage.setItem('rv_user', JSON.stringify(user));
+    window.location.href = user.type==='investor'
+      ? 'dashboard-investor.html' : 'dashboard-developer.html';
   } else {
-    // User not in this browser — they need to re-register
     err.style.display='block';
-    err.innerHTML = 'Account not found in this browser. Please ' +
-      '<a href="register.html" style="color:#dc2626;font-weight:600;">register again</a> ' +
-      'with the same email — your profile data is still saved on our side.';
+    err.innerHTML = 'Account not found in this browser. ' +
+      '<a href="register.html" style="color:#dc2626;font-weight:700;">Please register again →</a> ' +
+      '(your profile data is still saved on our side).';
   }
 }
 
@@ -310,5 +281,4 @@ document.addEventListener('keydown', function(e) {
       <a href="legal.html">Legal &amp; Disclaimer</a>
     </div>
   </div>
-</footer>
-</body></html>
+</footer></body></html>

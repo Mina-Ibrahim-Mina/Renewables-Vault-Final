@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Login — Renewables Vault</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 <style>
@@ -20,10 +21,8 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   align-items:flex-start;flex-wrap:wrap;gap:24px;}
 .footer-links a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:20px;}
 .btn{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:13px;
-  border:none;cursor:pointer;font-size:15px;width:100%;font-family:'Inter',sans-serif;
-  transition:opacity .15s;}
+  border:none;cursor:pointer;font-size:15px;width:100%;font-family:'Inter',sans-serif;transition:opacity .15s;}
 .btn:hover{opacity:.88;}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
 .field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
   padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;font-family:'Inter',sans-serif;}
 .field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,0.08);}
@@ -31,12 +30,24 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   color:#2C7C3B;display:block;margin-bottom:6px;}
 .err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
   font-size:13px;color:#dc2626;display:none;margin-top:10px;}
-@media(max-width:768px){.nav-links{display:none;}.nav-inner{padding:0 20px;}}
-</style></head>
-<body><nav class="nav-wrap">
+.view{display:none;}
+.view.active{display:block;}
+</style>
+</head>
+<body>
+
+<nav class="nav-wrap">
   <div class="nav-inner">
     <a href="index.html"><img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;"></a>
-    <div class="nav-links"><a href="about.html">About</a><a href="how-it-works.html">How It Works</a><a href="rare.html">Our Approach</a><a href="impact.html">Impact</a><a href="investors.html">For Investors</a><a href="developers.html">For Developers</a><a href="contact.html">Contact</a></div>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="rare.html">Our Approach</a>
+      <a href="impact.html">Impact</a>
+      <a href="investors.html">For Investors</a>
+      <a href="developers.html">For Developers</a>
+      <a href="contact.html">Contact</a>
+    </div>
     <div style="display:flex;gap:12px;">
       <a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a>
       <a href="register.html" style="font-size:12px;font-weight:700;border:1px solid #4ADE80;
@@ -44,12 +55,13 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
     </div>
   </div>
 </nav>
+
 <div style="padding-top:68px;">
 <section style="padding:80px 48px;min-height:80vh;background:#fff;">
 <div style="max-width:420px;margin:0 auto;">
 
-  <!-- NORMAL LOGIN -->
-  <div id="loginView">
+  <!-- VIEW 1: Normal Login -->
+  <div id="v1" class="view active">
     <div style="text-align:center;margin-bottom:36px;">
       <span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
         color:#4ADE80;display:block;margin-bottom:10px;">Welcome Back</span>
@@ -63,14 +75,13 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
       </div>
       <div>
         <label class="lbl">Password</label>
-        <input class="field" id="l_pass" type="password" placeholder="Your password"
-          onkeydown="if(event.key==='Enter')doLogin()">
+        <input class="field" id="l_pass" type="password" placeholder="Your password">
       </div>
       <div class="err" id="l_err"></div>
-      <button class="btn" onclick="doLogin()">Log In</button>
+      <button class="btn" id="loginBtn" onclick="doLogin()">Log In</button>
     </div>
     <div style="text-align:center;margin-top:16px;display:flex;justify-content:center;gap:20px;">
-      <a href="#" onclick="showView('recoveryView');return false;"
+      <a href="#" id="forgotLink"
          style="font-size:13px;color:#2C7C3B;font-weight:600;text-decoration:none;">
         Forgot password?
       </a>
@@ -81,33 +92,29 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
     </div>
   </div>
 
-  <!-- RECOVERY VIEW -->
-  <div id="recoveryView" style="display:none;">
-    <a href="#" onclick="showView('loginView');return false;"
+  <!-- VIEW 2: Recovery Code Entry -->
+  <div id="v2" class="view">
+    <a href="#" id="backToLogin"
        style="font-size:13px;color:#6b7280;text-decoration:none;
               display:flex;align-items:center;gap:6px;margin-bottom:28px;">
       <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span> Back to login
     </a>
-    <div style="text-align:center;margin-bottom:28px;">
+    <div style="text-align:center;margin-bottom:24px;">
       <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Reset Your Password</h2>
       <p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">
-        Enter your email and the recovery code from
-        <a href="forgot-password.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">
-          forgot-password page
-        </a>.
+        Enter your email and the recovery code you got from the
+        <a href="forgot-password.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">forgot password page</a>.
       </p>
     </div>
 
-    <!-- Step 1: Get code first -->
     <div style="background:#f0f5f2;border-radius:10px;padding:16px;margin-bottom:20px;
                 display:flex;align-items:center;gap:12px;">
       <span class="material-symbols-outlined" style="color:#2C7C3B;font-size:22px;">info</span>
       <div style="font-size:13px;color:#374151;line-height:1.5;">
-        Don't have a recovery code?
+        Don't have a recovery code yet?
         <a href="forgot-password.html" style="color:#2C7C3B;font-weight:700;text-decoration:none;">
-          Get it here →
+          Get it here in 10 seconds →
         </a>
-        <br>(Takes 10 seconds, no email needed)
       </div>
     </div>
 
@@ -126,16 +133,14 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
     </div>
   </div>
 
-  <!-- NEW PASSWORD VIEW -->
-  <div id="newPassView" style="display:none;">
+  <!-- VIEW 3: Set New Password -->
+  <div id="v3" class="view">
     <div style="text-align:center;margin-bottom:28px;">
       <div style="width:52px;height:52px;background:#dcfce7;border-radius:50%;
            display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
         <span class="material-symbols-outlined" style="color:#16a34a;font-size:26px;">verified</span>
       </div>
-      <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">
-        Identity Verified
-      </h2>
+      <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Identity Verified</h2>
       <p style="font-size:14px;color:#6b7280;margin:0;">Set your new password below.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;">
@@ -154,32 +159,59 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 
 </div>
 </section>
+</div>
+
+<footer class="footer-wrap">
+  <div class="footer-inner">
+    <div>
+      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;">
+      <p style="font-size:12px;color:#869486;margin:0;">© 2026 Renewables Vault. All rights reserved.</p>
+    </div>
+    <div class="footer-links" style="text-align:right;">
+      <a href="about.html">About</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="impact.html">Impact</a>
+      <a href="contact.html">Contact</a>
+      <a href="legal.html">Legal &amp; Disclaimer</a>
+    </div>
+  </div>
+</footer>
 
 <script>
-
-function genRecovery(email) {
-  var s = email.toLowerCase().trim() + 'RV_RECOVERY_2026';
-  var h = 0;
-  for (var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; }
-  var c = Math.abs(h).toString(36).toUpperCase();
-  while(c.length<6){c='0'+c;}
-  return 'RC-'+c.substring(0,6);
-}
-function genApproval(email) {
-  var s = email.toLowerCase().trim() + 'RV_RENEWABLES_VAULT_2026';
-  var h = 0;
-  for (var i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; }
-  var c = Math.abs(h).toString(36).toUpperCase();
-  while(c.length<8){c='0'+c;}
-  return c.substring(0,8);
-}
-
+// ── Constants ─────────────────────────────────────────────────────────────────
+var RECOVERY = 'RV_RECOVERY_2026';
+var SECRET   = 'RV_RENEWABLES_VAULT_2026';
 var verifiedEmail = '';
 
+// ── View switching ────────────────────────────────────────────────────────────
 function showView(id) {
-  ['loginView','recoveryView','newPassView'].forEach(function(v) {
-    document.getElementById(v).style.display = v===id ? 'block' : 'none';
-  });
+  document.getElementById('v1').className = 'view';
+  document.getElementById('v2').className = 'view';
+  document.getElementById('v3').className = 'view';
+  document.getElementById(id).className  = 'view active';
+}
+
+// ── Wire up links ─────────────────────────────────────────────────────────────
+document.getElementById('forgotLink').addEventListener('click', function(e) {
+  e.preventDefault();
+  showView('v2');
+});
+document.getElementById('backToLogin').addEventListener('click', function(e) {
+  e.preventDefault();
+  showView('v1');
+});
+document.getElementById('l_pass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ── Code generators ───────────────────────────────────────────────────────────
+function genRecovery(email) {
+  var s = email.toLowerCase().trim() + RECOVERY;
+  var h = 0;
+  for (var i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
+  var c = Math.abs(h).toString(36).toUpperCase();
+  while (c.length < 6) { c = '0' + c; }
+  return 'RC-' + c.substring(0, 6);
 }
 
 // ── Normal login ──────────────────────────────────────────────────────────────
@@ -189,22 +221,30 @@ function doLogin() {
   var err   = document.getElementById('l_err');
   err.style.display = 'none';
 
-  if (!email||!pass) {
-    err.style.display='block'; err.textContent='Please enter your email and password.'; return;
-  }
-  var users = JSON.parse(localStorage.getItem('rv_users')||'[]');
-  var user  = users.find(function(u){return u.email===email && u.password===pass;});
-
-  if (!user) {
-    err.style.display='block';
-    err.innerHTML = 'Incorrect email or password. ' +
-      '<a href="#" onclick="showView('recoveryView');return false;" ' +
-      'style="color:#dc2626;font-weight:700;">Forgot password?</a>';
+  if (!email || !pass) {
+    err.style.display = 'block';
+    err.textContent   = 'Please enter your email and password.';
     return;
   }
+
+  var users = JSON.parse(localStorage.getItem('rv_users') || '[]');
+  var user  = null;
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === email && users[i].password === pass) {
+      user = users[i]; break;
+    }
+  }
+
+  if (!user) {
+    err.style.display = 'block';
+    err.textContent   = 'Incorrect email or password. Use the "Forgot password?" link below to reset it.';
+    return;
+  }
+
   localStorage.setItem('rv_user', JSON.stringify(user));
-  window.location.href = user.type==='investor'
-    ? 'dashboard-investor.html' : 'dashboard-developer.html';
+  window.location.href = user.type === 'investor'
+    ? 'dashboard-investor.html'
+    : 'dashboard-developer.html';
 }
 
 // ── Verify recovery code ──────────────────────────────────────────────────────
@@ -214,20 +254,20 @@ function verifyCode() {
   var err   = document.getElementById('r_err');
   err.style.display = 'none';
 
-  if (!email||!code) {
-    err.style.display='block'; err.textContent='Please enter both your email and recovery code.'; return;
+  if (!email || !code) {
+    err.style.display = 'block';
+    err.textContent   = 'Please enter both your email and recovery code.';
+    return;
   }
 
-  var expected = genRecovery(email);
-  if (code !== expected) {
-    err.style.display='block';
-    err.innerHTML = 'Incorrect recovery code. ' +
-      '<a href="forgot-password.html" style="color:#dc2626;font-weight:700;">Get your code here →</a>';
+  if (code !== genRecovery(email)) {
+    err.style.display = 'block';
+    err.textContent   = 'Incorrect recovery code. Please get a new code from the forgot password page.';
     return;
   }
 
   verifiedEmail = email;
-  showView('newPassView');
+  showView('v3');
 }
 
 // ── Save new password ─────────────────────────────────────────────────────────
@@ -238,47 +278,40 @@ function savePassword() {
   err.style.display = 'none';
 
   if (!p1 || p1.length < 6) {
-    err.style.display='block'; err.textContent='Password must be at least 6 characters.'; return;
+    err.style.display = 'block';
+    err.textContent   = 'Password must be at least 6 characters.';
+    return;
   }
   if (p1 !== p2) {
-    err.style.display='block'; err.textContent='Passwords do not match.'; return;
+    err.style.display = 'block';
+    err.textContent   = 'Passwords do not match.';
+    return;
   }
 
-  // Update password in localStorage
-  var users   = JSON.parse(localStorage.getItem('rv_users')||'[]');
-  var found   = false;
-  for (var i=0;i<users.length;i++) {
+  var users = JSON.parse(localStorage.getItem('rv_users') || '[]');
+  var found = false;
+  for (var i = 0; i < users.length; i++) {
     if (users[i].email === verifiedEmail) {
-      users[i].password = p1; found = true;
+      users[i].password = p1;
+      found = true;
     }
   }
 
   if (found) {
     localStorage.setItem('rv_users', JSON.stringify(users));
-    var user = users.find(function(u){return u.email===verifiedEmail;});
+    var user = null;
+    for (var j = 0; j < users.length; j++) {
+      if (users[j].email === verifiedEmail) { user = users[j]; break; }
+    }
     localStorage.setItem('rv_user', JSON.stringify(user));
-    window.location.href = user.type==='investor'
-      ? 'dashboard-investor.html' : 'dashboard-developer.html';
+    window.location.href = user.type === 'investor'
+      ? 'dashboard-investor.html'
+      : 'dashboard-developer.html';
   } else {
-    err.style.display='block';
-    err.innerHTML = 'Account not found in this browser. ' +
-      '<a href="register.html" style="color:#dc2626;font-weight:700;">Please register again →</a> ' +
-      '(your profile data is still saved on our side).';
+    err.style.display = 'block';
+    err.textContent   = 'Account not found in this browser. Please register again — your profile data is still saved on our side.';
   }
 }
-
-document.addEventListener('keydown', function(e) {
-  if (e.key==='Enter') doLogin();
-});
-</script></div>
-<footer class="footer-wrap">
-  <div class="footer-inner">
-    <div><img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;">
-    <p style="font-size:12px;color:#869486;margin:0;">© 2026 Renewables Vault. All rights reserved.</p></div>
-    <div class="footer-links" style="text-align:right;">
-      <a href="about.html">About</a><a href="how-it-works.html">How It Works</a>
-      <a href="impact.html">Impact</a><a href="contact.html">Contact</a>
-      <a href="legal.html">Legal &amp; Disclaimer</a>
-    </div>
-  </div>
-</footer></body></html>
+</script>
+</body>
+</html>

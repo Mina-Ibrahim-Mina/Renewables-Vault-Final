@@ -1,187 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>For Investors — Renewables Vault</title>
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-X19FH9Z28D');
-</script>
-
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-
+<title>For Investors — Renewables Vault</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;overflow-x:hidden;margin:0;padding:0;background:#0f1f14;}
-.section-dark{background:#0f1f14;color:#d4e8d6;}
-.section-card{background:#111d15;color:#d4e8d6;}
-.section-hero{background:linear-gradient(150deg,#07170c 0%,#1A472A 100%);color:#fff;position:relative;overflow:hidden;}
-.section-hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;
-  background:radial-gradient(circle,rgba(74,222,128,0.10) 0%,transparent 70%);pointer-events:none;}
-.section-light{background:#f0f5f2;color:#1c2b1f;}
-.section-white{background:#ffffff;color:#1c2b1f;}
-.section-light h2,.section-white h2{color:#1A472A;}
-.section-light h3,.section-white h3{color:#1A472A;}
-.section-light p,.section-white p{color:#374151;}
-.card-dark{background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;}
-.card-light{background:#ffffff;border:1px solid #d1e8d8;border-radius:10px;}
-.card-dark.lime-top{border-top:2px solid #4ADE80;}
-.card-light.lime-top{border-top:2px solid #2C7C3B;}
-.btn-lime{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:12px 28px;
-  transition:opacity .15s;cursor:pointer;border:none;display:inline-block;text-decoration:none;}
-.btn-lime:hover{opacity:.88;}
-.btn-outline{background:transparent;border:1px solid #4ADE80;color:#4ADE80;font-weight:600;
-  border-radius:6px;padding:11px 28px;cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block;}
-.btn-outline:hover{background:rgba(74,222,128,0.08);}
-.btn-outline-green{background:transparent;border:1px solid #2C7C3B;color:#2C7C3B;font-weight:600;
-  border-radius:6px;padding:11px 28px;cursor:pointer;text-decoration:none;display:inline-block;}
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4ADE80;display:block;margin-bottom:12px;}
-.nav-wrap{position:fixed;top:0;width:100%;z-index:50;background:rgba(7,23,12,.92);
-  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,0.10);}
+body{font-family:'Inter',sans-serif;margin:0;padding:0;}
+/* NAV */
+.nav-wrap{position:fixed;top:0;width:100%;z-index:50;background:rgba(7,23,12,.93);
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,0.12);}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;height:68px;
-  display:flex;align-items:center;justify-content:space-between;}
-.nav-links{display:flex;gap:24px;}
-.nav-links a{font-size:12px;font-weight:600;letter-spacing:.04em;color:#bccabb;
-  text-decoration:none;transition:color .15s;}
+  display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.nav-links{display:flex;gap:22px;flex-shrink:0;}
+.nav-links a{font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;white-space:nowrap;}
 .nav-links a:hover,.nav-links a.active{color:#4ADE80;}
-.footer-wrap{background:#031107;border-top:1px solid rgba(74,222,128,0.08);padding:48px;}
+.nav-auth{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.nav-auth a{font-size:12px;font-weight:600;text-decoration:none;}
+.btn-nav{background:transparent;border:1px solid #4ADE80;color:#4ADE80;padding:7px 16px;
+  border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;
+  font-family:'Inter',sans-serif;transition:background .15s;}
+.btn-nav:hover{background:rgba(74,222,128,0.10);}
+/* FOOTER */
+.footer{background:#031107;border-top:1px solid rgba(74,222,128,0.08);padding:48px;}
 .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;
   align-items:flex-start;flex-wrap:wrap;gap:24px;}
-.footer-links a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:20px;}
-.footer-links a:hover{color:#4ADE80;}
-.form-field{width:100%;background:#0f1f14;border:1px solid rgba(74,222,128,0.20);
-  border-radius:6px;padding:12px 14px;color:#d4e8d6;font-size:14px;outline:none;transition:border .15s;}
-.form-field:focus{border-color:#4ADE80;}
-.form-field-light{width:100%;background:#fff;border:1px solid #c8ddd0;
-  border-radius:6px;padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;transition:border .15s;}
-.form-field-light:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,0.08);}
-.form-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+.footer a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:18px;}
+.footer a:hover{color:#4ADE80;}
+/* SECTIONS */
+.s-hero{background:linear-gradient(150deg,#07170c 0%,#1A472A 100%);color:#fff;
+  position:relative;overflow:hidden;}
+.s-hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(74,222,128,.10) 0%,transparent 70%);pointer-events:none;}
+.s-dark{background:#0f1f14;color:#d4e8d6;}
+.s-card{background:#111d15;color:#d4e8d6;}
+.s-light{background:#f0f5f2;color:#1c2b1f;}
+.s-white{background:#ffffff;color:#1c2b1f;}
+/* CARDS */
+.card{background:#fff;border-radius:12px;border:1px solid #d1e8d8;padding:28px;}
+.card-dark{background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;}
+.card-dark.lt{border-top:2px solid #4ADE80;}
+.card.lt{border-top:3px solid #2C7C3B;}
+/* BUTTONS */
+.btn-lime{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:12px 28px;
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;
+  text-decoration:none;display:inline-block;transition:opacity .15s;}
+.btn-lime:hover{opacity:.88;}
+.btn-lime.full{width:100%;display:block;text-align:center;padding:13px;}
+.btn-lime:disabled{opacity:.5;cursor:not-allowed;}
+.btn-out{background:transparent;border:1px solid #4ADE80;color:#4ADE80;font-weight:600;
+  border-radius:6px;padding:11px 28px;cursor:pointer;text-decoration:none;
+  display:inline-block;font-family:'Inter',sans-serif;transition:background .15s;}
+.btn-out:hover{background:rgba(74,222,128,.08);}
+.btn-green{background:#1A472A;color:#fff;border:none;border-radius:6px;padding:11px 20px;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-green:hover{background:#2C7C3B;}
+.btn-red{background:#fff;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;
+  padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+/* FORMS */
+.field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
+  padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;
+  font-family:'Inter',sans-serif;transition:border .15s;}
+.field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,.08);}
+.field-dark{width:100%;background:#0f1f14;border:1px solid rgba(74,222,128,.20);
+  border-radius:6px;padding:12px 14px;color:#d4e8d6;font-size:14px;outline:none;
+  font-family:'Inter',sans-serif;}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   color:#2C7C3B;display:block;margin-bottom:6px;}
-.divider-light{border:none;border-top:1px solid #d1e8d8;margin:0;}
-.prose-rv{max-width:720px;margin:0 auto;}
-.prose-rv p{font-size:17px;line-height:1.8;color:#374151;margin-bottom:28px;}
-.prose-rv p:first-of-type{font-size:19px;color:#1c2b1f;}
-.closing-statement{font-size:clamp(20px,3vw,32px);font-weight:700;color:#fff;
-  text-align:center;letter-spacing:-.01em;line-height:1.4;}
-.legal-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:#2C7C3B;margin-bottom:10px;display:block;}
-.energy-tile{background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;
-  padding:20px 12px;display:flex;flex-direction:column;align-items:center;
-  gap:10px;cursor:pointer;transition:all .15s;text-align:center;border:none;width:100%;}
-.energy-tile:hover{border-color:rgba(74,222,128,0.4);background:#1e3527;}
-.energy-tile.selected{border-top:2px solid #4ADE80;background:#1e3527;}
-.energy-tile span.icon{color:#bccabb;font-size:32px;}
-.energy-tile.selected span.icon{color:#4ADE80;}
-.energy-tile label{font-size:13px;font-weight:600;color:#d4e8d6;cursor:pointer;}
-.country-pill{display:inline-flex;align-items:center;padding:6px 16px;border-radius:20px;
-  font-size:12px;font-weight:700;letter-spacing:.05em;}
-.country-active{background:#4ADE80;color:#0f1f14;}
-.country-soon{background:rgba(74,222,128,0.08);color:#bccabb;border:1px solid rgba(74,222,128,0.15);}
-.inv-tile{background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;
-  padding:24px;position:relative;overflow:hidden;}
-.inv-tile-lock{position:absolute;inset:0;background:rgba(15,31,20,.70);
-  backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;border-radius:10px;}
-.sdg-tile{background:#fff;border-radius:10px;padding:24px;border-left:3px solid #2C7C3B;}
-.sdg-num{font-size:28px;font-weight:700;color:#1A472A;}
-.sdg-name{font-size:15px;font-weight:600;color:#1c2b1f;margin:4px 0 8px;}
-.sdg-desc{font-size:13px;color:#6b7280;line-height:1.5;}
-.impact-para{max-width:680px;margin:0 auto;font-size:17px;line-height:1.85;color:#374151;}
-/* Auth pages */
-.auth-card{background:#fff;border-radius:16px;box-shadow:0 4px 40px rgba(0,0,0,0.08);
-  padding:48px;max-width:520px;margin:0 auto;}
-.auth-card-dark{background:#162a1d;border:1px solid rgba(74,222,128,0.15);border-radius:16px;
-  padding:48px;max-width:520px;margin:0 auto;}
-.type-card{background:#fff;border:2px solid #d1e8d8;border-radius:12px;padding:32px;
-  cursor:pointer;transition:all .2s;text-decoration:none;display:block;}
-.type-card:hover{border-color:#2C7C3B;box-shadow:0 4px 20px rgba(26,71,42,0.10);}
-.type-card.selected{border-color:#2C7C3B;background:#f0f5f2;}
-/* Dashboard */
-.dash-stat{background:#fff;border-radius:10px;padding:24px;border-top:3px solid #2C7C3B;}
+.lbl-dark{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#4ADE80;display:block;margin-bottom:6px;}
+.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
+  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
+/* MISC */
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:#4ADE80;display:block;margin-bottom:12px;}
+.eyebrow-g{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:#2C7C3B;display:block;margin-bottom:12px;}
+.prose{max-width:720px;margin:0 auto;}
+.prose p{font-size:17px;line-height:1.8;color:#374151;margin-bottom:28px;}
+.prose p:first-of-type{font-size:19px;color:#1c2b1f;}
 .badge-pending{background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;
-  padding:4px 12px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;}
-.badge-active{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;
-  padding:4px 12px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;}
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.badge-approved{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.badge-rejected{background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.view{display:none;}
+.view.on{display:block;}
+/* ENERGY TILES */
+.etile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;
+  padding:20px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  cursor:pointer;transition:all .15s;text-align:center;width:100%;border:none;}
+.etile:hover,.etile.sel{background:#1e3527;border:1px solid #4ADE80;}
+.etile.sel{border-top:2px solid #4ADE80;}
+.etile i{color:#bccabb;font-size:26px;}
+.etile.sel i{color:#4ADE80;}
+.etile span{font-size:12px;font-weight:600;color:#d4e8d6;}
+/* INVESTOR TILES */
+.inv-tile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;
+  padding:20px;position:relative;overflow:hidden;text-align:center;}
+.inv-lock{position:absolute;inset:0;background:rgba(15,31,20,.75);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;border-radius:10px;}
+/* SDG */
+.sdg{background:#fff;border-radius:10px;padding:24px;border-left:3px solid #2C7C3B;}
+.sdg-n{font-size:26px;font-weight:700;color:#1A472A;}
+.sdg-t{font-size:14px;font-weight:600;color:#1c2b1f;margin:4px 0 8px;}
+.sdg-d{font-size:13px;color:#6b7280;line-height:1.5;}
+/* ADMIN */
+.tbl-row{border-bottom:1px solid #f0f5f2;padding:16px 20px;}
+.tbl-row:hover{background:#f8faf8;}
+.tbl-row:last-child{border-bottom:none;}
+.stat{background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;text-align:center;}
+.stat-n{font-size:32px;font-weight:700;color:#1A472A;line-height:1;}
+.stat-l{font-size:11px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
+/* STEP */
+.step-done{background:#dcfce7;color:#166534;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;}
+.step-next{background:#dbeafe;color:#1d4ed8;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.step-grey{background:#f3f4f6;color:#9ca3af;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
 @media(max-width:768px){
   .nav-links{display:none;}
   .nav-inner{padding:0 20px;}
-  .footer-wrap{padding:40px 20px;}
+  .footer{padding:40px 20px;}
 }
 </style>
-
 </head>
-<body>
-
+<body style="background:#0f1f14;">
 <nav class="nav-wrap">
   <div class="nav-inner">
     <a href="index.html" style="flex-shrink:0;">
       <img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;">
     </a>
-    <div class="nav-links"><a href="about.html">About</a>
-<a href="how-it-works.html">How It Works</a>
-<a href="rare.html">Our Approach</a>
-<a href="impact.html">Impact</a>
-<a href="investors.html" class="active">For Investors</a>
-<a href="developers.html">For Developers</a>
-<a href="contact.html">Contact</a>
-</div>
-    <div id="navAuth" style="display:flex;align-items:center;gap:12px;"></div>
+    <div class="nav-links"><a href="about.html">About</a><a href="how-it-works.html">How It Works</a><a href="rare.html">Our Approach</a><a href="impact.html">Impact</a><a href="investors.html" class=active>For Investors</a><a href="developers.html">For Developers</a><a href="contact.html">Contact</a></div>
+    <div class="nav-auth" id="navAuth"></div>
   </div>
 </nav>
-
 <script>
-// RV Auth utility
-var RVAuth = {
-  getUser: function() {
-    try { return JSON.parse(localStorage.getItem('rv_user')); } catch(e) { return null; }
-  },
-  setUser: function(data) {
-    localStorage.setItem('rv_user', JSON.stringify(data));
-  },
-  logout: function() {
-    localStorage.removeItem('rv_user');
-    window.location.href = 'index.html';
-  },
-  requireAuth: function(type) {
-    var u = this.getUser();
-    if (!u) { window.location.href = 'login.html'; return null; }
-    if (type && u.type !== type) {
-      window.location.href = u.type === 'investor' ? 'dashboard-investor.html' : 'dashboard-developer.html';
-      return null;
-    }
-    return u;
-  }
+var RVAuth={
+  get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
+  set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
+  out:function(){localStorage.removeItem('rv_user');window.location.href='index.html';}
 };
-</script>
-<script>
+function genCode(e){
+  var s=e.toLowerCase().trim()+'RV_RENEWABLES_VAULT_2026',h=0;
+  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
+  var c=Math.abs(h).toString(36).toUpperCase();
+  while(c.length<8)c='0'+c;
+  return c.substring(0,8);
+}
+function genRC(e){
+  var s=e.toLowerCase().trim()+'RV_RECOVERY_2026',h=0;
+  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
+  var c=Math.abs(h).toString(36).toUpperCase();
+  while(c.length<6)c='0'+c;
+  return 'RC-'+c.substring(0,6);
+}
 (function(){
-  var u = RVAuth.getUser();
-  var el = document.getElementById('navAuth');
-  if(!el) return;
+  var u=RVAuth.get();
+  var el=document.getElementById('navAuth');
+  if(!el)return;
   if(u){
-    var dash = u.type==='investor' ? 'dashboard-investor.html' : 'dashboard-developer.html';
-    el.innerHTML = '<span style="font-size:12px;color:#bccabb;">Hi, '+u.firstName+'</span>'+
-      '<a href="'+dash+'" style="font-size:12px;font-weight:700;border:1px solid #4ADE80;color:#4ADE80;'+
-      'padding:8px 18px;border-radius:6px;text-decoration:none;">My Account</a>'+
-      '<a href="#" onclick="RVAuth.logout();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';
+    var d=u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
+    el.innerHTML='<span style="font-size:12px;color:#bccabb;margin-right:4px;">Hi, '+u.firstName+'</span>'+
+      '<a href="'+d+'" class="btn-nav">My Account</a>'+
+      '<a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';
   }else{
-    el.innerHTML = '<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;'+
-      'text-decoration:none;">Login</a>'+
-      '<a href="register.html" style="font-size:12px;font-weight:700;letter-spacing:.04em;'+
-      'background:transparent;border:1px solid #4ADE80;color:#4ADE80;padding:8px 18px;'+
-      'border-radius:6px;text-decoration:none;">Register Now</a>';
+    el.innerHTML='<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a>'+
+      '<a href="register.html" class="btn-nav">Register Now</a>';
   }
 })();
 </script>
 <div style="padding-top:68px;">
-
-<section class="section-hero" style="padding:80px 48px 60px;text-align:center;">
+<section class="s-hero" style="padding:80px 48px 60px;text-align:center;">
   <div style="max-width:1200px;margin:0 auto;">
     <span class="eyebrow">Investors</span>
     <h1 style="font-size:clamp(24px,4vw,44px);font-weight:700;color:#fff;margin:0;letter-spacing:-.02em;max-width:700px;margin:0 auto;">
@@ -189,62 +184,59 @@ var RVAuth = {
     </h1>
   </div>
 </section>
-<section class="section-white" style="padding:72px 48px;">
-  <div class="prose-rv" style="text-align:center;">
+<section class="s-white" style="padding:72px 48px;">
+  <div class="prose" style="text-align:center;">
     <p>Renewables Vault provides investors access to asset-backed exposure to contracted renewable energy revenue — transactions structured around specific, operating clean energy assets, not projected cash flows.</p>
-    <p>Each transaction is underwritten through RARE™, Renewables Vault's proprietary risk methodology, and structured for a defined term. Current origination is focused in Egypt, across multiple clean energy asset classes including biofuel, solar, and circular economy infrastructure.</p>
+    <p>Each transaction is underwritten through RARE&#8482;, Renewables Vault's proprietary risk methodology, and structured for a defined term. Current origination is focused in Egypt, across multiple clean energy asset classes including biofuel, solar, and circular economy infrastructure.</p>
     <p>Transaction-level detail — including structure, terms, and underlying off-takers — is shared only with registered investors Renewables Vault has engaged with directly.</p>
   </div>
-  <div style="text-align:center;margin-top:20px;">
+  <div style="text-align:center;margin-top:24px;">
     <a href="register.html" class="btn-lime" style="font-size:16px;padding:14px 36px;">Register as Investor</a>
-    <span style="display:block;margin-top:12px;font-size:13px;color:#6b7280;">Already registered? <a href="login.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Log in here →</a></span>
+    <div style="margin-top:12px;font-size:13px;color:#6b7280;">
+      Already registered? <a href="login.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Log in here &#8594;</a>
+    </div>
   </div>
 </section>
-<section class="section-card" style="padding:72px 48px;border-top:1px solid rgba(74,222,128,0.10);">
+<section class="s-card" style="padding:72px 48px;border-top:1px solid rgba(74,222,128,.10);">
   <div style="max-width:900px;margin:0 auto;">
     <span class="eyebrow" style="text-align:center;display:block;margin-bottom:12px;">Current Pipeline</span>
-    <h2 style="font-size:24px;font-weight:700;color:#fff;text-align:center;margin:0 0 12px;">Active asset classes — Egypt</h2>
+    <h2 style="font-size:22px;font-weight:700;color:#fff;text-align:center;margin:0 0 12px;">Active asset classes — Egypt</h2>
     <p style="font-size:14px;color:#869486;text-align:center;margin:0 0 36px;">Register and complete your profile to unlock full transaction detail.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
       <div class="inv-tile">
-        <span class="material-symbols-outlined" style="color:#4ADE80;font-size:32px;margin-bottom:12px;display:block;">eco</span>
-        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;">Biofuel &amp; Biodiesel</div>
+        <i class="fa-solid fa-leaf" style="color:#4ADE80;font-size:28px;margin-bottom:12px;display:block;"></i>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">Biofuel &amp; Biodiesel</div>
         <div style="font-size:12px;color:#4ADE80;margin-bottom:4px;">Egypt</div>
-        <div style="font-size:12px;color:#bccabb;">Short to medium term</div>
-        <div class="inv-tile-lock"><span class="material-symbols-outlined" style="color:#4ADE80;font-size:28px;">lock</span></div>
+        <div style="font-size:12px;color:#869486;">Short to medium term</div>
+        <div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:20px;"></i></div>
       </div>
       <div class="inv-tile">
-        <span class="material-symbols-outlined" style="color:#4ADE80;font-size:32px;margin-bottom:12px;display:block;">solar_power</span>
-        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;">Solar (C&amp;I)</div>
+        <i class="fa-solid fa-sun" style="color:#4ADE80;font-size:28px;margin-bottom:12px;display:block;"></i>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">Solar (C&amp;I)</div>
         <div style="font-size:12px;color:#4ADE80;margin-bottom:4px;">Egypt</div>
-        <div style="font-size:12px;color:#bccabb;">Medium term</div>
-        <div class="inv-tile-lock"><span class="material-symbols-outlined" style="color:#4ADE80;font-size:28px;">lock</span></div>
+        <div style="font-size:12px;color:#869486;">Medium term</div>
+        <div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:20px;"></i></div>
       </div>
       <div class="inv-tile">
-        <span class="material-symbols-outlined" style="color:#4ADE80;font-size:32px;margin-bottom:12px;display:block;">recycling</span>
-        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;">Circular Economy</div>
+        <i class="fa-solid fa-recycle" style="color:#4ADE80;font-size:28px;margin-bottom:12px;display:block;"></i>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">Circular Economy</div>
         <div style="font-size:12px;color:#4ADE80;margin-bottom:4px;">Egypt</div>
-        <div style="font-size:12px;color:#bccabb;">Various tenors</div>
-        <div class="inv-tile-lock"><span class="material-symbols-outlined" style="color:#4ADE80;font-size:28px;">lock</span></div>
+        <div style="font-size:12px;color:#869486;">Various tenors</div>
+        <div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:20px;"></i></div>
       </div>
     </div>
   </div>
-</section>
-</div>
-
-<footer class="footer-wrap">
+</section></div>
+<footer class="footer">
   <div class="footer-inner">
     <div>
-      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;">
+      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;display:block;">
       <p style="font-size:12px;color:#869486;margin:0;">© 2026 Renewables Vault. All rights reserved.</p>
     </div>
-    <div class="footer-links" style="text-align:right;">
-      <a href="about.html">About</a>
-      <a href="how-it-works.html">How It Works</a>
-      <a href="impact.html">Impact</a>
-      <a href="insights.html">Insights</a>
-      <a href="contact.html">Contact</a>
-      <a href="legal.html">Legal &amp; Disclaimer</a>
+    <div style="text-align:right;">
+      <a href="about.html">About</a><a href="how-it-works.html">How It Works</a>
+      <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
+      <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
       <div style="margin-top:10px;">
         <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
         <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
@@ -252,5 +244,4 @@ var RVAuth = {
     </div>
   </div>
 </footer>
-</body>
-</html>
+</body></html>

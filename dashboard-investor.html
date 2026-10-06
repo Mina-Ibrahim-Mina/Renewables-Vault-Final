@@ -1,352 +1,315 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Investor Dashboard — Renewables Vault</title>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-X19FH9Z28D");</script><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"><style>
+<style>
 *,*::before,*::after{box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;margin:0;padding:0;}
-.nav-wrap{position:fixed;top:0;width:100%;z-index:50;background:rgba(7,23,12,.92);
-  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,0.10);}
+/* NAV */
+.nav-wrap{position:fixed;top:0;width:100%;z-index:50;background:rgba(7,23,12,.93);
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,0.12);}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;height:68px;
-  display:flex;align-items:center;justify-content:space-between;}
-.nav-links{display:flex;gap:24px;}
-.nav-links a{font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;}
-.nav-links a:hover{color:#4ADE80;}
-.footer-wrap{background:#031107;border-top:1px solid rgba(74,222,128,0.08);padding:48px;}
+  display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.nav-links{display:flex;gap:22px;flex-shrink:0;}
+.nav-links a{font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;white-space:nowrap;}
+.nav-links a:hover,.nav-links a.active{color:#4ADE80;}
+.nav-auth{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.nav-auth a{font-size:12px;font-weight:600;text-decoration:none;}
+.btn-nav{background:transparent;border:1px solid #4ADE80;color:#4ADE80;padding:7px 16px;
+  border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;
+  font-family:'Inter',sans-serif;transition:background .15s;}
+.btn-nav:hover{background:rgba(74,222,128,0.10);}
+/* FOOTER */
+.footer{background:#031107;border-top:1px solid rgba(74,222,128,0.08);padding:48px;}
 .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;
   align-items:flex-start;flex-wrap:wrap;gap:24px;}
-.footer-links a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:20px;}
-.btn-lime{{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:13px 28px;
+.footer a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:18px;}
+.footer a:hover{color:#4ADE80;}
+/* SECTIONS */
+.s-hero{background:linear-gradient(150deg,#07170c 0%,#1A472A 100%);color:#fff;
+  position:relative;overflow:hidden;}
+.s-hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(74,222,128,.10) 0%,transparent 70%);pointer-events:none;}
+.s-dark{background:#0f1f14;color:#d4e8d6;}
+.s-card{background:#111d15;color:#d4e8d6;}
+.s-light{background:#f0f5f2;color:#1c2b1f;}
+.s-white{background:#ffffff;color:#1c2b1f;}
+/* CARDS */
+.card{background:#fff;border-radius:12px;border:1px solid #d1e8d8;padding:28px;}
+.card-dark{background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;}
+.card-dark.lt{border-top:2px solid #4ADE80;}
+.card.lt{border-top:3px solid #2C7C3B;}
+/* BUTTONS */
+.btn-lime{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:12px 28px;
   border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;
-  transition:opacity .15s;width:100%;display:block;text-align:center;}}
-.btn-lime:hover{{opacity:.88;}}
-.btn-lime:disabled{{opacity:.5;cursor:not-allowed;}}
-.form-field{{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
-  padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;transition:border .15s;
-  font-family:'Inter',sans-serif;}}
-.form-field:focus{{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,0.08);}}
-.form-label{{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:#2C7C3B;display:block;margin-bottom:6px;}}
-.card{{background:#fff;border-radius:12px;border:1px solid #d1e8d8;padding:28px;}}
-.step-done{{background:#dcfce7;color:#166534;width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;}}
-.step-next{{background:#dbeafe;color:#1d4ed8;width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}}
-.step-grey{{background:#f3f4f6;color:#9ca3af;width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}}
-@media(max-width:768px){{.nav-links{{display:none;}}.nav-inner{{padding:0 20px;}}
-  .footer-wrap{{padding:40px 20px;}}}}
+  text-decoration:none;display:inline-block;transition:opacity .15s;}
+.btn-lime:hover{opacity:.88;}
+.btn-lime.full{width:100%;display:block;text-align:center;padding:13px;}
+.btn-lime:disabled{opacity:.5;cursor:not-allowed;}
+.btn-out{background:transparent;border:1px solid #4ADE80;color:#4ADE80;font-weight:600;
+  border-radius:6px;padding:11px 28px;cursor:pointer;text-decoration:none;
+  display:inline-block;font-family:'Inter',sans-serif;transition:background .15s;}
+.btn-out:hover{background:rgba(74,222,128,.08);}
+.btn-green{background:#1A472A;color:#fff;border:none;border-radius:6px;padding:11px 20px;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-green:hover{background:#2C7C3B;}
+.btn-red{background:#fff;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;
+  padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+/* FORMS */
+.field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
+  padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;
+  font-family:'Inter',sans-serif;transition:border .15s;}
+.field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,.08);}
+.field-dark{width:100%;background:#0f1f14;border:1px solid rgba(74,222,128,.20);
+  border-radius:6px;padding:12px 14px;color:#d4e8d6;font-size:14px;outline:none;
+  font-family:'Inter',sans-serif;}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#2C7C3B;display:block;margin-bottom:6px;}
+.lbl-dark{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#4ADE80;display:block;margin-bottom:6px;}
+.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
+  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
+/* MISC */
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:#4ADE80;display:block;margin-bottom:12px;}
+.eyebrow-g{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:#2C7C3B;display:block;margin-bottom:12px;}
+.prose{max-width:720px;margin:0 auto;}
+.prose p{font-size:17px;line-height:1.8;color:#374151;margin-bottom:28px;}
+.prose p:first-of-type{font-size:19px;color:#1c2b1f;}
+.badge-pending{background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.badge-approved{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.badge-rejected{background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.view{display:none;}
+.view.on{display:block;}
+/* ENERGY TILES */
+.etile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;
+  padding:20px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  cursor:pointer;transition:all .15s;text-align:center;width:100%;border:none;}
+.etile:hover,.etile.sel{background:#1e3527;border:1px solid #4ADE80;}
+.etile.sel{border-top:2px solid #4ADE80;}
+.etile i{color:#bccabb;font-size:26px;}
+.etile.sel i{color:#4ADE80;}
+.etile span{font-size:12px;font-weight:600;color:#d4e8d6;}
+/* INVESTOR TILES */
+.inv-tile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;
+  padding:20px;position:relative;overflow:hidden;text-align:center;}
+.inv-lock{position:absolute;inset:0;background:rgba(15,31,20,.75);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;border-radius:10px;}
+/* SDG */
+.sdg{background:#fff;border-radius:10px;padding:24px;border-left:3px solid #2C7C3B;}
+.sdg-n{font-size:26px;font-weight:700;color:#1A472A;}
+.sdg-t{font-size:14px;font-weight:600;color:#1c2b1f;margin:4px 0 8px;}
+.sdg-d{font-size:13px;color:#6b7280;line-height:1.5;}
+/* ADMIN */
+.tbl-row{border-bottom:1px solid #f0f5f2;padding:16px 20px;}
+.tbl-row:hover{background:#f8faf8;}
+.tbl-row:last-child{border-bottom:none;}
+.stat{background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;text-align:center;}
+.stat-n{font-size:32px;font-weight:700;color:#1A472A;line-height:1;}
+.stat-l{font-size:11px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
+/* STEP */
+.step-done{background:#dcfce7;color:#166534;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;}
+.step-next{background:#dbeafe;color:#1d4ed8;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.step-grey{background:#f3f4f6;color:#9ca3af;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-inner{padding:0 20px;}
+  .footer{padding:40px 20px;}
+}
 </style>
 </head>
-<body style="background:#f0f5f2;">
+<body style="background:#0f1f14;">
 <nav class="nav-wrap">
   <div class="nav-inner">
-    <a href="index.html"><img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;"></a>
+    <a href="index.html" style="flex-shrink:0;">
+      <img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;">
+    </a>
     <div class="nav-links"><a href="about.html">About</a><a href="how-it-works.html">How It Works</a><a href="rare.html">Our Approach</a><a href="impact.html">Impact</a><a href="investors.html">For Investors</a><a href="developers.html">For Developers</a><a href="contact.html">Contact</a></div>
-    <div id="navAuth" style="display:flex;align-items:center;gap:12px;"></div>
+    <div class="nav-auth" id="navAuth"></div>
   </div>
 </nav>
 <script>
 var RVAuth={
-  getUser:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
-  setUser:function(d){localStorage.setItem('rv_user',JSON.stringify(d));},
-  logout:function(){localStorage.removeItem('rv_user');window.location.href='index.html';},
-  // Generate approval code from email (deterministic)
-  genCode:function(email){
-    var s=email.toLowerCase().trim()+'RV_RENEWABLES_VAULT_2026';
-    var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-    var code=Math.abs(h).toString(36).toUpperCase();
-    while(code.length<8){code='0'+code;}
-    return code.substring(0,8);
-  },
-  // Verify code entered by investor
-  verifyCode:function(email,code){
-    return code.toUpperCase().trim()===this.genCode(email);
-  }
+  get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
+  set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
+  out:function(){localStorage.removeItem('rv_user');window.location.href='index.html';}
 };
-</script>
-<script>
+function genCode(e){
+  var s=e.toLowerCase().trim()+'RV_RENEWABLES_VAULT_2026',h=0;
+  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
+  var c=Math.abs(h).toString(36).toUpperCase();
+  while(c.length<8)c='0'+c;
+  return c.substring(0,8);
+}
+function genRC(e){
+  var s=e.toLowerCase().trim()+'RV_RECOVERY_2026',h=0;
+  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
+  var c=Math.abs(h).toString(36).toUpperCase();
+  while(c.length<6)c='0'+c;
+  return 'RC-'+c.substring(0,6);
+}
 (function(){
-  var u=RVAuth.getUser();var el=document.getElementById('navAuth');if(!el)return;
-  if(u){var d=u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
-    el.innerHTML='<span style="font-size:12px;color:#bccabb;">Hi, '+u.firstName+'</span>'+
-    '<a href="'+d+'" style="font-size:12px;font-weight:700;border:1px solid #4ADE80;color:#4ADE80;padding:8px 18px;border-radius:6px;text-decoration:none;">My Account</a>'+
-    '<a href="#" onclick="RVAuth.logout();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';
+  var u=RVAuth.get();
+  var el=document.getElementById('navAuth');
+  if(!el)return;
+  if(u){
+    var d=u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
+    el.innerHTML='<span style="font-size:12px;color:#bccabb;margin-right:4px;">Hi, '+u.firstName+'</span>'+
+      '<a href="'+d+'" class="btn-nav">My Account</a>'+
+      '<a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';
   }else{
     el.innerHTML='<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a>'+
-    '<a href="register.html" style="font-size:12px;font-weight:700;border:1px solid #4ADE80;color:#4ADE80;padding:8px 18px;border-radius:6px;text-decoration:none;">Register Now</a>';
+      '<a href="register.html" class="btn-nav">Register Now</a>';
   }
 })();
 </script>
 <div style="padding-top:68px;">
-<div style="padding:48px;min-height:80vh;" id="dashWrap">
-  <div style="text-align:center;padding:40px;color:#6b7280;">Loading...</div>
+<div style="padding:48px;min-height:80vh;background:#f0f5f2;" id="dw">
+  <div id="loadState" style="max-width:480px;margin:80px auto;text-align:center;">
+    <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+      <i class="fa-solid fa-user" style="color:#2C7C3B;font-size:28px;"></i>
+    </div>
+    <h2 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Loading your dashboard...</h2>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.6;">If this persists, your session may have expired. Please log in again.</p>
+    <a href="login.html" class="btn-lime" style="display:inline-block;padding:12px 28px;text-decoration:none;border-radius:6px;">Go to Login</a>
+    <div style="margin-top:12px;"><a href="register.html" style="font-size:13px;color:#6b7280;text-decoration:none;">New user? Register &#8594;</a></div>
+  </div>
+  <div id="dashContent" style="max-width:1000px;margin:0 auto;display:none;"></div>
 </div>
 <script>
-(function(){
-  var u = RVAuth.getUser();
-  if(!u){ window.location.href='login.html'; return; }
-  if(u.type!=='investor'){ window.location.href='dashboard-developer.html'; return; }
-  renderDash(u);
-})();
-
-function renderDash(u) {
-  var wrap = document.getElementById('dashWrap');
-  var html = '<div style="max-width:1000px;margin:0 auto;">';
-
-  // Header
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">';
-  html += '<div>';
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#2C7C3B;margin-bottom:6px;">INVESTOR DASHBOARD</div>';
-  html += '<h1 style="font-size:26px;font-weight:700;color:#1A472A;margin:0;">Welcome, '+u.firstName+' '+u.lastName+'.</h1>';
-  html += '<p style="font-size:14px;color:#6b7280;margin:6px 0 0;">'+u.org+' &middot; '+u.investorType+'</p>';
-  html += '</div>';
-  html += '<button onclick="RVAuth.logout()" style="font-size:13px;color:#6b7280;background:#fff;border:1px solid #d1e8d8;border-radius:6px;padding:8px 18px;cursor:pointer;">Logout</button>';
-  html += '</div>';
-
-  if(u.approved) {
-    renderApproved(html, u, wrap);
-  } else {
-    renderPending(html, u, wrap);
+window.addEventListener('DOMContentLoaded',function(){
+  try{
+    var u=RVAuth.get();
+    if(!u){return;}
+    if(u.type!=='investor'){window.location.href='dashboard-developer.html';return;}
+    document.getElementById('loadState').style.display='none';
+    document.getElementById('dashContent').style.display='block';
+    if(u.approved)renderApproved(u);else renderPending(u);
+  }catch(e){
+    document.getElementById('loadState').innerHTML='<div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;"><i class="fa-solid fa-triangle-exclamation" style="color:#dc2626;font-size:24px;"></i></div><h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 10px;">Something went wrong</h2><p style="font-size:14px;color:#6b7280;margin:0 0 20px;">Please log in again to access your dashboard.</p><a href="login.html" class="btn-lime" style="display:inline-block;padding:12px 28px;text-decoration:none;border-radius:6px;">Go to Login</a>';
   }
+});
+function renderPending(u){
+  var c=document.getElementById('dashContent');
+  var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">';
+  h+='<div><div class="eyebrow-g" style="margin-bottom:6px;">INVESTOR DASHBOARD</div>';
+  h+='<h1 style="font-size:26px;font-weight:700;color:#1A472A;margin:0;">Welcome, '+u.firstName+' '+u.lastName+'.</h1>';
+  h+='<p style="font-size:14px;color:#6b7280;margin:6px 0 0;">'+u.org+' &middot; '+u.investorType+'</p></div>';
+  h+='<button onclick="RVAuth.out()" style="font-size:13px;color:#6b7280;background:#fff;border:1px solid #d1e8d8;border-radius:6px;padding:8px 18px;cursor:pointer;">Logout</button></div>';
+  h+='<div style="background:#fff;border-radius:12px;border:1px solid #d1e8d8;border-left:4px solid #f59e0b;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">';
+  h+='<i class="fa-solid fa-clock" style="color:#f59e0b;font-size:26px;flex-shrink:0;"></i>';
+  h+='<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">Profile under review</div>';
+  h+='<p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">Our team will review your profile and reach out within <strong>48 hours</strong> to schedule an introductory call and begin KYC verification.</p></div></div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">';
+  h+='<div class="card" style="border-top:3px solid #2C7C3B;"><div class="eyebrow-g" style="margin-bottom:16px;">Your Profile</div><div style="display:flex;flex-direction:column;gap:12px;">';
+  var pf=[['Full Name',u.firstName+' '+u.lastName,true],['Email',u.email,false],['Organisation',u.org||'—',true],['Investor Type',u.investorType||'—',true],['Ticket Size',u.ticket||'Not specified',false],['Registered',u.registered||'Today',false]];
+  for(var i=0;i<pf.length;i++){h+='<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+pf[i][0]+'</div>';h+='<div style="font-size:14px;'+(pf[i][2]?'font-weight:600;color:#1c2b1f;':'color:#6b7280;')+'">'+pf[i][1]+'</div></div>';}
+  h+='<div><span class="badge-pending">Under Review</span></div></div></div>';
+  h+='<div class="card"><div class="eyebrow-g" style="margin-bottom:16px;">Your Journey</div>';
+  var steps=[['Registration complete','Submitted on '+(u.registered||'today'),'done'],['Profile review','Team reviews and contacts you within 48 hours.','next'],['KYC verification','Submit passport and proof of investor status.','grey'],['Receive approval code','We email your code once KYC is complete.','grey'],['Unlock deal access','Enter your code below to view live opportunities.','grey']];
+  for(var s=0;s<steps.length;s++){var st=steps[s],isL=(s===steps.length-1);var bl=isL?'none':(st[2]==='done'?'2px solid #4ADE80':'2px dashed #d1e8d8');var nc=st[2]==='done'?'step-done':(st[2]==='next'?'step-next':'step-grey');var ni=st[2]==='done'?'<i class="fa-solid fa-check" style="font-size:12px;"></i>':(s+1).toString();var tc=(st[2]==='grey'?'#9ca3af':'#1A472A');h+='<div style="margin-left:15px;padding-left:16px;padding-bottom:'+(isL?'0':'18px')+';position:relative;border-left:'+bl+';">';h+='<div class="'+nc+'" style="position:absolute;left:-16px;top:0;">'+ni+'</div>';h+='<div style="font-size:14px;font-weight:700;color:'+tc+';">'+st[0]+'</div>';h+='<div style="font-size:13px;color:'+(st[2]==='grey'?'#9ca3af':'#6b7280')+';margin-top:3px;">'+st[1]+'</div></div>';}
+  h+='</div></div>';
+  h+='<div class="card" style="margin-bottom:24px;"><div class="eyebrow-g" style="margin-bottom:10px;">Have an approval code?</div>';
+  h+='<p style="font-size:14px;color:#6b7280;margin:0 0 14px;line-height:1.6;">If our team has sent you an approval code after KYC, enter it below to unlock deal access immediately.</p>';
+  h+='<div style="display:flex;gap:12px;flex-wrap:wrap;">';
+  h+='<input id="codeIn" type="text" maxlength="8" placeholder="8-digit code" style="flex:1;min-width:160px;background:#fff;border:1px solid #c8ddd0;border-radius:6px;padding:12px 14px;color:#1c2b1f;font-size:16px;outline:none;letter-spacing:.12em;font-weight:700;font-family:monospace;text-transform:uppercase;">';
+  h+='<button onclick="applyCode()" class="btn-green" style="padding:12px 24px;white-space:nowrap;">Unlock Access</button></div>';
+  h+='<div id="codeErr" style="display:none;font-size:13px;color:#dc2626;margin-top:8px;"></div></div>';
+  h+='<div style="background:#0f1f14;border-radius:12px;padding:28px;">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div><div class="eyebrow" style="margin-bottom:4px;">Current Opportunities</div><div style="font-size:13px;color:#869486;">Complete KYC and enter your approval code to unlock.</div></div>';
+  h+='<i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">';
+  var tiles=[['fa-leaf','Biofuel & Biodiesel','Short to medium term'],['fa-sun','Solar (C&I)','Medium term'],['fa-recycle','Circular Economy','Various tenors']];
+  for(var t=0;t<tiles.length;t++){h+='<div class="inv-tile"><i class="fa-solid '+tiles[t][0]+'" style="color:#4ADE80;font-size:26px;margin-bottom:10px;display:block;"></i>';h+='<div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">'+tiles[t][1]+'</div>';h+='<div style="font-size:11px;color:#4ADE80;margin-bottom:3px;">Egypt</div>';h+='<div style="font-size:11px;color:#869486;">'+tiles[t][2]+'</div>';h+='<div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:20px;"></i></div></div>';}
+  h+='</div></div>';
+  h+='<div class="card" style="margin-top:24px;text-align:center;padding:20px;"><p style="font-size:14px;color:#6b7280;margin:0 0 8px;">Questions while you wait?</p><a href="contact.html" style="color:#2C7C3B;font-size:14px;font-weight:700;text-decoration:none;">Contact Renewables Vault &#8594;</a></div>';
+  c.innerHTML=h;
 }
-
-function renderPending(html, u, wrap) {
-  // Status banner — pending
-  html += '<div style="background:#fff;border-radius:12px;border:1px solid #d1e8d8;border-left:4px solid #f59e0b;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">';
-  html += '<span class="material-symbols-outlined" style="color:#f59e0b;font-size:28px;">schedule</span>';
-  html += '<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">Profile under review</div>';
-  html += '<p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">Our team will review your profile and reach out within <strong>48 hours</strong> to schedule a call and begin the KYC process.</p></div>';
-  html += '</div>';
-
-  // Grid: profile + journey
-  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">';
-
-  // Profile card
-  html += '<div class="card" style="border-top:3px solid #2C7C3B;">';
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2C7C3B;margin-bottom:20px;">Your Profile</div>';
-  html += '<div style="display:flex;flex-direction:column;gap:12px;">';
-  var pf=[['Full Name',u.firstName+' '+u.lastName,true],['Email',u.email,false],
-          ['Organisation',u.org,true],['Investor Type',u.investorType,true],
-          ['Ticket Size',u.ticket||'Not specified',false],['Registered',u.registered,false]];
-  for(var i=0;i<pf.length;i++){
-    html+='<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+pf[i][0]+'</div>';
-    html+='<div style="font-size:14px;'+(pf[i][2]?'font-weight:600;color:#1c2b1f;':'color:#6b7280;')+'">'+pf[i][1]+'</div></div>';
-  }
-  html += '<div><span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;">Under Review</span></div>';
-  html += '</div></div>';
-
-  // Journey steps
-  html += '<div class="card">';
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2C7C3B;margin-bottom:20px;">Your Journey to Deal Access</div>';
-  var steps=[
-    ['Registration complete','Profile submitted on '+u.registered,'done'],
-    ['Profile review & intro call','Our team reviews and reaches out within 48 hours.','next'],
-    ['KYC verification','Submit passport and proof of professional investor status.','grey'],
-    ['Receive approval code','We email your personal code once KYC is complete.','grey'],
-    ['Unlock deal access','Enter your code on this dashboard to view live opportunities.','grey']
-  ];
-  for(var s=0;s<steps.length;s++){
-    var st=steps[s];
-    var border=st[2]==='done'?'2px solid #4ADE80':'2px dashed #d1e8d8';
-    var isLast=(s===steps.length-1);
-    var nc=st[2]==='done'?'step-done':(st[2]==='next'?'step-next':'step-grey');
-    var ni=st[2]==='done'?'<span class="material-symbols-outlined" style="font-size:16px;">check</span>':(s+1).toString();
-    html+='<div style="display:flex;gap:0;'+(isLast?'':'border-left:'+border+';')+
-          'margin-left:16px;padding-left:16px;padding-bottom:'+(isLast?'0':'20px')+';position:relative;">';
-    html+='<div class="'+nc+'" style="position:absolute;left:-17px;top:0;">'+ni+'</div>';
-    html+='<div><div style="font-size:14px;font-weight:700;color:'+(st[2]==='grey'?'#9ca3af':'#1A472A')+';">'+st[0]+'</div>';
-    html+='<div style="font-size:13px;color:'+(st[2]==='grey'?'#9ca3af':'#6b7280')+';margin-top:3px;">'+st[1]+'</div></div>';
-    html+='</div>';
-  }
-  html += '</div>';
-  html += '</div>'; // end grid
-
-  // Approval code entry
-  html += '<div class="card" style="margin-bottom:24px;">';
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2C7C3B;margin-bottom:12px;">Have an approval code?</div>';
-  html += '<p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.6;">If our team has sent you an approval code after completing KYC verification, enter it below to unlock deal access immediately.</p>';
-  html += '<div style="display:flex;gap:12px;">';
-  html += '<input id="codeInput" type="text" maxlength="8" placeholder="Enter 8-digit code"';
-  html += ' style="flex:1;background:#fff;border:1px solid #c8ddd0;border-radius:6px;padding:12px 14px;color:#1c2b1f;font-size:16px;outline:none;letter-spacing:.12em;font-weight:700;font-family:monospace;text-transform:uppercase;">';
-  html += '<button onclick="applyCode()" style="background:#1A472A;color:#fff;font-weight:700;border:none;border-radius:6px;padding:12px 24px;cursor:pointer;font-size:14px;font-family:Inter,sans-serif;white-space:nowrap;">Unlock Access</button>';
-  html += '</div>';
-  html += '<div id="codeErr" style="display:none;font-size:13px;color:#dc2626;margin-top:10px;"></div>';
-  html += '</div>';
-
-  // Locked tiles
-  html += '<div style="background:#0f1f14;border-radius:12px;padding:28px;">';
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">';
-  html += '<div><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4ADE80;margin-bottom:4px;">Current Opportunities</div>';
-  html += '<div style="font-size:13px;color:#869486;">Complete KYC and enter your approval code to unlock.</div></div>';
-  html += '<span class="material-symbols-outlined" style="color:#4ADE80;font-size:20px;">lock</span>';
-  html += '</div>';
-  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">';
-  var tiles=[['eco','Biofuel & Biodiesel','Short to medium term'],
-             ['solar_power','Solar (C&I)','Medium term'],
-             ['recycling','Circular Economy','Various tenors']];
-  for(var t=0;t<tiles.length;t++){
-    html+='<div style="background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;padding:20px;position:relative;overflow:hidden;text-align:center;">';
-    html+='<span class="material-symbols-outlined" style="color:#4ADE80;font-size:28px;margin-bottom:10px;display:block;">'+tiles[t][0]+'</span>';
-    html+='<div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">'+tiles[t][1]+'</div>';
-    html+='<div style="font-size:11px;color:#4ADE80;margin-bottom:3px;">Egypt</div>';
-    html+='<div style="font-size:11px;color:#869486;">'+tiles[t][2]+'</div>';
-    html+='<div style="position:absolute;inset:0;background:rgba(15,31,20,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;border-radius:10px;">';
-    html+='<span class="material-symbols-outlined" style="color:#4ADE80;font-size:22px;">lock</span></div>';
-    html+='</div>';
-  }
-  html += '</div></div>';
-
-  html += '</div>';
-  wrap.innerHTML = html;
-}
-
-function applyCode() {
-  var u = RVAuth.getUser();
-  var code = document.getElementById('codeInput').value.trim().toUpperCase();
-  var err  = document.getElementById('codeErr');
-  if(!code){ err.style.display='block'; err.textContent='Please enter your approval code.'; return; }
-  if(RVAuth.verifyCode(u.email, code)){
-    u.approved = true;
-    RVAuth.setUser(u);
-    var users = JSON.parse(localStorage.getItem('rv_users')||'[]');
-    for(var i=0;i<users.length;i++){ if(users[i].email===u.email){ users[i].approved=true; } }
+function applyCode(){
+  var u=RVAuth.get();
+  var code=document.getElementById('codeIn').value.trim().toUpperCase();
+  var err=document.getElementById('codeErr');
+  if(!code){err.style.display='block';err.textContent='Please enter your approval code.';return;}
+  if(code===genCode(u.email)){
+    u.approved=true;RVAuth.set(u);
+    var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
+    for(var i=0;i<users.length;i++){if(users[i].email===u.email)users[i].approved=true;}
     localStorage.setItem('rv_users',JSON.stringify(users));
-    // Reload with approved view
-    renderDash(u);
-  } else {
-    err.style.display='block';
-    err.textContent='Incorrect code. Please check and try again, or contact contact@renewablesvault.com.';
-  }
+    renderApproved(u);
+  }else{err.style.display='block';err.textContent='Incorrect code. Contact contact@renewablesvault.com for help.';}
 }
-
-function renderApproved(html, u, wrap) {
-  // Approved status banner
-  html += '<div style="background:#fff;border-radius:12px;border:1px solid #d1e8d8;border-left:4px solid #4ADE80;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">';
-  html += '<span class="material-symbols-outlined" style="color:#16a34a;font-size:28px;">verified</span>';
-  html += '<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">KYC Approved — Deal Access Unlocked</div>';
-  html += '<p style="font-size:14px;color:#6b7280;margin:0;">You now have full access to current Renewables Vault opportunities. Click on any deal to express interest.</p></div>';
-  html += '</div>';
-
-  // Profile summary
-  html += '<div class="card" style="border-top:3px solid #2C7C3B;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">';
-  html += '<div><div style="font-size:13px;font-weight:700;color:#1A472A;">'+u.firstName+' '+u.lastName+'</div>';
-  html += '<div style="font-size:13px;color:#6b7280;">'+u.org+' &middot; '+u.investorType+'</div></div>';
-  html += '<span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;">KYC Approved</span>';
-  html += '</div>';
-
-  // Unlocked opportunity cards
-  html += '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2C7C3B;margin-bottom:16px;">Current Opportunities — Egypt</div>';
-
-  var deals = [
-    {icon:'eco',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'3 years',
-      offtaker:'Investment Grade — Pharmaceutical Sector',
-      structure:'Revenue Purchase Agreement (RPA)',
-      security:'Registered asset pledge + escrow-controlled receivables assignment',
-      returns:'10–12% p.a. (indicative)',status:'Active — Structuring Stage',id:'DEL-001'},
-    {icon:'eco',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'2 years',
-      offtaker:'Investment Grade — Cement Industry',
-      structure:'Revenue Purchase Agreement (RPA)',
-      security:'Registered asset pledge + escrow-controlled receivables assignment',
-      returns:'9–11% p.a. (indicative)',status:'Active — Structuring Stage',id:'DEL-002'},
-    {icon:'eco',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'2 years',
-      offtaker:'Investment Grade — Industrial Sector',
-      structure:'Revenue Purchase Agreement (RPA)',
-      security:'Registered asset pledge + escrow-controlled receivables assignment',
-      returns:'8–10% p.a. (indicative)',status:'Active — Due Diligence Stage',id:'DEL-003'}
+function renderApproved(u){
+  var c=document.getElementById('dashContent');
+  var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">';
+  h+='<div><div class="eyebrow-g" style="margin-bottom:6px;">INVESTOR DASHBOARD</div>';
+  h+='<h1 style="font-size:26px;font-weight:700;color:#1A472A;margin:0;">Welcome, '+u.firstName+' '+u.lastName+'.</h1>';
+  h+='<p style="font-size:14px;color:#6b7280;margin:6px 0 0;">'+u.org+' &middot; '+u.investorType+'</p></div>';
+  h+='<button onclick="RVAuth.out()" style="font-size:13px;color:#6b7280;background:#fff;border:1px solid #d1e8d8;border-radius:6px;padding:8px 18px;cursor:pointer;">Logout</button></div>';
+  h+='<div style="background:#fff;border-radius:12px;border:1px solid #d1e8d8;border-left:4px solid #4ADE80;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">';
+  h+='<i class="fa-solid fa-shield-halved" style="color:#16a34a;font-size:26px;flex-shrink:0;"></i>';
+  h+='<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">KYC Approved — Deal Access Unlocked</div>';
+  h+='<p style="font-size:14px;color:#6b7280;margin:0;">You have full access to current Renewables Vault opportunities. Click Express Interest on any deal to proceed.</p></div></div>';
+  h+='<div class="eyebrow-g" style="margin-bottom:16px;">Current Opportunities — Egypt</div>';
+  var deals=[
+    {id:'DEL-001',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'3 years',offtaker:'Investment Grade — Pharmaceutical Sector',structure:'Revenue Purchase Agreement (RPA)',security:'Registered asset pledge + escrow-controlled receivables assignment',returns:'10–12% p.a. (indicative)',status:'Active — Structuring Stage'},
+    {id:'DEL-002',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'2 years',offtaker:'Investment Grade — Cement Industry',structure:'Revenue Purchase Agreement (RPA)',security:'Registered asset pledge + escrow-controlled receivables assignment',returns:'9–11% p.a. (indicative)',status:'Active — Structuring Stage'},
+    {id:'DEL-003',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'2 years',offtaker:'Investment Grade — Industrial Sector',structure:'Revenue Purchase Agreement (RPA)',security:'Registered asset pledge + escrow-controlled receivables assignment',returns:'8–10% p.a. (indicative)',status:'Active — Due Diligence Stage'}
   ];
-
-  for(var d=0;d<deals.length;d++){
-    var dl = deals[d];
-    html += '<div class="card" style="margin-bottom:16px;">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px;">';
-    html += '<div style="display:flex;align-items:center;gap:12px;">';
-    html += '<div style="width:44px;height:44px;background:#f0f5f2;border-radius:10px;display:flex;align-items:center;justify-content:center;">';
-    html += '<span class="material-symbols-outlined" style="color:#2C7C3B;font-size:24px;">'+dl.icon+'</span></div>';
-    html += '<div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+dl.type+'</div>';
-    html += '<div style="font-size:13px;color:#6b7280;">'+dl.country+' &middot; '+dl.tenor+'</div></div></div>';
-    html += '<div style="display:flex;align-items:center;gap:10px;">';
-    html += '<span style="background:#f0f5f2;color:#1A472A;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;">'+dl.status+'</span>';
-    html += '<span style="font-size:11px;color:#9ca3af;">'+dl.id+'</span></div>';
-    html += '</div>';
-    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">';
-    var rows=[['Off-taker',dl.offtaker],['Structure',dl.structure],
-              ['Security',dl.security],['Target Return',dl.returns]];
-    for(var r=0;r<rows.length;r++){
-      html+='<div style="background:#f8faf8;border-radius:8px;padding:14px;">';
-      html+='<div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">'+rows[r][0]+'</div>';
-      html+='<div style="font-size:13px;font-weight:600;color:#1c2b1f;line-height:1.4;">'+rows[r][1]+'</div></div>';
-    }
-    html += '</div>';
-    html += '<button onclick="expressInterest(''+dl.id+'',''+dl.type+'')"';
-    html += ' style="width:100%;background:#1A472A;color:#fff;font-weight:700;border:none;border-radius:8px;';
-    html += 'padding:13px;cursor:pointer;font-size:14px;font-family:Inter,sans-serif;transition:opacity .15s;"';
-    html += ' onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">';
-    html += 'Express Interest in This Opportunity →</button>';
-    html += '</div>';
+  for(var d=0;d<deals.length;d++){var dl=deals[d];
+    h+='<div class="card" style="margin-bottom:16px;">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">';
+    h+='<div style="display:flex;align-items:center;gap:12px;">';
+    h+='<div style="width:44px;height:44px;background:#f0f5f2;border-radius:10px;display:flex;align-items:center;justify-content:center;">';
+    h+='<i class="fa-solid fa-leaf" style="color:#2C7C3B;font-size:22px;"></i></div>';
+    h+='<div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+dl.type+'</div>';
+    h+='<div style="font-size:13px;color:#6b7280;">'+dl.country+' &middot; '+dl.tenor+'</div></div></div>';
+    h+='<div style="display:flex;align-items:center;gap:10px;"><span style="background:#f0f5f2;color:#1A472A;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;">'+dl.status+'</span>';
+    h+='<span style="font-size:11px;color:#9ca3af;">'+dl.id+'</span></div></div>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">';
+    var rows=[['Off-taker',dl.offtaker],['Structure',dl.structure],['Security',dl.security],['Target Return',dl.returns]];
+    for(var r=0;r<rows.length;r++){var bg=rows[r][0]==='Target Return'?'background:#dcfce7;':'background:#f8faf8;';h+='<div style="'+bg+'border-radius:8px;padding:14px;">';h+='<div style="font-size:10px;color:'+(rows[r][0]==='Target Return'?'#166534':'#9ca3af')+';font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">'+rows[r][0]+'</div>';h+='<div style="font-size:13px;font-weight:600;color:'+(rows[r][0]==='Target Return'?'#166534':'#1c2b1f')+';line-height:1.4;">'+rows[r][1]+'</div></div>';}
+    h+='</div>';
+    h+='<button id="btn_'+dl.id+'" onclick="xInt(''+dl.id+'',''+dl.type+'')" class="btn-green" style="width:100%;padding:13px;border-radius:8px;font-size:14px;">Express Interest in This Opportunity &#8594;</button>';
+    h+='</div>';
   }
-
-  // Disclaimer
-  html += '<div style="background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;margin-top:8px;">';
-  html += '<p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.7;text-align:center;">';
-  html += 'Indicative returns are not guaranteed and are subject to final underwriting, due diligence, and transaction structuring. ';
-  html += 'Off-taker identities and transaction details are disclosed under separate NDA. Contact <a href="mailto:contact@renewablesvault.com" style="color:#2C7C3B;text-decoration:none;">contact@renewablesvault.com</a> for further information.';
-  html += '</p></div>';
-
-  html += '</div>'; // close max-width
-  wrap.innerHTML = html;
+  h+='<div class="card" style="margin-top:8px;"><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.7;text-align:center;">Indicative returns are not guaranteed. Off-taker identities disclosed under separate NDA. Contact <a href="mailto:contact@renewablesvault.com" style="color:#2C7C3B;text-decoration:none;">contact@renewablesvault.com</a> for further information.</p></div>';
+  c.innerHTML=h;
 }
-
-function expressInterest(dealId, dealType) {
-  var u = RVAuth.getUser();
-  var btn = event.target;
-  btn.disabled=true; btn.textContent='Sending...';
-
-  fetch('https://api.web3forms.com/submit', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({
-      access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',
-      subject:'💰 Investor Interest — '+dealId+' — '+u.firstName+' '+u.lastName,
-      name: u.firstName+' '+u.lastName,
-      email: u.email,
-      message: [
-        '═══════════════════════════════',
-        'INVESTOR INTEREST EXPRESSED',
-        '═══════════════════════════════',
-        'Deal ID:       '+dealId,
-        'Deal Type:     '+dealType,
-        'Investor:      '+u.firstName+' '+u.lastName,
-        'Email:         '+u.email,
-        'Organisation:  '+u.org,
-        'Investor Type: '+u.investorType,
-        'Ticket Size:   '+(u.ticket||'Not specified'),
-        'Date:          '+new Date().toLocaleDateString(),
-        '═══════════════════════════════',
-        'ACTION: Follow up to discuss deal details, share NDA, and progress to term sheet.'
-      ].join('\n')
-    })
-  }).finally(function(){
-    btn.textContent = '✓ Interest Registered — Our team will be in touch';
-    btn.style.background = '#16a34a';
-    btn.disabled = true;
-  });
+function xInt(id,type){
+  var u=RVAuth.get();
+  var btn=document.getElementById('btn_'+id);
+  if(!btn||!u)return;
+  btn.disabled=true;btn.textContent='Sending...';
+  fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'Investor Interest — '+id+' — '+u.firstName+' '+u.lastName,name:u.firstName+' '+u.lastName,email:u.email,message:'INVESTOR INTEREST\n=================\nDeal: '+id+' — '+type+'\nInvestor: '+u.firstName+' '+u.lastName+'\nEmail: '+u.email+'\nOrg: '+(u.org||'')+'\nTicket: '+(u.ticket||'Not specified')+'\nDate: '+new Date().toLocaleDateString()+'\n=================\nACTION: Share NDA and progress to term sheet.'})}).finally(function(){btn.textContent='&#10003; Interest Registered — Our team will be in touch';btn.style.background='#16a34a';btn.disabled=true;});
 }
 </script></div>
-<footer class="footer-wrap">
+<footer class="footer">
   <div class="footer-inner">
     <div>
-      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;">
+      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;display:block;">
       <p style="font-size:12px;color:#869486;margin:0;">© 2026 Renewables Vault. All rights reserved.</p>
     </div>
-    <div class="footer-links" style="text-align:right;">
+    <div style="text-align:right;">
       <a href="about.html">About</a><a href="how-it-works.html">How It Works</a>
-      <a href="impact.html">Impact</a><a href="contact.html">Contact</a>
-      <a href="legal.html">Legal &amp; Disclaimer</a>
+      <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
+      <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
+      <div style="margin-top:10px;">
+        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
+        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
+      </div>
     </div>
   </div>
 </footer>
-</body>
-</html>
+</body></html>

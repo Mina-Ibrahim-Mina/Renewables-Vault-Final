@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Developer Dashboard — Renewables Vault</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -66,40 +68,11 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
   font-size:13px;color:#dc2626;display:none;margin-top:10px;}
 
-/* RADIO / OPTION CARDS */
-.opts{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
-.opt{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:1px solid #d1e8d8;
-  border-radius:8px;cursor:pointer;transition:all .12s;background:#fff;}
-.opt:hover{border-color:#2C7C3B;background:#f9fcf9;}
-.opt.sel{border-color:#2C7C3B;background:#f0f7f0;border-width:2px;}
-.opt input[type=radio]{margin:3px 0 0 0;flex-shrink:0;accent-color:#2C7C3B;cursor:pointer;}
-.opt-label{font-size:14px;font-weight:600;color:#1c2b1f;display:block;}
-.opt-desc{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.4;}
-
 /* PROGRESS BAR */
 .prog-wrap{display:flex;gap:6px;margin-bottom:32px;}
 .prog-step{flex:1;height:4px;border-radius:2px;background:#d1e8d8;transition:background .3s;}
 .prog-step.done{background:#4ADE80;}
 .prog-step.active{background:#2C7C3B;}
-
-/* PILLAR HEADER */
-.pillar-hdr{background:linear-gradient(135deg,#1A472A,#2C7C3B);border-radius:10px;
-  padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;}
-.pillar-hdr i{color:#4ADE80;font-size:28px;flex-shrink:0;}
-.pillar-pts{background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.25);
-  border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:#4ADE80;
-  white-space:nowrap;margin-left:auto;}
-
-/* RESULT TIERS */
-.tier-a{background:linear-gradient(135deg,#052e16,#166534);}
-.tier-b{background:linear-gradient(135deg,#172554,#1e40af);}
-.tier-c{background:linear-gradient(135deg,#451a03,#92400e);}
-.tier-d{background:linear-gradient(135deg,#1c1917,#44403c);}
-
-/* SCORE RING */
-.score-ring{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;margin:0 auto 16px;border:4px solid rgba(255,255,255,.2);
-  flex-direction:column;}
 
 /* BADGES */
 .badge-pending{background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;
@@ -115,11 +88,51 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   .nav-links{display:none;} .nav-inner{padding:0 20px;}
   .footer{padding:40px 20px;} .grid-2{grid-template-columns:1fr!important;}
 }
+
+/* RV mobile fix v10 */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;}
+  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="display:flex"]{flex-wrap:wrap;}
+  img,video,table{max-width:100%;}
+  h1{font-size:30px !important;line-height:1.2 !important;}
+  .footer-inner>div{text-align:left !important;}
+  .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
+}
+
+/* DASHBOARD v11 */
+.backlink{font-size:13px;color:#6b7280;background:none;border:none;cursor:pointer;padding:0;margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
+.backlink:hover{color:#1A472A;}
+.arow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid #f0f5f2;flex-wrap:wrap;}
+.arow:last-child{border-bottom:none;padding-bottom:0;}
+.aicon{width:42px;height:42px;border-radius:10px;background:#f0f5f2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.aicon i{color:#2C7C3B;font-size:18px;}
+.anote{margin-top:8px;font-size:13px;color:#374151;background:#f8faf8;border-left:3px solid #4ADE80;padding:8px 12px;border-radius:4px;}
+.chip{font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;white-space:nowrap;}
+.tcard{background:#fff;border:1px solid #d1e8d8;border-radius:12px;padding:24px 20px;text-align:left;cursor:pointer;font-family:'Inter',sans-serif;display:flex;flex-direction:column;gap:8px;transition:all .15s;position:relative;}
+.tcard:hover{border-color:#2C7C3B;transform:translateY(-2px);box-shadow:0 6px 18px rgba(26,71,42,.08);}
+.tcard.pre{border:2px solid #4ADE80;}
+.tcard i{color:#2C7C3B;font-size:26px;}
+.tcard-t{font-size:15px;font-weight:700;color:#1A472A;line-height:1.35;}
+.tcard-d{font-size:13px;color:#6b7280;line-height:1.5;}
+.tcard-b{font-size:11px;font-weight:700;color:#166534;background:#dcfce7;border-radius:20px;padding:3px 10px;align-self:flex-start;margin-top:4px;}
+.qrow{margin-bottom:22px;border-radius:8px;transition:background .2s;}
+.qrow.bad{background:#fef2f2;box-shadow:0 0 0 8px #fef2f2;}
+.qlab{font-size:14px;font-weight:600;color:#1c2b1f;display:block;margin-bottom:10px;line-height:1.4;}
+.pills{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #c8ddd0;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;color:#1c2b1f;background:#fff;transition:all .12s;line-height:1.35;}
+.pill:hover{border-color:#2C7C3B;}
+.pill.sel{border-color:#2C7C3B;background:#f0f7f0;box-shadow:inset 0 0 0 1px #2C7C3B;font-weight:600;}
+.pill input{accent-color:#2C7C3B;margin:0;}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#374151;cursor:pointer;line-height:1.5;}
+.chk input{margin-top:3px;accent-color:#2C7C3B;width:16px;height:16px;flex-shrink:0;}
+@media(max-width:768px){.pill{width:100%;}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav-wrap">
   <div class="nav-inner">
     <a href="index.html"><img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;"></a>
@@ -133,118 +146,64 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   </div>
 </nav>
 
-<!-- MAIN WRAPPER -->
-<div style="padding-top:68px;min-height:100vh;" id="dashWrap">
+<div style="padding-top:68px;min-height:100vh;">
 
-  <!-- Loading state -->
-  <div id="loadState" style="max-width:480px;margin:80px auto;text-align:center;padding:48px;">
-    <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;
-         display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+  <!-- No session -->
+  <div id="loadState" style="max-width:480px;margin:80px auto;text-align:center;padding:48px 20px;">
+    <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
       <i class="fa-solid fa-user" style="color:#2C7C3B;font-size:28px;"></i>
     </div>
-    <h2 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Session Expired</h2>
-    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.6;">Your session was not found. Please log in again.</p>
-    <p id="cntMsg" style="font-size:13px;color:#9ca3af;margin:0 0 20px;">Redirecting in <strong id="cnt">5</strong> seconds...</p>
-    <a href="login.html" style="display:inline-block;background:#1A472A;color:#fff;font-weight:700;
-       border-radius:6px;padding:12px 28px;text-decoration:none;font-size:14px;">Go to Login</a>
-    <div style="margin-top:12px;"><a href="seed.html" style="font-size:13px;color:#6b7280;text-decoration:none;">New browser? Set up account &#8594;</a></div>
+    <h2 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Please log in</h2>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.6;">Your session was not found on this browser.</p>
+    <p style="font-size:13px;color:#9ca3af;margin:0 0 20px;">Redirecting to login in <strong id="cnt">5</strong> seconds...</p>
+    <a href="login.html" class="btn-green" style="text-decoration:none;">Go to Login</a>
+    <div style="margin-top:12px;"><a href="seed.html" style="font-size:13px;color:#6b7280;text-decoration:none;">Registered on another device? Set up this browser &#8594;</a></div>
   </div>
 
-  <!-- VIEW 1: MAIN DASHBOARD -->
+  <!-- ============ VIEW: MAIN ============ -->
   <div id="vMain" class="view" style="padding:48px;">
     <div style="max-width:1000px;margin:0 auto;">
-
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">
         <div>
-          <div class="eyebrow-g" style="margin-bottom:6px;">DEVELOPER DASHBOARD</div>
+          <div class="eyebrow-g">DEVELOPER DASHBOARD</div>
           <h1 id="dName" style="font-size:26px;font-weight:700;color:#1A472A;margin:0;"></h1>
           <p id="dSub" style="font-size:14px;color:#6b7280;margin:6px 0 0;"></p>
         </div>
-        <button onclick="RVAuth.out()" style="font-size:13px;color:#6b7280;background:#fff;
-          border:1px solid #d1e8d8;border-radius:6px;padding:8px 18px;cursor:pointer;font-family:'Inter',sans-serif;">Logout</button>
+        <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
       </div>
 
-      <!-- Status banner -->
-      <div id="statusBanner" style="border-radius:12px;border:1px solid #d1e8d8;padding:20px 24px;
-           margin-bottom:24px;display:flex;align-items:center;gap:16px;background:#fff;"></div>
-
-      <!-- RARE™ CTA (shown when not completed) -->
-      <div id="rareCta" style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;
-           padding:36px;margin-bottom:24px;display:none;">
-        <div style="display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;">
-          <div>
-            <span class="eyebrow" style="margin-bottom:10px;">Required Next Step</span>
-            <h2 style="font-size:22px;font-weight:700;color:#fff;margin:0 0 12px;">
-              Complete Your RARE&#8482; Project Assessment
-            </h2>
-            <p style="font-size:15px;color:#bccabb;margin:0 0 20px;line-height:1.65;max-width:520px;">
-              RARE&#8482; is Renewables Vault's proprietary underwriting framework — a 6-pillar, 100-point
-              evaluation of your asset's revenue quality, performance, and structural eligibility.
-              Completing it takes approximately 10 minutes and gives you a preliminary eligibility result.
-            </p>
-            <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
-              <button onclick="startRare()" class="btn-lime">
-                Start RARE&#8482; Assessment <i class="fa-solid fa-arrow-right" style="font-size:12px;"></i>
-              </button>
-              <span style="font-size:13px;color:#869486;">~10 minutes &middot; 6 sections</span>
-            </div>
-          </div>
-          <div style="text-align:center;">
-            <div style="width:90px;height:90px;border-radius:50%;border:3px solid rgba(74,222,128,.3);
-                 display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
-              <i class="fa-solid fa-shield-halved" style="color:#4ADE80;font-size:36px;"></i>
-            </div>
-            <div style="font-size:11px;color:#869486;font-weight:600;letter-spacing:.06em;text-transform:uppercase;">RARE&#8482;</div>
-          </div>
-        </div>
-        <!-- 6-pillar preview strip -->
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:28px;
-             border-top:1px solid rgba(74,222,128,.12);padding-top:24px;">
-          <div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.12);border-radius:8px;padding:12px 8px;text-align:center;">
-            <i class="fa-solid fa-money-bill-wave" style="color:#4ADE80;font-size:16px;display:block;margin-bottom:6px;"></i>
-            <div style="font-size:11px;color:#bccabb;font-weight:600;line-height:1.3;">Revenue Quality</div>
-            <div style="font-size:10px;color:#4ADE80;margin-top:4px;">22 pts</div>
-          </div>
-          <div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.12);border-radius:8px;padding:12px 8px;text-align:center;">
-            <i class="fa-solid fa-solar-panel" style="color:#4ADE80;font-size:16px;display:block;margin-bottom:6px;"></i>
-            <div style="font-size:11px;color:#bccabb;font-weight:600;line-height:1.3;">Asset Performance</div>
-            <div style="font-size:10px;color:#4ADE80;margin-top:4px;">18 pts</div>
-          </div>
-          <div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.12);border-radius:8px;padding:12px 8px;text-align:center;">
-            <i class="fa-solid fa-building" style="color:#4ADE80;font-size:16px;display:block;margin-bottom:6px;"></i>
-            <div style="font-size:11px;color:#bccabb;font-weight:600;line-height:1.3;">Developer Strength</div>
-            <div style="font-size:10px;color:#4ADE80;margin-top:4px;">18 pts</div>
-          </div>
-          <div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.12);border-radius:8px;padding:12px 8px;text-align:center;">
-            <i class="fa-solid fa-scale-balanced" style="color:#4ADE80;font-size:16px;display:block;margin-bottom:6px;"></i>
-            <div style="font-size:11px;color:#bccabb;font-weight:600;line-height:1.3;">Legal Enforceability</div>
-            <div style="font-size:10px;color:#4ADE80;margin-top:4px;">18 pts</div>
-          </div>
-          <div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.12);border-radius:8px;padding:12px 8px;text-align:center;">
-            <i class="fa-solid fa-globe" style="color:#4ADE80;font-size:16px;display:block;margin-bottom:6px;"></i>
-            <div style="font-size:11px;color:#bccabb;font-weight:600;line-height:1.3;">Market &amp; Macro</div>
-            <div style="font-size:10px;color:#4ADE80;margin-top:4px;">12 pts</div>
-          </div>
-          <div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.12);border-radius:8px;padding:12px 8px;text-align:center;">
-            <i class="fa-solid fa-shield" style="color:#4ADE80;font-size:16px;display:block;margin-bottom:6px;"></i>
-            <div style="font-size:11px;color:#bccabb;font-weight:600;line-height:1.3;">Default &amp; Recovery</div>
-            <div style="font-size:10px;color:#4ADE80;margin-top:4px;">12 pts</div>
-          </div>
+      <div id="draftBanner" class="card" style="display:none;border-left:4px solid #f59e0b;margin-bottom:20px;padding:18px 22px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+          <div><div style="font-size:15px;font-weight:700;color:#1A472A;">You have an unfinished asset profile</div>
+          <div id="draftTxt" style="font-size:13px;color:#6b7280;margin-top:3px;"></div></div>
+          <div style="display:flex;gap:10px;"><button class="btn-green" onclick="resumeDraft()">Continue</button>
+          <button class="btn-out" onclick="discardDraft()">Discard</button></div>
         </div>
       </div>
 
-      <!-- RARE™ result summary card (shown when completed) -->
-      <div id="rareResultCard" style="display:none;margin-bottom:24px;"></div>
+      <div id="emptyCta" style="display:none;background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;">
+        <div class="eyebrow">NEXT STEP</div>
+        <h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Register your first asset</h2>
+        <p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">Tell us about the asset you would like to finance. It is a short asset profile — about 5 minutes — and you can save and continue later. Our team reviews every profile and contacts you within 5 business days.</p>
+        <button class="btn-lime" onclick="newAsset()"><i class="fa-solid fa-plus"></i> Register an Asset</button>
+      </div>
 
-      <!-- Two-col: Profile + Journey -->
-      <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+      <div id="assetsBox" class="card" style="display:none;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+          <div class="eyebrow-g" style="margin:0;">MY ASSETS</div>
+          <button class="btn-green" onclick="newAsset()" style="font-size:13px;padding:9px 16px;"><i class="fa-solid fa-plus"></i> Register another asset</button>
+        </div>
+        <div id="assetList"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
         <div class="card lt">
-          <div class="eyebrow-g" style="margin-bottom:16px;">Your Profile</div>
-          <div id="profileFields" style="display:flex;flex-direction:column;gap:12px;"></div>
+          <div class="eyebrow-g" style="margin-bottom:16px;">YOUR PROFILE</div>
+          <div id="profFields" style="display:flex;flex-direction:column;gap:12px;"></div>
         </div>
         <div class="card">
-          <div class="eyebrow-g" style="margin-bottom:16px;">What Happens Next</div>
-          <div id="journeySteps" style="display:flex;flex-direction:column;gap:0;"></div>
+          <div class="eyebrow-g" style="margin-bottom:16px;">HOW IT WORKS</div>
+          <div id="journey"></div>
         </div>
       </div>
 
@@ -255,383 +214,65 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
     </div>
   </div>
 
-  <!-- VIEW 2: RARE™ FORM -->
-  <div id="vRare" class="view" style="padding:48px;">
-    <div style="max-width:760px;margin:0 auto;">
-
-      <button onclick="showView('vMain')" style="font-size:13px;color:#6b7280;background:none;
-        border:none;cursor:pointer;padding:0;margin-bottom:24px;display:flex;align-items:center;
-        gap:6px;font-family:'Inter',sans-serif;">
-        <i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> Back to dashboard
-      </button>
-
-      <div style="margin-bottom:32px;">
-        <div class="eyebrow-g" style="margin-bottom:8px;">RARE&#8482; Project Assessment</div>
-        <h1 style="font-size:26px;font-weight:700;color:#1A472A;margin:0 0 6px;">Renewables Vault Underwriting Intake</h1>
-        <p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">
-          Your answers are used to assess preliminary eligibility for a Revenue Purchase Agreement.
-          All information is treated as strictly confidential.
-        </p>
-      </div>
-
-      <!-- Progress bar -->
-      <div class="prog-wrap" id="progBar">
-        <div class="prog-step active" id="ps0"></div>
-        <div class="prog-step" id="ps1"></div>
-        <div class="prog-step" id="ps2"></div>
-        <div class="prog-step" id="ps3"></div>
-        <div class="prog-step" id="ps4"></div>
-        <div class="prog-step" id="ps5"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-        <div id="stepLabel" style="font-size:13px;font-weight:700;color:#2C7C3B;letter-spacing:.04em;"></div>
-        <div id="stepNum" style="font-size:12px;color:#9ca3af;font-weight:600;"></div>
-      </div>
-
-      <!-- STEP 1: REVENUE QUALITY -->
-      <div id="rStep1" class="rview on">
-        <div class="pillar-hdr">
-          <i class="fa-solid fa-money-bill-wave"></i>
-          <div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">Revenue Quality</div>
-            <div style="font-size:13px;color:#bccabb;">The contractual and commercial strength of your revenue stream</div>
-          </div>
-          <div class="pillar-pts">22 pts</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:24px;">
-          <div>
-            <label class="lbl">1.1 &nbsp; What type of revenue contract does your asset operate under? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q11" value="ppa"><div><span class="opt-label">Power Purchase Agreement (PPA)</span><span class="opt-desc">Long-term electricity offtake agreement with a defined buyer</span></div></label>
-              <label class="opt"><input type="radio" name="q11" value="fsa"><div><span class="opt-label">Fuel Supply / Biofuel Supply Agreement</span><span class="opt-desc">Contracted fuel or biofuel delivery with fixed or indexed pricing</span></div></label>
-              <label class="opt"><input type="radio" name="q11" value="ota"><div><span class="opt-label">Offtake Agreement / Service Contract</span><span class="opt-desc">Contractual purchase of energy output or services</span></div></label>
-              <label class="opt"><input type="radio" name="q11" value="other"><div><span class="opt-label">Other contracted revenue arrangement</span><span class="opt-desc">Tipping fees, gate fees, REC contracts, other structured revenues</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">1.2 &nbsp; Which category best describes your off-taker (buyer)? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q12" value="gov"><div><span class="opt-label">Government / State Entity / Public Utility</span><span class="opt-desc">Sovereign or quasi-sovereign creditworthiness</span></div></label>
-              <label class="opt"><input type="radio" name="q12" value="ig_corp"><div><span class="opt-label">Large Corporate — Investment Grade</span><span class="opt-desc">Multinational, major local corporate, or bank-guaranteed buyer</span></div></label>
-              <label class="opt"><input type="radio" name="q12" value="local_corp"><div><span class="opt-label">Local / Regional Corporate</span><span class="opt-desc">Established local company with verifiable payment history</span></div></label>
-              <label class="opt"><input type="radio" name="q12" value="sme"><div><span class="opt-label">SME / Smaller Entity</span><span class="opt-desc">Smaller buyer without investment-grade standing</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">1.3 &nbsp; How much contracted revenue term remains on the agreement? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q13" value="gt5"><div><span class="opt-label">More than 5 years remaining</span></div></label>
-              <label class="opt"><input type="radio" name="q13" value="2to5"><div><span class="opt-label">2 to 5 years remaining</span></div></label>
-              <label class="opt"><input type="radio" name="q13" value="1to2"><div><span class="opt-label">1 to 2 years remaining</span></div></label>
-              <label class="opt"><input type="radio" name="q13" value="lt1"><div><span class="opt-label">Less than 1 year remaining</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">1.4 &nbsp; Approximate contracted annual revenue (USD equivalent)</label>
-            <input class="field" id="q14" type="text" placeholder="e.g. $800,000 or EGP 25M">
-          </div>
-          <div>
-            <label class="lbl">1.5 &nbsp; Off-taker payment track record *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q15" value="perfect"><div><span class="opt-label">All payments received on time</span><span class="opt-desc">No delays or arrears in payment history</span></div></label>
-              <label class="opt"><input type="radio" name="q15" value="minor"><div><span class="opt-label">1–2 minor delays in the past 12 months</span><span class="opt-desc">Payments ultimately received, short delays only</span></div></label>
-              <label class="opt"><input type="radio" name="q15" value="first_year"><div><span class="opt-label">Asset is in its first year — limited payment history</span></div></label>
-              <label class="opt"><input type="radio" name="q15" value="issues"><div><span class="opt-label">3 or more delayed or missed payments</span><span class="opt-desc">Recurring payment issues on record</span></div></label>
-            </div>
-          </div>
-        </div>
-        <div class="err" id="err1"></div>
-      </div>
-
-      <!-- STEP 2: ASSET PERFORMANCE -->
-      <div id="rStep2" class="rview">
-        <div class="pillar-hdr">
-          <i class="fa-solid fa-solar-panel"></i>
-          <div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">Asset Performance</div>
-            <div style="font-size:13px;color:#bccabb;">The technical and operational health of the asset</div>
-          </div>
-          <div class="pillar-pts">18 pts</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:24px;">
-          <div>
-            <label class="lbl">2.1 &nbsp; How long has the asset been commercially operational? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q21" value="gt7"><div><span class="opt-label">More than 7 years</span><span class="opt-desc">Mature asset with a long operational track record</span></div></label>
-              <label class="opt"><input type="radio" name="q21" value="3to7"><div><span class="opt-label">3 to 7 years</span><span class="opt-desc">Established asset with proven performance data</span></div></label>
-              <label class="opt"><input type="radio" name="q21" value="1to3"><div><span class="opt-label">1 to 3 years</span><span class="opt-desc">Early-stage operation with limited history</span></div></label>
-              <label class="opt"><input type="radio" name="q21" value="lt1"><div><span class="opt-label">Less than 1 year</span><span class="opt-desc">Recently commissioned asset</span></div></label>
-              <label class="opt"><input type="radio" name="q21" value="not_yet"><div><span class="opt-label">Not yet operational</span><span class="opt-desc">Under construction or development</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">2.2 &nbsp; Installed capacity</label>
-            <input class="field" id="q22" type="text" placeholder="e.g. 500 kW, 2 MW, 700 units">
-          </div>
-          <div>
-            <label class="lbl">2.3 &nbsp; Average capacity factor / utilization rate *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q23" value="gt80"><div><span class="opt-label">Above 80%</span><span class="opt-desc">Consistently high utilization or production</span></div></label>
-              <label class="opt"><input type="radio" name="q23" value="60to80"><div><span class="opt-label">60% – 80%</span><span class="opt-desc">Good performance, within normal operating range</span></div></label>
-              <label class="opt"><input type="radio" name="q23" value="40to60"><div><span class="opt-label">40% – 60%</span><span class="opt-desc">Moderate utilization</span></div></label>
-              <label class="opt"><input type="radio" name="q23" value="lt40"><div><span class="opt-label">Below 40%</span><span class="opt-desc">Low utilization — please note reason in project notes</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">2.4 &nbsp; When was the last major maintenance or overhaul? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q24" value="lt6m"><div><span class="opt-label">Within the last 6 months</span></div></label>
-              <label class="opt"><input type="radio" name="q24" value="6to12m"><div><span class="opt-label">6 to 12 months ago</span></div></label>
-              <label class="opt"><input type="radio" name="q24" value="1to2y"><div><span class="opt-label">1 to 2 years ago</span></div></label>
-              <label class="opt"><input type="radio" name="q24" value="gt2y"><div><span class="opt-label">More than 2 years ago</span></div></label>
-              <label class="opt"><input type="radio" name="q24" value="na"><div><span class="opt-label">Not applicable / continuous maintenance schedule</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">2.5 &nbsp; Current operational status *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q25" value="full"><div><span class="opt-label">Fully operational — generating contracted revenue</span></div></label>
-              <label class="opt"><input type="radio" name="q25" value="partial"><div><span class="opt-label">Partially operational — some capacity temporarily offline</span></div></label>
-              <label class="opt"><input type="radio" name="q25" value="maintenance"><div><span class="opt-label">Under planned maintenance — expected to resume within 30 days</span></div></label>
-            </div>
-          </div>
-        </div>
-        <div class="err" id="err2"></div>
-      </div>
-
-      <!-- STEP 3: DEVELOPER STRENGTH -->
-      <div id="rStep3" class="rview">
-        <div class="pillar-hdr">
-          <i class="fa-solid fa-building"></i>
-          <div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">Developer Strength</div>
-            <div style="font-size:13px;color:#bccabb;">Your organisation's track record and financial standing</div>
-          </div>
-          <div class="pillar-pts">18 pts</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:24px;">
-          <div>
-            <label class="lbl">3.1 &nbsp; How many years has your organisation been operating in renewable energy? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q31" value="gt10"><div><span class="opt-label">More than 10 years</span></div></label>
-              <label class="opt"><input type="radio" name="q31" value="5to10"><div><span class="opt-label">5 to 10 years</span></div></label>
-              <label class="opt"><input type="radio" name="q31" value="2to5"><div><span class="opt-label">2 to 5 years</span></div></label>
-              <label class="opt"><input type="radio" name="q31" value="lt2"><div><span class="opt-label">Less than 2 years</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">3.2 &nbsp; How many other operating clean energy assets does your organisation own? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q32" value="gt5"><div><span class="opt-label">More than 5 assets</span></div></label>
-              <label class="opt"><input type="radio" name="q32" value="3to5"><div><span class="opt-label">3 to 5 assets</span></div></label>
-              <label class="opt"><input type="radio" name="q32" value="1to2"><div><span class="opt-label">1 to 2 assets</span></div></label>
-              <label class="opt"><input type="radio" name="q32" value="0"><div><span class="opt-label">This is our only asset</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">3.3 &nbsp; Are audited financial accounts available for your organisation? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q33" value="3y"><div><span class="opt-label">Yes — last 3 or more years available</span></div></label>
-              <label class="opt"><input type="radio" name="q33" value="1y"><div><span class="opt-label">Yes — last year only available</span></div></label>
-              <label class="opt"><input type="radio" name="q33" value="first_year"><div><span class="opt-label">First year of operation — accounts in preparation</span></div></label>
-              <label class="opt"><input type="radio" name="q33" value="none"><div><span class="opt-label">No audited accounts available</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">3.4 &nbsp; Does the management team have prior experience managing energy assets of this type? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q34" value="yes_direct"><div><span class="opt-label">Yes — direct experience with this asset type</span></div></label>
-              <label class="opt"><input type="radio" name="q34" value="yes_adjacent"><div><span class="opt-label">Yes — experience in adjacent energy or infrastructure sectors</span></div></label>
-              <label class="opt"><input type="radio" name="q34" value="no"><div><span class="opt-label">No — this is a new sector for our team</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">3.5 &nbsp; Is there any ongoing legal dispute, regulatory investigation, or fraud allegation involving your organisation or this asset? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q35" value="no"><div><span class="opt-label">No — clean legal and regulatory standing</span></div></label>
-              <label class="opt"><input type="radio" name="q35" value="minor"><div><span class="opt-label">Minor commercial dispute — not related to this asset</span></div></label>
-              <label class="opt"><input type="radio" name="q35" value="yes"><div><span class="opt-label">Yes — active dispute or investigation involving this asset</span></div></label>
-            </div>
-          </div>
-        </div>
-        <div class="err" id="err3"></div>
-      </div>
-
-      <!-- STEP 4: LEGAL ENFORCEABILITY -->
-      <div id="rStep4" class="rview">
-        <div class="pillar-hdr">
-          <i class="fa-solid fa-scale-balanced"></i>
-          <div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">Legal Enforceability</div>
-            <div style="font-size:13px;color:#bccabb;">The legal integrity of the asset and revenue structure</div>
-          </div>
-          <div class="pillar-pts">18 pts</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:24px;">
-          <div>
-            <label class="lbl">4.1 &nbsp; What is the asset registration and title status? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q41" value="clean"><div><span class="opt-label">Fully registered — clean title, no encumbrances</span></div></label>
-              <label class="opt"><input type="radio" name="q41" value="minor"><div><span class="opt-label">Registered — minor administrative issues in process of resolution</span></div></label>
-              <label class="opt"><input type="radio" name="q41" value="in_process"><div><span class="opt-label">Registration in process</span></div></label>
-              <label class="opt"><input type="radio" name="q41" value="not_reg"><div><span class="opt-label">Not yet formally registered</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">4.2 &nbsp; Is it legally possible to assign the revenue / receivables of this asset to a third party? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q42" value="yes"><div><span class="opt-label">Yes — no contractual or legal restriction on assignment</span></div></label>
-              <label class="opt"><input type="radio" name="q42" value="review"><div><span class="opt-label">Needs legal review — assignment may be possible with consent</span></div></label>
-              <label class="opt"><input type="radio" name="q42" value="unsure"><div><span class="opt-label">Unsure — not yet reviewed by legal counsel</span></div></label>
-              <label class="opt"><input type="radio" name="q42" value="no"><div><span class="opt-label">No — assignment is contractually prohibited</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">4.3 &nbsp; Does the asset have any existing lender or financier? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q43" value="none"><div><span class="opt-label">No — asset is unencumbered, no existing debt</span></div></label>
-              <label class="opt"><input type="radio" name="q43" value="no_restrict"><div><span class="opt-label">Yes — existing lender, no restriction on revenue assignment</span></div></label>
-              <label class="opt"><input type="radio" name="q43" value="restrict"><div><span class="opt-label">Yes — existing lender with security over cashflows or assignment restriction</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">4.4 &nbsp; Under which legal jurisdiction does the off-take / revenue contract operate? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q44" value="egypt"><div><span class="opt-label">Egyptian law</span></div></label>
-              <label class="opt"><input type="radio" name="q44" value="mena"><div><span class="opt-label">Other MENA jurisdiction (UAE, KSA, Morocco, etc.)</span></div></label>
-              <label class="opt"><input type="radio" name="q44" value="intl"><div><span class="opt-label">International / multi-jurisdictional</span></div></label>
-            </div>
-          </div>
-        </div>
-        <div class="err" id="err4"></div>
-      </div>
-
-      <!-- STEP 5: MARKET & MACRO -->
-      <div id="rStep5" class="rview">
-        <div class="pillar-hdr">
-          <i class="fa-solid fa-globe"></i>
-          <div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">Market &amp; Macro</div>
-            <div style="font-size:13px;color:#bccabb;">Currency, FX exposure, and regulatory environment</div>
-          </div>
-          <div class="pillar-pts">12 pts</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:24px;">
-          <div>
-            <label class="lbl">5.1 &nbsp; In what currency is your contracted revenue denominated or indexed? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q51" value="usd"><div><span class="opt-label">USD — direct USD payments</span></div></label>
-              <label class="opt"><input type="radio" name="q51" value="usd_indexed"><div><span class="opt-label">USD-indexed EGP — EGP payments calculated at USD rate</span></div></label>
-              <label class="opt"><input type="radio" name="q51" value="egp"><div><span class="opt-label">EGP — Egyptian Pound, no USD indexation</span></div></label>
-              <label class="opt"><input type="radio" name="q51" value="other"><div><span class="opt-label">Other currency</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">5.2 &nbsp; What is the regulatory / licensing status of this asset? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q52" value="licensed"><div><span class="opt-label">Fully licensed and permitted — all approvals in place</span></div></label>
-              <label class="opt"><input type="radio" name="q52" value="provisional"><div><span class="opt-label">Provisional — operating under interim approval</span></div></label>
-              <label class="opt"><input type="radio" name="q52" value="in_process"><div><span class="opt-label">Licensing in process — operating under registered status</span></div></label>
-              <label class="opt"><input type="radio" name="q52" value="dispute"><div><span class="opt-label">Regulatory dispute or licence challenge ongoing</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">5.3 &nbsp; Does your off-taker provide a payment guarantee (letter of credit, bank guarantee, etc.)? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q53" value="yes"><div><span class="opt-label">Yes — bank guarantee or letter of credit in place</span></div></label>
-              <label class="opt"><input type="radio" name="q53" value="no"><div><span class="opt-label">No — payment guaranteed by contract terms only</span></div></label>
-            </div>
-          </div>
-        </div>
-        <div class="err" id="err5"></div>
-      </div>
-
-      <!-- STEP 6: DEFAULT RISK & RECOVERY -->
-      <div id="rStep6" class="rview">
-        <div class="pillar-hdr">
-          <i class="fa-solid fa-shield"></i>
-          <div>
-            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;">Default Risk &amp; Recovery</div>
-            <div style="font-size:13px;color:#bccabb;">Asset coverage, insurance, and structural protection</div>
-          </div>
-          <div class="pillar-pts">12 pts</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:24px;">
-          <div>
-            <label class="lbl">6.1 &nbsp; Approximate current market value of the asset (USD or equivalent) *</label>
-            <input class="field" id="q61" type="text" placeholder="e.g. $3,000,000 or EGP 150M">
-            <div style="font-size:12px;color:#6b7280;margin-top:6px;line-height:1.5;">
-              Used to calculate your Asset Coverage Ratio (ACR). A minimum ACR of 0.5x is required for eligibility.
-            </div>
-          </div>
-          <div>
-            <label class="lbl">6.2 &nbsp; Approximate capital amount you are seeking (USD or equivalent) *</label>
-            <input class="field" id="q62" type="text" placeholder="e.g. $1,000,000 or EGP 50M">
-          </div>
-          <!-- ACR live display -->
-          <div id="acrDisplay" style="display:none;background:#f0f5f2;border-radius:10px;padding:20px;border:1px solid #d1e8d8;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <div style="font-size:12px;font-weight:700;color:#2C7C3B;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">Indicative Asset Coverage Ratio (ACR)</div>
-                <div id="acrValue" style="font-size:28px;font-weight:700;color:#1A472A;"></div>
-              </div>
-              <div id="acrStatus" style="text-align:right;font-size:13px;font-weight:700;"></div>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">6.3 &nbsp; Is trade credit insurance (TCI) available or being considered? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q63" value="yes"><div><span class="opt-label">Yes — TCI policy currently in place</span></div></label>
-              <label class="opt"><input type="radio" name="q63" value="open"><div><span class="opt-label">Open to it — willing to explore TCI as part of the structure</span></div></label>
-              <label class="opt"><input type="radio" name="q63" value="no"><div><span class="opt-label">No — not currently available or being considered</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">6.4 &nbsp; Can you offer a personal or corporate guarantee as additional security? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q64" value="yes"><div><span class="opt-label">Yes — personal or corporate guarantee available</span></div></label>
-              <label class="opt"><input type="radio" name="q64" value="no"><div><span class="opt-label">No — not available</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">6.5 &nbsp; Is there any other collateral or security you could offer? *</label>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="q65" value="yes"><div><span class="opt-label">Yes — additional collateral available (describe in notes)</span></div></label>
-              <label class="opt"><input type="radio" name="q65" value="no"><div><span class="opt-label">No additional collateral</span></div></label>
-            </div>
-          </div>
-          <div>
-            <label class="lbl">6.6 &nbsp; Additional project notes (optional)</label>
-            <textarea class="field" id="q66" rows="4" placeholder="Any additional context about this project — unusual circumstances, planned improvements, existing relationships, etc."></textarea>
-          </div>
-        </div>
-        <div class="err" id="err6"></div>
-      </div>
-
-      <!-- Nav buttons -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:32px;
-           padding-top:24px;border-top:1px solid #d1e8d8;">
-        <button id="prevBtn" onclick="prevStep()" class="btn-out" style="display:none;">
-          <i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> Previous
-        </button>
-        <div></div>
-        <button id="nextBtn" onclick="nextStep()" class="btn-lime">
-          Next <i class="fa-solid fa-arrow-right" style="font-size:12px;"></i>
-        </button>
-        <button id="submitBtn" onclick="submitRare()" class="btn-lime" style="display:none;">
-          Submit Assessment <i class="fa-solid fa-check"></i>
-        </button>
-      </div>
-
+  <!-- ============ VIEW: ASSET TYPE PICKER ============ -->
+  <div id="vType" class="view" style="padding:48px;">
+    <div style="max-width:860px;margin:0 auto;">
+      <button onclick="goMain()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</button>
+      <div class="eyebrow-g">REGISTER AN ASSET</div>
+      <h1 style="font-size:24px;font-weight:700;color:#1A472A;margin:0 0 8px;">What type of asset is it?</h1>
+      <p style="font-size:14px;color:#6b7280;margin:0 0 26px;">We currently finance operating assets in Egypt in these three sectors.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="typeCards"></div>
     </div>
   </div>
 
-  <!-- VIEW 3: RESULTS -->
-  <div id="vResults" class="view" style="padding:48px;">
-    <div style="max-width:760px;margin:0 auto;" id="resultsContent"></div>
+  <!-- ============ VIEW: ASSET PROFILE FORM ============ -->
+  <div id="vForm" class="view" style="padding:48px;">
+    <div style="max-width:720px;margin:0 auto;">
+      <button onclick="saveAndExit()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Save &amp; return to dashboard</button>
+      <div class="eyebrow-g">ASSET PROFILE</div>
+      <h1 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 4px;" id="fTitle"></h1>
+      <p style="font-size:13px;color:#6b7280;margin:0 0 22px;">All information is treated as strictly confidential. Your answers are saved as you go.</p>
+      <div class="prog-wrap" id="prog"></div>
+      <div class="card" style="padding:28px 28px 22px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;flex-wrap:wrap;">
+          <h2 id="sTitle" style="font-size:19px;font-weight:700;color:#1A472A;margin:0;"></h2>
+          <span id="sCount" style="font-size:12px;color:#9ca3af;font-weight:600;"></span>
+        </div>
+        <p id="sDesc" style="font-size:13px;color:#6b7280;margin:0 0 22px;"></p>
+        <div id="qBox"></div>
+        <div class="err" id="fErr"></div>
+        <div style="display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap;">
+          <button class="btn-out" id="bPrev" onclick="prevS()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn-green" id="bNext" onclick="nextS()">Next <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
   </div>
 
-</div><!-- end dashWrap -->
+  <!-- ============ VIEW: SUBMITTED ============ -->
+  <div id="vDone" class="view" style="padding:48px;">
+    <div style="max-width:640px;margin:0 auto;">
+      <div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:40px 32px;text-align:center;color:#fff;margin-bottom:20px;">
+        <div style="width:70px;height:70px;border-radius:50%;background:rgba(74,222,128,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+          <i class="fa-solid fa-check" style="color:#4ADE80;font-size:30px;"></i>
+        </div>
+        <h1 style="font-size:24px;font-weight:700;margin:0 0 10px;">Asset profile submitted</h1>
+        <p id="doneTxt" style="font-size:15px;color:#bccabb;line-height:1.7;margin:0;"></p>
+        <div id="doneRef" style="display:inline-block;margin-top:18px;background:rgba(255,255,255,.08);border-radius:8px;padding:8px 16px;font-size:13px;color:#d4e8d6;"></div>
+      </div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="eyebrow-g">WHAT HAPPENS NEXT</div>
+        <p style="font-size:15px;color:#374151;line-height:1.7;margin:0 0 18px;">Our team reviews your asset profile and will contact you within <b>5 business days</b> to arrange a discovery call. You can follow the status of this asset on your dashboard.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn-green" onclick="goMain()">Back to Dashboard</button>
+          <button class="btn-out" onclick="newAsset()"><i class="fa-solid fa-plus"></i> Register another asset</button>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#9ca3af;line-height:1.7;text-align:center;margin:0;">Submitting an asset profile is not a commitment or offer of financing. Any transaction is subject to Renewables Vault's independent due diligence and formal approval.</p>
+    </div>
+  </div>
+
+</div>
 
 <footer class="footer">
   <div class="footer-inner">
@@ -647,511 +288,250 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   </div>
 </footer>
 
+<script src="rv-config.js"></script>
 <script>
-/* ── AUTH & NAV ── */
-var W3F = "615b6c70-27cb-4e3d-a889-b332649aeef0";
-var SEC = "RV_RENEWABLES_VAULT_2026";
-
-var RVAuth = {
-  get:  function(){ try{ return JSON.parse(localStorage.getItem('rv_user')); }catch(e){ return null; } },
-  set:  function(u){ localStorage.setItem('rv_user', JSON.stringify(u)); },
-  out:  function(){ localStorage.removeItem('rv_user'); window.location.href='index.html'; }
+var W3F='615b6c70-27cb-4e3d-a889-b332649aeef0';
+var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
+var RVAuth={
+  get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
+  set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
+  out:function(){localStorage.removeItem('rv_user');window.location.href='index.html';}
 };
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
-(function(){
-  var u=RVAuth.get(), el=document.getElementById('navAuth');
-  if(!el) return;
-  if(u){
-    var d=u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
-    el.innerHTML='<span style="font-size:12px;color:#bccabb;margin-right:4px;">Hi, '+u.firstName+'</span>'+
-      '<a href="'+d+'" class="btn-nav">My Account</a>'+
-      '<a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;margin-left:8px;">Logout</a>';
-  } else {
-    el.innerHTML='<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a>'+
-      '<a href="register.html" class="btn-nav" style="margin-left:8px;">Register Now</a>';
-  }
+(function(){var u=RVAuth.get(),el=document.getElementById('navAuth');if(!el)return;
+  if(u){el.innerHTML='<span style="font-size:12px;color:#bccabb;">Hi, '+esc(u.firstName)+'</span><a href="'+(u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html')+'" class="btn-nav">My Account</a><a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';}
+  else{el.innerHTML='<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a><a href="register.html" class="btn-nav">Register Now</a>';}
 })();
 
-function showView(id){
-  ['vMain','vRare','vResults'].forEach(function(v){
-    document.getElementById(v).className=v===id?'view on':'view';
-  });
-  window.scrollTo(0,0);
-}
-</script>
+/* ───────────── Asset types & questions ───────────── */
+var TYPES={
+  biofuel:{label:'Biofuel & Biodiesel',icon:'fa-gas-pump',desc:'Biodiesel and biofuel plants selling to industrial buyers.'},
+  circular:{label:'Circular Economy — Waste Recycling',icon:'fa-recycle',desc:'Recycling and recovery facilities.'},
+  solar:{label:'Solar C&I — Commercial & Industrial',icon:'fa-solar-panel',desc:'Solar systems supplying businesses, factories and farms.'}
+};
+function typeKey(label){label=String(label||'');return /circular|recycl/i.test(label)?'circular':/solar/i.test(label)?'solar':/bio/i.test(label)?'biofuel':'';}
 
-<script>
-/* ── DASHBOARD RENDER ── */
-var CURR_USER=null;
-var RARE_ANSWERS={};
+function O(pairs){return pairs.map(function(p){return{v:p[0],t:p[1]};});}
+var SPECIFIC={
+  biofuel:[
+    {k:'b_cap',t:'text',q:'Production capacity',ph:'e.g. 15,000 tonnes per year',req:1},
+    {k:'b_feed',t:'radio',q:'Main feedstock',req:1,o:O([['uco','Used cooking oil'],['veg','Vegetable oils'],['fat','Animal fats'],['res','Agricultural or other residues'],['mix','Mixed / other']])},
+    {k:'b_prod',t:'radio',q:'Main product sold',req:1,o:O([['bd','Biodiesel (B100 or blends)'],['ind','Bio-heavy fuel / industrial fuel'],['gly','Glycerin and by-products'],['oth','Other']])}
+  ],
+  circular:[
+    {k:'c_stream',t:'radio',q:'Main waste stream processed',req:1,o:O([['pl','Plastics (PET, HDPE, etc.)'],['pa','Paper and cardboard'],['me','Metals'],['or','Organic / food waste'],['cd','Construction and demolition waste'],['mx','Mixed municipal waste'],['ot','Other']])},
+    {k:'c_cap',t:'text',q:'Processing capacity',ph:'e.g. 30,000 tonnes per year',req:1},
+    {k:'c_rev',t:'radio',q:'Main source of revenue',req:1,o:O([['sale','Sale of recycled material'],['gate','Gate or tipping fees'],['svc','Collection or service contract'],['mix','A mix of these']])}
+  ],
+  solar:[
+    {k:'s_cap',t:'text',q:'Installed capacity',ph:'e.g. 2.5 MWp',req:1},
+    {k:'s_model',t:'radio',q:'Business model',req:1,o:O([['ppa','Power purchase agreement — client pays per kWh'],['lease','Lease or rental — fixed monthly payment'],['oth','Other']])},
+    {k:'s_client',t:'radio',q:'Client sector',req:1,o:O([['ind','Industrial / factory'],['agr','Agriculture'],['com','Commercial and retail'],['hos','Hospitality'],['oth','Other']])}
+  ]
+};
+var CONTRACT={
+  biofuel:O([['fsa','Supply or offtake agreement with agreed pricing'],['ota','Framework or service contract'],['other','Spot sales / no long-term contract']]),
+  circular:O([['fsa','Long-term offtake contract for recycled material'],['ota','Gate-fee or waste-service contract'],['other','Spot sales / no long-term contract']]),
+  solar:O([['ppa','PPA with the client (per-kWh tariff)'],['ota','Lease or rental agreement'],['other','Other / no long-term contract']])
+};
+function steps(type){return [
+  {title:'The asset',desc:'Basic information about the asset you would like to finance.',qs:[
+    {k:'a_name',t:'text',q:'Asset name',ph:'e.g. 10th of Ramadan Biodiesel Plant',req:1},
+    {k:'a_loc',t:'text',q:'Location (city / governorate)',ph:'e.g. 10th of Ramadan City, Sharqia',req:1}
+  ].concat(SPECIFIC[type]).concat([
+    {k:'q21',t:'radio',q:'How long has the asset been operating?',req:1,o:O([['gt7','More than 7 years'],['3to7','3 to 7 years'],['1to3','1 to 3 years'],['lt1','Less than 1 year'],['not_yet','Not yet operating']])},
+    {k:'q23',t:'radio',q:'Current output compared with full capacity',req:1,o:O([['gt80','Above 80%'],['60to80','60% to 80%'],['40to60','40% to 60%'],['lt40','Below 40%']])}
+  ])},
+  {title:'Revenue & contracts',desc:'How the asset earns its revenue.',qs:[
+    {k:'q11',t:'radio',q:'What kind of contract does the revenue come from?',req:1,o:CONTRACT[type]},
+    {k:'q12',t:'radio',q:'Who is the main buyer / client?',req:1,o:O([['gov','Government entity or public utility'],['ig_corp','Large corporate or multinational'],['local_corp','Established local or regional company'],['sme','Small business']])},
+    {k:'q13',t:'radio',q:'Time remaining on the main contract',req:1,o:O([['gt5','More than 5 years'],['2to5','2 to 5 years'],['1to2','1 to 2 years'],['lt1','Less than 1 year']])},
+    {k:'q15',t:'radio',q:"Buyer's payment record over the last 12 months",req:1,o:O([['perfect','Always on time'],['minor','1–2 short delays'],['first_year','Less than one year of history'],['issues','3 or more late or missed payments']])},
+    {k:'q51',t:'radio',q:'Currency of the revenue',req:1,o:O([['usd','US dollars'],['usd_indexed','Egyptian pounds, indexed to USD'],['egp','Egyptian pounds'],['other','Other']])},
+    {k:'q14',t:'text',q:'Approximate annual revenue from contracts (USD equivalent)',ph:'e.g. 2,400,000',req:0}
+  ]},
+  {title:'Company & legal',desc:'About your company and the legal position of the asset.',qs:[
+    {k:'q31',t:'radio',q:'How long has your company operated in this sector?',req:1,o:O([['gt10','More than 10 years'],['5to10','5 to 10 years'],['2to5','2 to 5 years'],['lt2','Less than 2 years']])},
+    {k:'q33',t:'radio',q:'Do you have audited financial statements?',req:1,o:O([['3y','Yes — 3 years or more'],['1y','Yes — 1 to 2 years'],['first_year','First year of operation'],['none','No']])},
+    {k:'q52',t:'radio',q:'Licences and permits for the asset',req:1,o:O([['licensed','All licences in place'],['provisional','Provisional licence'],['in_process','Application in progress'],['dispute','Under dispute']])},
+    {k:'q43',t:'radio',q:'Are there existing loans secured on the asset or its revenue?',req:1,o:O([['none','No — the asset and revenue are free of loans'],['no_restrict','Yes — but there is no security over the revenue'],['restrict','Yes — a lender has security over the revenue']])},
+    {k:'q42',t:'radio',q:'Can the contract revenue be assigned to a financing partner?',req:1,o:O([['yes','Yes'],['review','Possibly — would need buyer consent'],['unsure','Not sure'],['no','No — the contract does not allow it']])},
+    {k:'q35',t:'radio',q:'Any legal disputes or investigations involving the asset?',req:1,o:O([['no','No'],['minor','A minor commercial dispute'],['yes','Yes — an active dispute or investigation']])}
+  ]},
+  {title:'Financing',desc:'What you are looking for.',qs:[
+    {k:'q61',t:'text',q:'Estimated current value of the asset (USD equivalent)',ph:'e.g. 6,000,000',req:1},
+    {k:'q62',t:'text',q:'Amount of capital you are seeking (USD equivalent)',ph:'e.g. 3,000,000',req:1},
+    {k:'q64',t:'radio',q:'Could a company or personal guarantee be provided?',req:1,o:O([['yes','Yes'],['no','No']])},
+    {k:'q66',t:'area',q:'Anything else we should know? (optional)',ph:'e.g. expansion plans, key contracts, timing',req:0},
+    {k:'confirm',t:'check',q:'I confirm the information provided is accurate to the best of my knowledge.',req:1}
+  ]}
+];}
+
+/* ───────────── State ───────────── */
+var U=null,DRAFT=null,S=0;
+function kA(){return 'rv_assets_'+U.email.toLowerCase();}
+function kD(){return 'rv_draft_'+U.email.toLowerCase();}
+
+function show(v){['vMain','vType','vForm','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});window.scrollTo(0,0);}
 
 window.addEventListener('DOMContentLoaded',function(){
-  try{
-    var u=RVAuth.get();
-    if(!u){
-      var n=5;
-      var iv=setInterval(function(){
-        n--;document.getElementById('cnt').textContent=n;
-        if(n<=0){clearInterval(iv);window.location.href='login.html';}
-      },1000);
-      return;
-    }
-    if(u.type!=='developer'){ window.location.href='dashboard-investor.html'; return; }
-    CURR_USER=u;
-    try{ var s=localStorage.getItem('rv_rare_'+u.email); if(s) RARE_ANSWERS=JSON.parse(s); }catch(e){}
-    document.getElementById('loadState').style.display='none';
-    showView('vMain');
-    renderDash(u);
-  }catch(err){
-    document.getElementById('loadState').innerHTML=
-      '<i class="fa-solid fa-triangle-exclamation" style="color:#dc2626;font-size:48px;display:block;margin-bottom:16px;"></i>'+
-      '<h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 10px;">Something went wrong</h2>'+
-      '<p style="font-size:14px;color:#6b7280;margin:0 0 20px;">Please log in again.</p>'+
-      '<a href="login.html" style="display:inline-block;background:#1A472A;color:#fff;font-weight:700;border-radius:6px;padding:12px 28px;text-decoration:none;">Go to Login</a>';
-  }
+  U=RVAuth.get();
+  if(!U){var n=5,iv=setInterval(function(){n--;document.getElementById('cnt').textContent=n;if(n<=0){clearInterval(iv);location.href='login.html';}},1000);return;}
+  if(U.type!=='developer'){location.href='dashboard-investor.html';return;}
+  document.getElementById('loadState').style.display='none';
+  goMain();
+  syncAssets();
 });
 
-function renderDash(u){
-  var rare=u.rareCompleted||false;
-  document.getElementById('dName').textContent='Welcome, '+u.firstName+' '+u.lastName+'.';
-  document.getElementById('dSub').textContent=(u.company||'')+(u.energy?' · '+u.energy:'')+(u.country?' · '+u.country:'');
-
-  var banner=document.getElementById('statusBanner');
-  if(rare){
-    banner.style.borderLeft='4px solid #4ADE80';
-    banner.innerHTML='<i class="fa-solid fa-circle-check" style="color:#16a34a;font-size:24px;flex-shrink:0;"></i>'+
-      '<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">RARE™ Assessment Submitted</div>'+
-      '<p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">Our underwriting team has received your project data and will follow up within 5 business days.</p></div>';
-  } else {
-    banner.style.borderLeft='4px solid #f59e0b';
-    banner.innerHTML='<i class="fa-solid fa-clock" style="color:#f59e0b;font-size:24px;flex-shrink:0;"></i>'+
-      '<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">Project submission received</div>'+
-      '<p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">Complete the RARE™ assessment below to receive a preliminary eligibility result.</p></div>';
-  }
-
-  if(rare){
-    document.getElementById('rareCta').style.display='none';
-    renderRareResultCard(u.rareResult);
-  } else {
-    document.getElementById('rareCta').style.display='block';
-    document.getElementById('rareResultCard').style.display='none';
-  }
-
-  var pf=document.getElementById('profileFields');
-  var fields=[
-    ['Full Name',u.firstName+' '+u.lastName,true],
-    ['Email',u.email,false],
-    ['Company',u.company||'—',true],
-    ['Energy Type',u.energy||'—',true],
-    ['Country',u.country||'Egypt',true],
-    ['Asset Stage',u.stage||'—',false],
-    ['Registered',u.registered||'Today',false]
-  ];
-  pf.innerHTML='';
-  fields.forEach(function(f){
-    pf.innerHTML+='<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+f[0]+'</div>'+
-      '<div style="font-size:14px;'+(f[2]?'font-weight:600;color:#1c2b1f;':'color:#6b7280;')+'">'+f[1]+'</div></div>';
+/* ───────────── Main view ───────────── */
+function goMain(){
+  show('vMain');
+  document.getElementById('dName').textContent='Welcome, '+U.firstName+' '+U.lastName+'.';
+  document.getElementById('dSub').textContent=[U.company,U.country||'Egypt'].filter(Boolean).join(' · ');
+  var assets=lsGet(kA(),[]);
+  DRAFT=lsGet(kD(),null);
+  var db=document.getElementById('draftBanner');
+  if(DRAFT&&DRAFT.type){db.style.display='block';document.getElementById('draftTxt').textContent=TYPES[DRAFT.type].label+(DRAFT.ans&&DRAFT.ans.a_name?' — '+DRAFT.ans.a_name:'')+' · step '+((DRAFT.step||0)+1)+' of 4';}
+  else db.style.display='none';
+  document.getElementById('emptyCta').style.display=assets.length?'none':'block';
+  document.getElementById('assetsBox').style.display=assets.length?'block':'none';
+  renderAssets(assets);
+  var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone / WhatsApp',U.phone||'—'],['Company',U.company||'—'],['Main asset type',U.energy||'—'],['Registered',U.registered||'—']];
+  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('');
+  var j=[['Create your profile','Done',1],['Register your asset','A short asset profile for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
+  var nextIdx=j.findIndex(function(x){return!x[2];});
+  document.getElementById('journey').innerHTML=j.map(function(s,i){var last=i===j.length-1,done=s[2],nx=i===nextIdx;
+    return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(done?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';">'+
+      '<div class="'+(done?'step-done':nx?'step-next':'step-grey')+'" style="position:absolute;left:-16px;top:0;">'+(done?'<i class="fa-solid fa-check"></i>':(i+1))+'</div>'+
+      '<div style="font-size:14px;font-weight:700;color:'+(done||nx?'#1A472A':'#9ca3af')+';">'+s[0]+'</div>'+
+      '<div style="font-size:12px;color:'+(done||nx?'#6b7280':'#9ca3af')+';margin-top:2px;">'+s[1]+'</div></div>';}).join('');
+}
+var CHIP={'Submitted':['#e0f2fe','#075985'],'Under review':['#fef3c7','#92400e'],'More information needed':['#ffedd5','#9a3412'],'Discovery call':['#dcfce7','#166534'],'Term sheet':['#d1fae5','#065f46'],'Not eligible at this time':['#f3f4f6','#4b5563']};
+function renderAssets(assets){
+  document.getElementById('assetList').innerHTML=assets.slice().reverse().map(function(a){
+    var c=CHIP[a.status]||CHIP['Submitted'];
+    return '<div class="arow"><div style="display:flex;gap:14px;align-items:flex-start;flex:1;min-width:220px;">'+
+      '<div class="aicon"><i class="fa-solid '+TYPES[a.type].icon+'"></i></div><div>'+
+      '<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
+      '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(TYPES[a.type].label)+' · '+esc(a.location)+'</div>'+
+      '<div style="font-size:11px;color:#9ca3af;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
+      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+
+      '</div></div><span class="chip" style="background:'+c[0]+';color:'+c[1]+';">'+esc(a.status||'Submitted')+'</span></div>';
+  }).join('');
+}
+function syncAssets(){
+  var assets=lsGet(kA(),[]);if(!API||!assets.length)return;
+  // retry any submission that did not reach the server
+  assets.filter(function(a){return !a.synced&&a.payload;}).forEach(function(a){
+    post(a.payload).then(function(r){if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===a.id){x.synced=true;delete x.payload;}});lsSet(kA(),L);}}).catch(function(){});
   });
-  pf.innerHTML+='<div>'+(rare?'<span class="badge-done">RARE™ Complete</span>':'<span class="badge-pending">RARE™ Pending</span>')+'</div>';
+  fetch(API+'?action=asset_status&email='+encodeURIComponent(U.email)+'&ids='+encodeURIComponent(assets.map(function(a){return a.id;}).join(',')))
+    .then(function(r){return r.json();}).then(function(r){
+      if(!r||!r.ok||!r.assets)return;var L=lsGet(kA(),[]),changed=false;
+      r.assets.forEach(function(s){L.forEach(function(a){if(a.id===s.id&&(a.status!==s.status||a.note!==s.note)){a.status=s.status;a.note=s.note;changed=true;}});});
+      if(changed){lsSet(kA(),L);if(document.getElementById('vMain').classList.contains('on'))renderAssets(L);}
+    }).catch(function(){});
+}
+function post(payload){return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(r){return r.json();});}
 
-  var jSteps=rare?[
-    ['RARE™ Assessment complete',u.registered||'Today','done'],
-    ['Underwriting review','Our team reviews your RARE™ submission within 5 business days.','next'],
-    ['Discovery call','We discuss your asset and confirm preliminary terms.','grey'],
-    ['Term sheet','If eligible, a formal term sheet is issued.','grey'],
-    ['Due diligence &amp; close','Full legal, technical, and financial due diligence. 60–75 day close.','grey']
-  ]:[
-    ['Project submitted','Registration received on '+(u.registered||'today'),'done'],
-    ['Complete RARE™ Assessment','Fill in the 6-pillar intake form to receive a preliminary eligibility result.','next'],
-    ['Underwriting review','Our team reviews your submission within 5 business days.','grey'],
-    ['Discovery call','We discuss your asset in detail.','grey'],
-    ['Term sheet &amp; close','Formal term sheet, due diligence, 60–75 day close.','grey']
-  ];
+/* ───────────── Type picker & drafts ───────────── */
+function newAsset(){
+  if(DRAFT&&DRAFT.type&&!confirm('You have an unfinished asset profile. Start a new one and discard it?'))return;
+  lsSet(kD(),null);DRAFT=null;
+  var pre=typeKey(U.energy);
+  document.getElementById('typeCards').innerHTML=Object.keys(TYPES).map(function(k){var t=TYPES[k];
+    return '<button class="tcard'+(k===pre?' pre':'')+'" onclick="startForm(\''+k+'\')"><i class="fa-solid '+t.icon+'"></i><div class="tcard-t">'+t.label+'</div><div class="tcard-d">'+t.desc+'</div>'+(k===pre?'<div class="tcard-b">Your main asset type</div>':'')+'</button>';}).join('');
+  show('vType');
+}
+function startForm(type){DRAFT={type:type,step:0,ans:{}};lsSet(kD(),DRAFT);S=0;renderStep();show('vForm');}
+function resumeDraft(){DRAFT=lsGet(kD(),null);if(!DRAFT)return goMain();S=DRAFT.step||0;renderStep();show('vForm');}
+function discardDraft(){if(confirm('Discard this unfinished asset profile?')){lsSet(kD(),null);DRAFT=null;goMain();}}
+function saveAndExit(){collect();DRAFT.step=S;lsSet(kD(),DRAFT);goMain();}
 
-  var js=document.getElementById('journeySteps');
-  js.innerHTML='';
-  jSteps.forEach(function(st,s){
-    var isL=s===jSteps.length-1;
-    var bl=isL?'none':(st[2]==='done'?'2px solid #4ADE80':'2px dashed #d1e8d8');
-    var nc=st[2]==='done'?'step-done':(st[2]==='next'?'step-next':'step-grey');
-    var ni=st[2]==='done'?'<i class="fa-solid fa-check" style="font-size:11px;"></i>':(s+1).toString();
-    js.innerHTML+='<div style="margin-left:15px;padding-left:16px;padding-bottom:'+(isL?'0':'18px')+';position:relative;border-left:'+bl+';">'+
-      '<div class="'+nc+'" style="position:absolute;left:-16px;top:0;">'+ni+'</div>'+
-      '<div style="font-size:14px;font-weight:700;color:'+(st[2]==='grey'?'#9ca3af':'#1A472A')+';">'+st[0]+'</div>'+
-      '<div style="font-size:13px;color:'+(st[2]==='grey'?'#9ca3af':'#6b7280')+';margin-top:3px;">'+st[1]+'</div></div>';
+/* ───────────── Form rendering ───────────── */
+function renderStep(){
+  var st=steps(DRAFT.type),s=st[S],a=DRAFT.ans;
+  document.getElementById('fTitle').textContent=TYPES[DRAFT.type].label;
+  document.getElementById('prog').innerHTML=st.map(function(x,i){return '<div class="prog-step'+(i<S?' done':i===S?' active':'')+'"></div>';}).join('');
+  document.getElementById('sTitle').textContent=s.title;
+  document.getElementById('sCount').textContent='Step '+(S+1)+' of '+st.length;
+  document.getElementById('sDesc').textContent=s.desc;
+  document.getElementById('fErr').style.display='none';
+  document.getElementById('qBox').innerHTML=s.qs.map(function(q){
+    var lab='<label class="qlab">'+esc(q.q)+(q.req&&q.t!=='check'?' <span style="color:#dc2626">*</span>':'')+'</label>';
+    if(q.t==='text')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);autosave()"></div>';
+    if(q.t==='area')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
+    if(q.t==='check')return '<div class="qrow" id="row_'+q.k+'"><label class="chk"><input type="checkbox" id="'+q.k+'"'+(a[q.k]?' checked':'')+' onchange="clr(this);autosave()"> <span>'+esc(q.q)+'</span></label></div>';
+    return '<div class="qrow" id="row_'+q.k+'">'+lab+'<div class="pills">'+q.o.map(function(o){var on=a[q.k]===o.v;
+      return '<label class="pill'+(on?' sel':'')+'"><input type="radio" name="'+q.k+'" value="'+o.v+'"'+(on?' checked':'')+' onchange="pick(this)"><span>'+esc(o.t)+'</span></label>';}).join('')+'</div></div>';
+  }).join('');
+  document.getElementById('bPrev').style.visibility=S===0?'hidden':'visible';
+  var last=S===st.length-1,b=document.getElementById('bNext');
+  b.innerHTML=last?'<i class="fa-solid fa-paper-plane"></i> Submit asset profile':'Next <i class="fa-solid fa-arrow-right"></i>';
+  b.className=last?'btn-lime':'btn-green';b.disabled=false;
+}
+function pick(el){el.closest('.pills').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.closest('.pill').classList.add('sel');el.closest('.qrow').classList.remove('bad');autosave();}
+function collect(){
+  if(!DRAFT)return;var s=steps(DRAFT.type)[S];
+  s.qs.forEach(function(q){
+    if(q.t==='radio'){var r=document.querySelector('input[name="'+q.k+'"]:checked');if(r)DRAFT.ans[q.k]=r.value;}
+    else if(q.t==='check'){DRAFT.ans[q.k]=document.getElementById(q.k).checked;}
+    else{DRAFT.ans[q.k]=document.getElementById(q.k).value.trim();}
   });
 }
-
-function renderRareResultCard(result){
-  if(!result) return;
-  var el=document.getElementById('rareResultCard');
-  el.style.display='block';
-  var tierClass=result.tier==='A'?'tier-a':(result.tier==='B'?'tier-b':(result.tier==='C'?'tier-c':'tier-d'));
-  var tierLabel=result.tier==='A'?'Eligible — Strong':(result.tier==='B'?'Eligible — Standard':(result.tier==='C'?'Conditionally Eligible':'Not Currently Eligible'));
-  var tierIcon=result.tier==='A'||result.tier==='B'?'fa-circle-check':(result.tier==='C'?'fa-circle-exclamation':'fa-circle-xmark');
-  var tierCol=result.tier==='A'||result.tier==='B'?'#4ADE80':(result.tier==='C'?'#fbbf24':'#ef4444');
-  el.innerHTML='<div class="'+tierClass+'" style="border-radius:14px;padding:36px;">'+
-    '<div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;">'+
-    '<div>'+
-    '<div class="eyebrow" style="margin-bottom:10px;">RARE™ Preliminary Result</div>'+
-    '<h2 style="font-size:22px;font-weight:700;color:#fff;margin:0 0 10px;">'+tierLabel+'</h2>'+
-    '<div style="font-size:15px;color:rgba(255,255,255,.75);line-height:1.65;margin-bottom:16px;">'+result.summary+'</div>'+
-    (result.vetoed?'<div style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:14px;font-size:13px;color:#fca5a5;line-height:1.6;margin-bottom:12px;"><i class="fa-solid fa-triangle-exclamation" style="margin-right:8px;"></i><strong>Veto condition:</strong> '+result.vetoReason+'</div>':'')+
-    '<div style="font-size:14px;color:rgba(255,255,255,.65);">Score: <strong style="color:#fff;">'+result.score+' / 100</strong> &mdash; Tier <strong style="color:#fff;">'+result.tier+'</strong></div>'+
-    '</div>'+
-    '<div style="text-align:center;">'+
-    '<div class="score-ring" style="border-color:'+tierCol+'50;"><i class="fa-solid '+tierIcon+'" style="color:'+tierCol+';font-size:40px;"></i></div>'+
-    '<div style="font-size:22px;font-weight:700;color:#fff;">'+result.score+'</div>'+
-    '<div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;">/ 100 pts</div>'+
-    '</div></div>'+
-    (result.tier!=='D'&&!result.vetoed?'<div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:14px;color:rgba(255,255,255,.75);line-height:1.6;">Our team will be in touch within 5 business days to discuss next steps and schedule a discovery call.</div>':'')+
-    '</div>';
-}
-</script>
-
-<script>
-/* ── RARE™ FORM NAVIGATION ── */
-var CURR_STEP=1;
-var PILLAR_LABELS=['Revenue Quality','Asset Performance','Developer Strength','Legal Enforceability','Market & Macro','Default Risk & Recovery'];
-
-function startRare(){
-  CURR_STEP=1;
-  updateStepUI();
-  showView('vRare');
-}
-
-function updateStepUI(){
-  for(var i=0;i<6;i++){
-    var el=document.getElementById('ps'+i);
-    if(i<CURR_STEP-1) el.className='prog-step done';
-    else if(i===CURR_STEP-1) el.className='prog-step active';
-    else el.className='prog-step';
+function clr(el){var r=el.closest('.qrow');if(r)r.classList.remove('bad');}
+var asT=null;function autosave(){clearTimeout(asT);asT=setTimeout(function(){if(!DRAFT)return;collect();DRAFT.step=S;lsSet(kD(),DRAFT);},300);}
+function validate(){
+  collect();var s=steps(DRAFT.type)[S],bad=[];
+  s.qs.forEach(function(q){var v=DRAFT.ans[q.k],row=document.getElementById('row_'+q.k);row.classList.remove('bad');
+    if(q.req&&(v===undefined||v===''||v===false)){bad.push(q);row.classList.add('bad');}});
+  if(!bad.length&&S===3){
+    ['q61','q62'].forEach(function(k){if(!/\d/.test(DRAFT.ans[k]||'')){bad.push(k);document.getElementById('row_'+k).classList.add('bad');}});
+    if(bad.length){err('Please enter the amounts as numbers, for example 3,000,000.');return false;}
   }
-  document.getElementById('stepLabel').textContent='Pillar '+CURR_STEP+': '+PILLAR_LABELS[CURR_STEP-1];
-  document.getElementById('stepNum').textContent='Step '+CURR_STEP+' of 6';
-  for(var s=1;s<=6;s++){
-    document.getElementById('rStep'+s).className=s===CURR_STEP?'rview on':'rview';
-  }
-  document.getElementById('prevBtn').style.display=CURR_STEP>1?'inline-flex':'none';
-  document.getElementById('nextBtn').style.display=CURR_STEP<6?'inline-flex':'none';
-  document.getElementById('submitBtn').style.display=CURR_STEP===6?'inline-flex':'none';
-  restoreStep(CURR_STEP);
-}
-
-function restoreStep(step){
-  document.querySelectorAll('#rStep'+step+' input[type=radio]').forEach(function(r){
-    if(RARE_ANSWERS[r.name]===r.value){ r.checked=true; r.closest('.opt').classList.add('sel'); }
-  });
-  document.querySelectorAll('#rStep'+step+' input[type=text],#rStep'+step+' textarea').forEach(function(inp){
-    if(inp.id&&RARE_ANSWERS[inp.id]) inp.value=RARE_ANSWERS[inp.id];
-  });
-  if(step===6) calcACR();
-}
-
-document.addEventListener('change',function(e){
-  if(e.target.type!=='radio') return;
-  document.querySelectorAll('input[name="'+e.target.name+'"]').forEach(function(r){
-    r.closest('.opt').classList.toggle('sel',r.checked);
-  });
-});
-
-function saveStep(step){
-  document.querySelectorAll('#rStep'+step+' input[type=radio]:checked').forEach(function(r){
-    RARE_ANSWERS[r.name]=r.value;
-  });
-  document.querySelectorAll('#rStep'+step+' input[type=text],#rStep'+step+' textarea').forEach(function(inp){
-    if(inp.id) RARE_ANSWERS[inp.id]=inp.value;
-  });
-  try{ localStorage.setItem('rv_rare_'+CURR_USER.email,JSON.stringify(RARE_ANSWERS)); }catch(e){}
-  if(step===6) calcACR();
-}
-
-function validateStep(step){
-  var err=document.getElementById('err'+step);
-  err.style.display='none';
-  var required={
-    1:['q11','q12','q13','q15'],
-    2:['q21','q23','q24','q25'],
-    3:['q31','q32','q33','q34','q35'],
-    4:['q41','q42','q43','q44'],
-    5:['q51','q52','q53'],
-    6:['q63','q64','q65']
-  }[step]||[];
-  for(var i=0;i<required.length;i++){
-    var n=required[i];
-    var ok=document.querySelector('input[name="'+n+'"]:checked')||
-           (document.getElementById(n)&&document.getElementById(n).value.trim());
-    if(!ok){ err.style.display='block'; err.textContent='Please answer all required questions before continuing.'; return false; }
-  }
-  if(step===6){
-    var av=document.getElementById('q61').value.trim();
-    var ca=document.getElementById('q62').value.trim();
-    if(!av||!ca){ err.style.display='block'; err.textContent='Please enter both the asset market value and the capital amount you are seeking.'; return false; }
-  }
+  if(bad.length){err(bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.');
+    document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   return true;
 }
+function err(m){var e=document.getElementById('fErr');e.textContent=m;e.style.display='block';}
+function nextS(){if(!validate())return;var st=steps(DRAFT.type);
+  if(S<st.length-1){S++;DRAFT.step=S;lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}else submitAsset();}
+function prevS(){collect();if(S>0){S--;DRAFT.step=S;lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}}
 
-function nextStep(){
-  if(!validateStep(CURR_STEP)) return;
-  saveStep(CURR_STEP);
-  if(CURR_STEP<6){ CURR_STEP++; updateStepUI(); window.scrollTo(0,0); }
-}
-function prevStep(){
-  saveStep(CURR_STEP);
-  if(CURR_STEP>1){ CURR_STEP--; updateStepUI(); window.scrollTo(0,0); }
-}
-
-function calcACR(){
-  var avRaw=document.getElementById('q61').value.replace(/[^0-9.]/g,'');
-  var caRaw=document.getElementById('q62').value.replace(/[^0-9.]/g,'');
-  var av=parseFloat(avRaw),ca=parseFloat(caRaw);
-  var disp=document.getElementById('acrDisplay');
-  if(av>0&&ca>0){
-    var acr=av/ca;
-    document.getElementById('acrValue').textContent=acr.toFixed(2)+'x';
-    var st='';
-    if(acr<0.5) st='<span style="color:#ef4444;">&#9888; Below minimum (0.5x) &mdash; veto threshold</span>';
-    else if(acr<1.0) st='<span style="color:#f59e0b;">&#9888; Moderate coverage &mdash; enhanced security may be required</span>';
-    else st='<span style="color:#16a34a;">&#10003; Adequate coverage</span>';
-    document.getElementById('acrStatus').innerHTML=st;
-    disp.style.display='block';
-    RARE_ANSWERS['acr']=acr.toFixed(2)+'x';
-    RARE_ANSWERS['acr_num']=acr;
-  } else { disp.style.display='none'; }
-}
-
-document.getElementById('q61').addEventListener('input',calcACR);
-document.getElementById('q62').addEventListener('input',calcACR);
-</script>
-
-<script>
-/* ── SCORING, VETO DETECTION, SUBMISSION ── */
-function computeRareScore(a){
-  var score=0,vetoed=false,vetoReason='';
-
-  // PILLAR 1: Revenue Quality (22 pts)
-  score+=({ppa:8,fsa:7,ota:6,other:3}[a.q11]||0);
-  score+=({gov:6,ig_corp:5,local_corp:3,sme:1}[a.q12]||0);
-  score+=({gt5:5,'2to5':4,'1to2':3,lt1:1}[a.q13]||0);
-  if(a.q15==='issues'){vetoed=true;vetoReason='Off-taker has 3 or more delayed or missed payments in the past 12 months — automatic veto on payment default.';}
-  score+=({perfect:3,minor:2,first_year:1,issues:0}[a.q15]||0);
-
-  // PILLAR 2: Asset Performance (18 pts)
-  if(a.q21==='not_yet'){vetoed=true;vetoReason='Asset is not yet operational. RPA eligibility requires a generating, operating asset.';}
-  score+=({gt7:5,'3to7':4,'1to3':3,lt1:1,not_yet:0}[a.q21]||0);
-  score+=({gt80:5,'60to80':4,'40to60':3,lt40:1}[a.q23]||0);
-  score+=({lt6m:4,'6to12m':3,'1to2y':2,gt2y:0,na:3}[a.q24]||0);
-  score+=({full:4,partial:2,maintenance:1}[a.q25]||0);
-
-  // PILLAR 3: Developer Strength (18 pts)
-  score+=({gt10:6,'5to10':5,'2to5':3,lt2:1}[a.q31]||0);
-  score+=({gt5:5,'3to5':4,'1to2':2,'0':0}[a.q32]||0);
-  score+=({'3y':5,'1y':3,first_year:2,none:1}[a.q33]||0);
-  if(a.q33==='none'){vetoed=true;vetoReason='No audited accounts available. Audited financials are a minimum requirement for RPA underwriting.';}
-  score+=({yes_direct:2,yes_adjacent:1,no:0}[a.q34]||0);
-  if(a.q35==='yes'){vetoed=true;vetoReason='Active legal dispute or regulatory investigation involving this asset — RPA cannot be structured until resolved.';}
-
-  // PILLAR 4: Legal Enforceability (18 pts)
-  score+=({clean:7,minor:5,in_process:2,not_reg:0}[a.q41]||0);
-  if(a.q42==='no'){vetoed=true;vetoReason='Revenue assignment is contractually prohibited. An RPA requires the ability to assign receivables to the RV structure.';}
-  score+=({yes:5,review:3,unsure:2,no:0}[a.q42]||0);
-  if(a.q43==='restrict'){vetoed=true;vetoReason='Existing lender holds security over cashflows with assignment restriction. Intercreditor arrangement required before RPA can proceed.';}
-  score+=({none:4,no_restrict:3,restrict:0}[a.q43]||0);
-  score+=({egypt:2,mena:1,intl:2}[a.q44]||0);
-
-  // PILLAR 5: Market & Macro (12 pts)
-  score+=({usd:5,usd_indexed:4,egp:2,other:1}[a.q51]||0);
-  if(a.q52==='dispute'){vetoed=true;vetoReason='Regulatory licence dispute is ongoing. A clean regulatory status is required for RPA eligibility.';}
-  score+=({licensed:4,provisional:3,in_process:2,dispute:0}[a.q52]||0);
-  score+=({yes:3,no:0}[a.q53]||0);
-
-  // PILLAR 6: Default Risk & Recovery (12 pts)
-  var acr=a.acr_num||0;
-  if(acr>0&&acr<0.5){vetoed=true;vetoReason='Asset Coverage Ratio is below the 0.5x minimum threshold. Capital requested exceeds twice the estimated asset market value.';}
-  if(acr>=2) score+=5; else if(acr>=1.5) score+=4; else if(acr>=1.0) score+=3; else if(acr>=0.5) score+=1;
-  score+=({yes:3,open:2,no:0}[a.q63]||0);
-  score+=({yes:2,no:0}[a.q64]||0);
-  score+=({yes:2,no:0}[a.q65]||0);
-
-  score=Math.min(score,100);
-  var tier='D',summary='';
-  if(vetoed){
-    tier='D';
-    summary='One or more automatic veto conditions were detected. These require resolution before an RPA can be structured. Our team will advise on the specific steps required.';
-  } else if(score>=80){
-    tier='A';
-    summary='Your asset presents strong preliminary eligibility across all six RARE™ pillars. Our team will prioritise this for an early discovery call and preliminary term discussion.';
-  } else if(score>=60){
-    tier='B';
-    summary='Your asset meets standard RARE™ eligibility criteria. A transaction may be possible under standard conditions. Our team will follow up to discuss structure and timing.';
-  } else if(score>=40){
-    tier='C';
-    summary='Your asset shows conditional eligibility. Certain pillars require strengthening before a transaction can be structured. Our team will outline what is needed in the follow-up.';
-  } else {
-    tier='D';
-    summary='Based on your responses, this asset does not currently meet RARE™ minimum thresholds. Our team will review and advise on what steps could improve eligibility in the future.';
-  }
-  return {score:score,tier:tier,vetoed:vetoed,vetoReason:vetoReason,summary:summary};
-}
-
-function submitRare(){
-  if(!validateStep(6)) return;
-  saveStep(6);
-  var btn=document.getElementById('submitBtn');
-  btn.disabled=true;
-  btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
-  var u=CURR_USER,a=RARE_ANSWERS,result=computeRareScore(a);
-
-  // Persist to localStorage
-  u.rareCompleted=true; u.rareResult=result; RVAuth.set(u);
-  try{
-    var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-    for(var i=0;i<users.length;i++){
-      if(users[i].email===u.email){users[i].rareCompleted=true;users[i].rareResult=result;}
-    }
-    localStorage.setItem('rv_users',JSON.stringify(users));
-  }catch(e){}
-
-  // Build human-readable RARE™ report for Mina
-  var L={
-    q11:{ppa:'PPA',fsa:'Fuel Supply Agreement',ota:'Offtake Agreement',other:'Other'},
-    q12:{gov:'Government/State',ig_corp:'Large Corporate (IG)',local_corp:'Local/Regional Corporate',sme:'SME'},
-    q13:{gt5:'>5 years','2to5':'2–5 years','1to2':'1–2 years',lt1:'<1 year'},
-    q15:{perfect:'All on time',minor:'1–2 minor delays',first_year:'First year',issues:'3+ delays/defaults'},
-    q21:{gt7:'>7 years','3to7':'3–7 years','1to3':'1–3 years',lt1:'<1 year',not_yet:'Not operational'},
-    q23:{gt80:'>80%','60to80':'60–80%','40to60':'40–60%',lt40:'<40%'},
-    q24:{lt6m:'<6 months','6to12m':'6–12 months','1to2y':'1–2 years',gt2y:'>2 years',na:'N/A'},
-    q25:{full:'Fully operational',partial:'Partial',maintenance:'Under maintenance'},
-    q31:{gt10:'>10 years','5to10':'5–10 years','2to5':'2–5 years',lt2:'<2 years'},
-    q32:{gt5:'>5 assets','3to5':'3–5','1to2':'1–2','0':'None (first asset)'},
-    q33:{'3y':'3+ years','1y':'1 year only',first_year:'First year',none:'None available'},
-    q34:{yes_direct:'Yes – direct',yes_adjacent:'Yes – adjacent',no:'No'},
-    q35:{no:'No disputes',minor:'Minor commercial dispute',yes:'Active dispute'},
-    q41:{clean:'Fully registered',minor:'Registered (minor issues)',in_process:'In process',not_reg:'Not registered'},
-    q42:{yes:'Yes – assignable',review:'Needs review',unsure:'Unsure',no:'Prohibited'},
-    q43:{none:'No existing lender',no_restrict:'Existing lender – no restriction',restrict:'Existing lender – restriction'},
-    q44:{egypt:'Egyptian law',mena:'Other MENA',intl:'International'},
-    q51:{usd:'USD direct',usd_indexed:'USD-indexed EGP',egp:'EGP (no indexation)',other:'Other'},
-    q52:{licensed:'Fully licensed',provisional:'Provisional',in_process:'In process',dispute:'Regulatory dispute'},
-    q53:{yes:'Yes – bank guarantee/LC',no:'No guarantee'},
-    q63:{yes:'TCI in place',open:'Open to TCI',no:'No TCI'},
-    q64:{yes:'Guarantee available',no:'No guarantee'},
-    q65:{yes:'Additional collateral available',no:'No additional collateral'}
+/* ───────────── Submit ───────────── */
+function newId(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='';for(var i=0;i<6;i++)r+=c[Math.floor(Math.random()*c.length)];return 'RV-'+r;}
+function submitAsset(){
+  clearTimeout(asT);
+  var b=document.getElementById('bNext');b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+  var type=DRAFT.type,a=DRAFT.ans,st=steps(type),items=[],answers={};
+  st.forEach(function(s){s.qs.forEach(function(q){if(q.t==='check')return;var v=a[q.k];
+    if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];items.push({sec:s.title,q:q.q,a:o?o.t:''});answers[q.k]=v;}
+    else{items.push({sec:s.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
+  var rec={id:newId(),type:type,name:a.a_name,location:a.a_loc,submitted:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'Submitted',note:'',synced:false};
+  var payload={action:'submit_asset',dev:{firstName:U.firstName,lastName:U.lastName,email:U.email,phone:U.phone||'',company:U.company||''},
+    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,answers:answers,items:items}};
+  var finish=function(synced){
+    rec.synced=synced;if(!synced)rec.payload=payload;
+    var L=lsGet(kA(),[]);L.push(rec);lsSet(kA(),L);lsSet(kD(),null);DRAFT=null;
+    document.getElementById('doneTxt').textContent='Thank you. We have received the asset profile for '+rec.name+'.'+(synced?' A confirmation has been sent to '+U.email+'.':'');
+    document.getElementById('doneRef').textContent='Reference: '+rec.id;
+    show('vDone');
   };
-  function lbl(k){return(L[k]&&L[k][a[k]])||a[k]||'—';}
-
-  var report=[
-    'RARE™ PROJECT ASSESSMENT — Renewables Vault',
-    '='.repeat(56),
-    'DEVELOPER: '+(u.firstName||'')+' '+(u.lastName||''),
-    'COMPANY:   '+(u.company||''),
-    'EMAIL:     '+u.email,
-    'ENERGY:    '+(u.energy||''),
-    'COUNTRY:   '+(u.country||''),
-    'DATE:      '+new Date().toLocaleDateString('en-GB'),
-    '',
-    'RESULT: TIER '+result.tier+' — '+result.score+'/100 pts',
-    (result.vetoed?'⚠ VETO: '+result.vetoReason:'✓ No automatic veto conditions detected'),
-    '='.repeat(56),
-    '',
-    'PILLAR 1: REVENUE QUALITY (22 pts)',
-    '  Contract type:       '+lbl('q11'),
-    '  Off-taker:           '+lbl('q12'),
-    '  Term remaining:      '+lbl('q13'),
-    '  Annual revenue:      '+(a.q14||'Not provided'),
-    '  Payment record:      '+lbl('q15'),
-    '',
-    'PILLAR 2: ASSET PERFORMANCE (18 pts)',
-    '  Years operational:   '+lbl('q21'),
-    '  Capacity:            '+(a.q22||'Not provided'),
-    '  Utilization:         '+lbl('q23'),
-    '  Last maintenance:    '+lbl('q24'),
-    '  Current status:      '+lbl('q25'),
-    '',
-    'PILLAR 3: DEVELOPER STRENGTH (18 pts)',
-    '  Years in renewables: '+lbl('q31'),
-    '  Other assets:        '+lbl('q32'),
-    '  Audited accounts:    '+lbl('q33'),
-    '  Mgmt experience:     '+lbl('q34'),
-    '  Legal disputes:      '+lbl('q35'),
-    '',
-    'PILLAR 4: LEGAL ENFORCEABILITY (18 pts)',
-    '  Registration:        '+lbl('q41'),
-    '  Assignable:          '+lbl('q42'),
-    '  Existing lender:     '+lbl('q43'),
-    '  Jurisdiction:        '+lbl('q44'),
-    '',
-    'PILLAR 5: MARKET & MACRO (12 pts)',
-    '  Revenue currency:    '+lbl('q51'),
-    '  Regulatory status:   '+lbl('q52'),
-    '  Payment guarantee:   '+lbl('q53'),
-    '',
-    'PILLAR 6: DEFAULT RISK & RECOVERY (12 pts)',
-    '  Asset market value:  '+(a.q61||'Not provided'),
-    '  Capital requested:   '+(a.q62||'Not provided'),
-    '  ACR (indicative):    '+(a.acr||'Not calculated'),
-    '  Trade credit ins.:   '+lbl('q63'),
-    '  Personal guarantee:  '+lbl('q64'),
-    '  Other collateral:    '+lbl('q65'),
-    '  Notes:               '+(a.q66||'None'),
-    '',
-    'Admin panel: renewablesvault.com/admin.html'
-  ].join('\n');
-
-  fetch('https://api.web3forms.com/submit',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({
-      access_key:W3F,
-      subject:'RARE™ Assessment — Tier '+result.tier+' — '+u.firstName+' '+u.lastName+' ('+( u.company||'no company')+')',
-      name:u.firstName+' '+u.lastName,
-      email:u.email,
-      message:report
-    })
-  }).finally(function(){ renderResults(result,u); });
-}
-
-function renderResults(result,u){
-  var tierClass=result.tier==='A'?'tier-a':(result.tier==='B'?'tier-b':(result.tier==='C'?'tier-c':'tier-d'));
-  var tierLabel=result.tier==='A'?'Eligible — Strong':(result.tier==='B'?'Eligible — Standard':(result.tier==='C'?'Conditionally Eligible':'Not Currently Eligible'));
-  var tierIcon=result.tier==='A'||result.tier==='B'?'fa-circle-check':(result.tier==='C'?'fa-circle-exclamation':'fa-circle-xmark');
-  var tierCol=result.tier==='A'||result.tier==='B'?'#4ADE80':(result.tier==='C'?'#fbbf24':'#ef4444');
-  var nextStep={
-    'A':'Our team will reach out within 5 business days to schedule a discovery call and discuss preliminary transaction terms.',
-    'B':'Our team will contact you within 5 business days to discuss the transaction structure and any conditions that apply.',
-    'C':'Our team will contact you within 5 business days to outline specific improvements that would strengthen your eligibility.',
-    'D':result.vetoed?'Our team will review your submission and advise on the steps required to resolve the identified issues before an RPA can be considered.':'Our team will review your submission and advise on what improvements could make your asset eligible in the future.'
-  }[result.tier];
-
-  document.getElementById('resultsContent').innerHTML=
-    '<button onclick="showView(\'vMain\');renderDash(CURR_USER);" style="font-size:13px;color:#6b7280;background:none;border:none;cursor:pointer;padding:0;margin-bottom:24px;display:flex;align-items:center;gap:6px;font-family:Inter,sans-serif;"><i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> Back to dashboard</button>'+
-    '<div class="'+tierClass+'" style="border-radius:16px;padding:48px;margin-bottom:28px;text-align:center;">'+
-    '<div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4ADE80;margin-bottom:16px;">RARE™ Preliminary Result</div>'+
-    '<div class="score-ring" style="border-color:'+tierCol+'50;width:140px;height:140px;margin:0 auto 20px;">'+
-    '<div><i class="fa-solid '+tierIcon+'" style="color:'+tierCol+';font-size:44px;display:block;margin-bottom:4px;"></i>'+
-    '<div style="font-size:32px;font-weight:700;color:#fff;line-height:1;">'+result.score+'</div>'+
-    '<div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;">/ 100</div></div></div>'+
-    '<h2 style="font-size:28px;font-weight:700;color:#fff;margin:0 0 8px;">'+tierLabel+'</h2>'+
-    '<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px;font-weight:600;">Tier '+result.tier+' — Preliminary RARE™ Score</div>'+
-    '<p style="font-size:16px;color:rgba(255,255,255,.80);line-height:1.7;max-width:560px;margin:0 auto;">'+result.summary+'</p>'+
-    (result.vetoed?'<div style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:16px;margin:20px auto 0;max-width:560px;font-size:14px;color:#fca5a5;line-height:1.6;"><i class="fa-solid fa-triangle-exclamation" style="margin-right:8px;"></i><strong>Veto condition:</strong> '+result.vetoReason+'</div>':'')+
-    '</div>'+
-    '<div class="card" style="margin-bottom:20px;">'+
-    '<div class="eyebrow-g" style="margin-bottom:12px;">What happens next</div>'+
-    '<p style="font-size:16px;color:#374151;margin:0 0 20px;line-height:1.7;">'+nextStep+'</p>'+
-    '<div style="display:flex;gap:12px;flex-wrap:wrap;">'+
-    '<a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;background:#1A472A;color:#fff;font-weight:700;border-radius:6px;padding:11px 22px;text-decoration:none;font-size:14px;"><i class="fa-solid fa-envelope"></i> Contact Our Team</a>'+
-    '<button onclick="showView(\'vMain\');renderDash(CURR_USER);" class="btn-out">Back to Dashboard</button>'+
-    '</div></div>'+
-    '<div class="card" style="padding:20px;">'+
-    '<div class="eyebrow-g" style="margin-bottom:8px;">Disclaimer</div>'+
-    '<p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.7;">This is a preliminary, indicative assessment based on self-reported information and does not constitute a commitment, offer, or guarantee of financing. Renewables Vault will conduct independent due diligence and formal underwriting before any transaction is approved or structured.</p>'+
-    '</div>';
-
-  showView('vResults');
-  renderDash(CURR_USER);
+  var w3f=function(){
+    var txt='ASSET PROFILE (server not connected — not yet scored)\n==============================\nRef: '+rec.id+'\nType: '+TYPES[type].label+'\nDeveloper: '+U.firstName+' '+U.lastName+'\nCompany: '+(U.company||'')+'\nEmail: '+U.email+'\nPhone: '+(U.phone||'')+'\n';
+    var sec='';items.forEach(function(it){if(it.sec!==sec){sec=it.sec;txt+='\n— '+sec.toUpperCase()+' —\n';}txt+=it.q+': '+(it.a||'—')+'\n';});
+    return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({access_key:W3F,subject:'Asset Profile — '+rec.name+' — '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
+  };
+  if(API){
+    post(payload).then(function(r){if(r&&r.ok)finish(true);else{w3f().finally(function(){finish(false);});}})
+      .catch(function(){w3f().finally(function(){finish(false);});});
+  }else{
+    w3f().finally(function(){finish(false);});
+  }
 }
 </script>
-
-</body>
-</html>
+</body></html>

@@ -128,6 +128,29 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
   .nav-inner{padding:0 20px;}
   .footer{padding:40px 20px;}
 }
+
+/* RV mobile fix v10 */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;}
+  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="display:flex"]{flex-wrap:wrap;}
+  img,video,table{max-width:100%;}
+  h1{font-size:30px !important;line-height:1.2 !important;}
+  .footer-inner>div{text-align:left !important;}
+  .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
+}
+.acard{background:#162a1d;border:1px solid rgba(74,222,128,.14);border-radius:12px;padding:26px 22px;text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:all .15s;}
+.acard:hover{border-color:#4ADE80;background:#1b3424;transform:translateY(-2px);}
+.acard i{color:#4ADE80;font-size:28px;}
+.acard-t{font-size:16px;font-weight:700;color:#fff;line-height:1.35;}
+.acard p{font-size:13px;color:#bccabb;line-height:1.6;margin:0;flex:1;}
+.acard-l{font-size:13px;font-weight:700;color:#4ADE80;}
+.hstep{background:#f0f5f2;border-radius:12px;padding:22px;}
+.hstep-n{width:30px;height:30px;border-radius:50%;background:#1A472A;color:#4ADE80;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.hstep-t{font-size:15px;font-weight:700;color:#1A472A;margin-bottom:6px;}
+.hstep p{font-size:13px;color:#6b7280;line-height:1.6;margin:0;}
 </style>
 </head>
 <body style="background:#0f1f14;">
@@ -237,19 +260,29 @@ function genRC(e){
   </div>
 </section>
 <section class="s-dark" style="padding:72px 48px;">
-  <div style="max-width:900px;margin:0 auto;">
-    <span class="eyebrow" style="text-align:center;display:block;margin-bottom:12px;">Asset Types</span>
-    <h2 style="font-size:22px;font-weight:700;color:#fff;text-align:center;margin:0 0 40px;">What type of asset are you working with?</h2>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;" id="eGrid">
-      <button class="etile" onclick="selE(this,'Biofuel &amp; Biodiesel')"><i class="fa-solid fa-fire"></i><span>Biofuel &amp; Biodiesel</span></button>
-      <button class="etile" onclick="selE(this,'Solar — Utility Scale')"><i class="fa-solid fa-sun"></i><span>Solar — Utility Scale</span></button>
-      <button class="etile" onclick="selE(this,'Solar — C&amp;I / Distributed')"><i class="fa-regular fa-sun"></i><span>Solar — C&amp;I / Distributed</span></button>
-      <button class="etile" onclick="selE(this,'Wind')"><i class="fa-solid fa-wind"></i><span>Wind</span></button>
-      <button class="etile" onclick="selE(this,'Waste-to-Energy')"><i class="fa-solid fa-trash-can"></i><span>Waste-to-Energy</span></button>
-      <button class="etile" onclick="selE(this,'Circular Economy Infrastructure')"><i class="fa-solid fa-recycle"></i><span>Circular Economy Infrastructure</span></button>
-      <button class="etile" onclick="selE(this,'Carbon Capture')"><i class="fa-solid fa-smog"></i><span>Carbon Capture</span></button>
-      <button class="etile" onclick="selE(this,'Hydro')"><i class="fa-solid fa-droplet"></i><span>Hydro</span></button>
-      <button class="etile" onclick="selE(this,'Geothermal')"><i class="fa-solid fa-mountain"></i><span>Geothermal</span></button>
+  <div style="max-width:1000px;margin:0 auto;">
+    <span class="eyebrow" style="text-align:center;display:block;margin-bottom:12px;">Our Focus</span>
+    <h2 style="font-size:24px;font-weight:700;color:#fff;text-align:center;margin:0 0 12px;">Three asset classes. Deep specialisation.</h2>
+    <p style="font-size:15px;color:#bccabb;text-align:center;max-width:620px;margin:0 auto 40px;line-height:1.7;">We currently work with operating assets in Egypt across three sectors where contracted revenue is strongest. We will expand to further asset classes and markets over time.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px;">
+      <a class="acard" href="register-developer.html?type=biofuel">
+        <i class="fa-solid fa-gas-pump"></i>
+        <div class="acard-t">Biofuel &amp; Biodiesel</div>
+        <p>Biodiesel and biofuel plants selling under supply or offtake agreements to industrial buyers.</p>
+        <span class="acard-l">Register this asset &#8594;</span>
+      </a>
+      <a class="acard" href="register-developer.html?type=circular">
+        <i class="fa-solid fa-recycle"></i>
+        <div class="acard-t">Circular Economy — Waste Recycling</div>
+        <p>Recycling and recovery facilities earning from recycled-material sales, gate fees or service contracts.</p>
+        <span class="acard-l">Register this asset &#8594;</span>
+      </a>
+      <a class="acard" href="register-developer.html?type=solar">
+        <i class="fa-solid fa-solar-panel"></i>
+        <div class="acard-t">Solar C&amp;I — Commercial &amp; Industrial</div>
+        <p>Rooftop and ground-mount systems supplying factories, farms and businesses under PPAs or leases.</p>
+        <span class="acard-l">Register this asset &#8594;</span>
+      </a>
     </div>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
       <span style="background:#4ADE80;color:#0f1f14;font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;">&#127466;&#127468; Egypt</span>
@@ -260,90 +293,21 @@ function genRC(e){
   </div>
 </section>
 <section class="s-white" style="padding:72px 48px;" id="devForm">
-  <div style="max-width:620px;margin:0 auto;">
-    <div id="ectx" style="background:#f0f5f2;border-radius:10px;padding:20px;margin-bottom:28px;border-left:3px solid #2C7C3B;display:none;">
-      <div style="font-size:13px;font-weight:700;color:#2C7C3B;margin-bottom:8px;" id="ectxT"></div>
-      <p style="font-size:14px;color:#374151;margin:0;line-height:1.6;" id="ectxD"></p>
+  <div style="max-width:880px;margin:0 auto;">
+    <span class="eyebrow-g" style="text-align:center;display:block;">How to start</span>
+    <h2 style="font-size:24px;font-weight:700;color:#1A472A;text-align:center;margin:0 0 36px;">From registration to term sheet.</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:36px;">
+      <div class="hstep"><div class="hstep-n">1</div><div class="hstep-t">Create your profile</div><p>Two minutes — your company and contact details.</p></div>
+      <div class="hstep"><div class="hstep-n">2</div><div class="hstep-t">Register your asset</div><p>A short asset profile, about 5 minutes. Add as many assets as you operate.</p></div>
+      <div class="hstep"><div class="hstep-n">3</div><div class="hstep-t">Review &amp; discovery call</div><p>Our team reviews it and contacts you within 5 business days.</p></div>
     </div>
-    <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 28px;">Tell us about your project.</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div><label class="lbl">Full Name *</label><input class="field" id="d_first" type="text" placeholder="Your name"></div>
-      <div><label class="lbl">Email Address *</label><input class="field" id="d_email" type="email" placeholder="you@company.com"></div>
-      <div><label class="lbl">Company Name *</label><input class="field" id="d_company" type="text" placeholder="Your company"></div>
-      <div><label class="lbl">Energy Type</label><input class="field" id="d_energy" type="text" placeholder="Select above" readonly style="background:#f9fafb;"></div>
-      <div><label class="lbl">Country</label><input class="field" value="Egypt" readonly style="background:#f9fafb;color:#6b7280;"></div>
-      <div><label class="lbl">Asset Stage *</label>
-        <select class="field" id="d_stage">
-          <option value="" disabled selected>Select stage</option>
-          <option>Operational — Generating Revenue</option>
-          <option>Operational — Pre-revenue</option>
-          <option>Under Construction</option>
-          <option>Development Stage</option>
-        </select>
-      </div>
-      <div style="grid-column:1/-1;"><label class="lbl">Brief Project Description</label>
-        <textarea class="field" id="d_desc" rows="4" placeholder="Briefly describe your asset: capacity, off-taker, contracted revenue, and capital need."></textarea>
-      </div>
-      <div class="err" id="d_err" style="grid-column:1/-1;"></div>
-      <div style="grid-column:1/-1;"><button class="btn-lime full" id="d_btn" onclick="sendDev()">Submit Inquiry</button></div>
-    </div>
-    <div id="d_ok" style="display:none;text-align:center;padding:40px;">
-      <i class="fa-solid fa-circle-check" style="color:#16a34a;font-size:48px;display:block;margin-bottom:16px;"></i>
-      <h3 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 10px;">Inquiry sent — thank you.</h3>
-      <p style="font-size:14px;color:#6b7280;margin:0;">Our team will review your project and follow up within 5 business days.</p>
+    <div style="text-align:center;">
+      <a href="register-developer.html" class="btn-lime" style="padding:14px 36px;">Create Your Developer Profile &#8594;</a>
+      <div style="margin-top:14px;font-size:13px;color:#6b7280;">Already registered? <a href="login.html" style="color:#2C7C3B;font-weight:700;text-decoration:none;">Log in &#8594;</a> &nbsp;&middot;&nbsp; Questions first? <a href="contact.html" style="color:#2C7C3B;font-weight:700;text-decoration:none;">Contact us</a></div>
     </div>
   </div>
 </section>
 <script>
-var eDesc={
-  'Biofuel & Biodiesel':'For biofuel and biodiesel facilities, we evaluate fuel supply agreements and off-take contracts, focusing on production consistency and counterparty creditworthiness.',
-  'Solar — Utility Scale':'For utility-scale solar assets, we evaluate long-term PPAs and government off-take arrangements, focusing on off-taker creditworthiness and regulatory stability.',
-  'Solar — C&I / Distributed':'For C&I solar portfolios, we evaluate distributed off-take arrangements and corporate PPA structures, focusing on counterparty diversification.',
-  'Wind':'For wind assets, we evaluate capacity factor performance, grid connection stability, and long-term PPA structure.',
-  'Waste-to-Energy':'For waste-to-energy facilities, we evaluate feedstock supply security, tipping fee contracts, and energy off-take arrangements.',
-  'Circular Economy Infrastructure':'For circular economy assets, we evaluate contracted revenue streams from gate fees, commodity sales, and energy off-take.',
-  'Carbon Capture':'For carbon capture projects, we evaluate voluntary carbon market contracts, registry verification, and counterparty strength.',
-  'Hydro':'For hydropower assets, we evaluate water resource agreements, grid connection arrangements, and hydrology risk.',
-  'Geothermal':'For geothermal assets, we evaluate subsurface resource assessments, long-term PPAs, and operational performance data.'
-};
-function selE(btn,name) {
-  document.querySelectorAll('.etile').forEach(function(t){t.classList.remove('sel');});
-  btn.classList.add('sel');
-  var clean=name.replace(/&amp;/g,'&').replace(/&amp;/g,'&');
-  document.getElementById('d_energy').value=name;
-  var desc=eDesc[clean]||eDesc[name]||'';
-  if(desc){
-    document.getElementById('ectxT').textContent='Structuring for '+clean;
-    document.getElementById('ectxD').textContent=desc;
-    document.getElementById('ectx').style.display='block';
-  }
-  document.getElementById('devForm').scrollIntoView({behavior:'smooth'});
-}
-function sendDev() {
-  var name=document.getElementById('d_first').value.trim();
-  var email=document.getElementById('d_email').value.trim();
-  var company=document.getElementById('d_company').value.trim();
-  var energy=document.getElementById('d_energy').value;
-  var stage=document.getElementById('d_stage').value;
-  var desc=document.getElementById('d_desc').value.trim();
-  var err=document.getElementById('d_err');
-  var btn=document.getElementById('d_btn');
-  err.style.display='none';
-  if(!name||!email||!company||!stage){err.style.display='block';err.textContent='Please fill in all required fields.';return;}
-  btn.disabled=true;btn.textContent='Sending...';
-  fetch('https://api.web3forms.com/submit',{
-    method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({
-      access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',
-      subject:'Developer Inquiry — '+name+' — '+company,
-      name:name,email:email,
-      message:'Name: '+name+'\nEmail: '+email+'\nCompany: '+company+'\nEnergy: '+energy+'\nStage: '+stage+'\nDescription: '+desc
-    })
-  }).finally(function(){
-    document.getElementById('devForm').querySelector('[style*="grid"]').style.display='none';
-    document.getElementById('d_ok').style.display='block';
-  });
-}
 </script></div>
 <footer class="footer">
   <div class="footer-inner">

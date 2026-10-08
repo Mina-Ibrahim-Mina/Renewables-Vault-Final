@@ -128,6 +128,19 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
   .nav-inner{padding:0 20px;}
   .footer{padding:40px 20px;}
 }
+
+/* RV mobile fix v10 */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;}
+  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="display:flex"]{flex-wrap:wrap;}
+  img,video,table{max-width:100%;}
+  h1{font-size:30px !important;line-height:1.2 !important;}
+  .footer-inner>div{text-align:left !important;}
+  .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
+}
 </style>
 </head>
 <body style="background:#0f1f14;">
@@ -140,6 +153,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
     <div class="nav-auth" id="navAuth"></div>
   </div>
 </nav>
+<script src="rv-config.js"></script>
 <script>
 var RVAuth={
   get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
@@ -184,21 +198,21 @@ function genRC(e){
   <div style="text-align:center;margin-bottom:40px;">
     <span class="eyebrow-g" style="display:block;margin-bottom:10px;">Developer Registration</span>
     <h1 style="font-size:clamp(22px,3vw,32px);font-weight:700;color:#1A472A;margin:0 0 10px;">Create Your Developer Profile</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0;">Tell us about your asset. Our team will follow up within 5 business days.</p>
+    <p style="font-size:15px;color:#6b7280;margin:0;">Takes about 2 minutes. Next, you will register your asset from your dashboard.</p>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-    <div><label class="lbl">First Name *</label><input class="field" id="d_first" type="text" placeholder="First name"></div>
-    <div><label class="lbl">Last Name *</label><input class="field" id="d_last" type="text" placeholder="Last name"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Email Address *</label><input class="field" id="d_email" type="email" placeholder="you@company.com"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Password *</label><input class="field" id="d_pass" type="password" placeholder="Create a password (min 6 characters)"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Company Name *</label><input class="field" id="d_company" type="text" placeholder="Your company"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Energy Type *</label>
+    <div><label class="lbl">First Name *</label><input class="field" id="d_first" type="text" placeholder="First name" autocomplete="given-name"></div>
+    <div><label class="lbl">Last Name *</label><input class="field" id="d_last" type="text" placeholder="Last name" autocomplete="family-name"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Email Address *</label><input class="field" id="d_email" type="email" placeholder="you@company.com" autocomplete="email"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Mobile / WhatsApp *</label><input class="field" id="d_phone" type="tel" placeholder="+20 10 1234 5678" autocomplete="tel"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Password *</label><input class="field" id="d_pass" type="password" placeholder="Create a password (min 6 characters)" autocomplete="new-password"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Company Name *</label><input class="field" id="d_company" type="text" placeholder="Your company" autocomplete="organization"></div>
+    <div><label class="lbl">Main Asset Type *</label>
       <select class="field" id="d_energy">
-        <option value="" disabled selected>Select energy type</option>
-        <option>Biofuel &amp; Biodiesel</option><option>Solar — Utility Scale</option>
-        <option>Solar — C&amp;I / Distributed</option><option>Wind</option>
-        <option>Waste-to-Energy</option><option>Circular Economy Infrastructure</option>
-        <option>Carbon Capture</option><option>Hydro</option><option>Geothermal</option>
+        <option value="" disabled selected>Select asset type</option>
+        <option value="Biofuel &amp; Biodiesel">Biofuel &amp; Biodiesel</option>
+        <option value="Circular Economy — Waste Recycling">Circular Economy — Waste Recycling</option>
+        <option value="Solar C&amp;I — Commercial &amp; Industrial">Solar C&amp;I — Commercial &amp; Industrial</option>
       </select>
     </div>
     <div><label class="lbl">Country *</label>
@@ -209,15 +223,12 @@ function genRC(e){
         <option disabled>Morocco — Coming Soon</option>
       </select>
     </div>
-    <div><label class="lbl">Asset Stage *</label>
-      <select class="field" id="d_stage">
-        <option value="" disabled selected>Select stage</option>
-        <option>Operational — Generating Revenue</option>
-        <option>Operational — Pre-revenue</option>
-        <option>Under Construction</option><option>Development Stage</option>
-      </select>
+    <div style="grid-column:1/-1;margin-top:4px;">
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#374151;line-height:1.55;cursor:pointer;">
+        <input type="checkbox" id="d_consent" style="margin-top:3px;width:16px;height:16px;accent-color:#2C7C3B;flex-shrink:0;">
+        <span>I agree that Renewables Vault may store and use the information I provide to review my assets and contact me, as described in the <a href="legal.html" target="_blank" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
+      </label>
     </div>
-    <div style="grid-column:1/-1;"><label class="lbl">Brief Project Description</label><textarea class="field" id="d_desc" rows="4" placeholder="Briefly describe your asset: capacity, off-taker, contracted revenue, and capital need."></textarea></div>
     <div class="err" id="d_err" style="grid-column:1/-1;"></div>
     <div style="grid-column:1/-1;"><button class="btn-lime full" id="d_btn" onclick="subDev()">Create Developer Account</button></div>
   </div>
@@ -226,25 +237,35 @@ function genRC(e){
 </section>
 <script>
 function subDev() {
-  var first=document.getElementById('d_first').value.trim(),last=document.getElementById('d_last').value.trim();
-  var email=document.getElementById('d_email').value.trim(),pass=document.getElementById('d_pass').value;
-  var company=document.getElementById('d_company').value.trim(),energy=document.getElementById('d_energy').value;
-  var country=document.getElementById('d_country').value,stage=document.getElementById('d_stage').value;
-  var desc=document.getElementById('d_desc').value.trim();
-  var err=document.getElementById('d_err'),btn=document.getElementById('d_btn');
+  var g=function(id){return document.getElementById(id);};
+  var first=g('d_first').value.trim(),last=g('d_last').value.trim(),email=g('d_email').value.trim(),pass=g('d_pass').value;
+  var phone=g('d_phone').value.trim(),company=g('d_company').value.trim(),energy=g('d_energy').value,country=g('d_country').value;
+  var consent=g('d_consent').checked,err=g('d_err'),btn=g('d_btn');
+  var fail=function(m){err.style.display='block';err.textContent=m;};
   err.style.display='none';
-  if(!first||!last||!email||!pass||!company||!energy||!stage){err.style.display='block';err.textContent='Please fill in all required fields.';return;}
-  if(pass.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
+  if(!first||!last||!email||!phone||!pass||!company||!energy){return fail('Please fill in all required fields.');}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
+  if(phone.replace(/\D/g,'').length<8){return fail('Please enter a valid mobile / WhatsApp number, including the country code.');}
+  if(pass.length<6){return fail('Password must be at least 6 characters.');}
+  if(!consent){return fail('Please tick the box to agree to the Privacy Policy.');}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-  if(users.find(function(u){return u.email===email;})){err.style.display='block';err.textContent='An account with this email already exists.';return;}
-  var user={firstName:first,lastName:last,email:email,password:pass,company:company,energy:energy,country:country,stage:stage,description:desc,type:'developer',status:'pending',registered:new Date().toLocaleDateString()};
+  if(users.find(function(u){return u.email.toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists on this browser. Please log in instead.');}
+  var user={firstName:first,lastName:last,email:email,phone:phone,password:pass,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
   users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
   btn.disabled=true;btn.textContent='Creating account...';
-  var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_developer&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&company='+encodeURIComponent(company)+'&energy='+encodeURIComponent(energy)+'&country='+encodeURIComponent(country)+'&stage='+encodeURIComponent(stage)+'&description='+encodeURIComponent(desc);
-  var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration — '+first+' '+last+' — '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nCompany: '+company+'\nEnergy: '+energy+'\nCountry: '+country+'\nStage: '+stage+'\nDescription: '+(desc||'Not provided')+'\nDate: '+new Date().toLocaleDateString()+'\n============================\nAdmin: renewablesvault.com/admin.html'})});
-  var sheet=fetch(sheetUrl,{mode:'no-cors'});
-  Promise.allSettled([w3f,sheet]).then(function(){window.location.href='dashboard-developer.html';});
+  var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_developer&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&company='+encodeURIComponent(company)+'&energy='+encodeURIComponent(energy)+'&country='+encodeURIComponent(country)+'&stage=&description='+encodeURIComponent('Phone: '+phone);
+  var calls=[
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration — '+first+' '+last+' — '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})}),
+    fetch(sheetUrl,{mode:'no-cors'})
+  ];
+  if(typeof RV_API==='string'&&/^https:\/\//.test(RV_API)){
+    calls.push(fetch(RV_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true})}));
+  }
+  var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-developer.html';}};
+  Promise.allSettled(calls).then(go);setTimeout(go,8000);
 }
+(function(){var t=(location.search.match(/type=(\w+)/)||[])[1],m={biofuel:0,circular:1,solar:2};
+  if(t in m){var s=document.getElementById('d_energy');s.selectedIndex=m[t]+1;}})();
 </script></div>
 <footer class="footer">
   <div class="footer-inner">

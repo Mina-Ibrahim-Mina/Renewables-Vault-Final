@@ -74,6 +74,19 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 #toast{position:fixed;bottom:24px;right:24px;background:#1A472A;color:#fff;
   padding:14px 20px;border-radius:8px;font-size:14px;font-weight:600;
   display:none;z-index:300;border-left:4px solid #4ADE80;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+
+/* RV mobile fix v10 */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;}
+  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="display:flex"]{flex-wrap:wrap;}
+  img,video,table{max-width:100%;}
+  h1{font-size:30px !important;line-height:1.2 !important;}
+  .footer-inner>div{text-align:left !important;}
+  .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
+}
 </style>
 </head>
 <body>
@@ -112,6 +125,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     <div class="tabs">
       <button class="tab on" id="t1" onclick="showTab('inv')">Investors</button>
       <button class="tab" id="t2" onclick="showTab('dev')">Developers</button>
+      <button class="tab" id="t3" onclick="showTab('ast')"><i class="fa-solid fa-shield-halved"></i> Asset Assessments</button>
     </div>
     <div id="vi">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -127,6 +141,26 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       </div>
       <div class="tbl" id="devTbl"><div class="tbl-empty">Loading...</div></div>
     </div>
+    <div id="va" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Asset Assessments <span style="font-size:12px;color:#9ca3af;font-weight:600;">(RARE™ — internal only)</span></h2>
+        <div id="aTools" style="display:none;gap:8px;align-items:center;">
+          <select id="aFilter" onchange="renderA()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;">
+            <option value="">All statuses</option></select>
+          <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+      </div>
+      <div id="aLock" class="tbl" style="padding:28px;text-align:center;">
+        <p style="font-size:14px;color:#6b7280;margin:0 0 14px;">Enter the assessments password (the one you set in the RV Assessments script).</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <input type="password" id="aPass" placeholder="Assessments password" style="padding:10px 14px;border:1px solid #c8ddd0;border-radius:6px;font-size:14px;min-width:240px;">
+          <button class="tbtn" onclick="unlockA()" style="background:#1A472A;color:#fff;padding:10px 18px;">Unlock</button>
+        </div>
+        <div id="aMsg" style="font-size:13px;color:#dc2626;margin-top:10px;"></div>
+      </div>
+      <div id="aList"></div>
+    </div>
+
   </div>
 </div>
 
@@ -151,6 +185,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <div id="toast"></div>
 
+<script src="rv-config.js"></script>
 <script>
 var SHEET='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec',PASS='RVault2026!',SEC='RV_RENEWABLES_VAULT_2026',REC='RV_RECOVERY_2026';
 
@@ -161,7 +196,7 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('passIn').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 document.getElementById('logoutBtn').addEventListener('click',doLogout);
-document.getElementById('refreshBtn').addEventListener('click',loadData);
+document.getElementById('refreshBtn').addEventListener('click',function(){loadData();});
 
 function doLogin(){
   if(document.getElementById('passIn').value===PASS){
@@ -180,8 +215,59 @@ window.addEventListener('DOMContentLoaded',function(){
 function showTab(t){
   document.getElementById('vi').style.display=t==='inv'?'block':'none';
   document.getElementById('vd').style.display=t==='dev'?'block':'none';
+  document.getElementById('va').style.display=t==='ast'?'block':'none';
   document.getElementById('t1').className='tab'+(t==='inv'?' on':'');
   document.getElementById('t2').className='tab'+(t==='dev'?' on':'');
+  document.getElementById('t3').className='tab'+(t==='ast'?' on':'');
+  if(t==='ast'&&sessionStorage.getItem('rva_ap'))loadA();
+}
+
+/* ── ASSET ASSESSMENTS (RV Assessments service) ── */
+var AAPI=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'',ADATA=null;
+function unlockA(){sessionStorage.setItem('rva_ap',document.getElementById('aPass').value);loadA();}
+function aMsg(m){document.getElementById('aMsg').textContent=m;}
+function loadA(){
+  if(!AAPI){aMsg('The assessments service is not connected yet. Add its URL to rv-config.js (see the setup guide).');return;}
+  var pw=sessionStorage.getItem('rva_ap')||'';aMsg('Loading...');
+  fetch(AAPI+'?action=admin_list&password='+encodeURIComponent(pw)).then(function(r){return r.json();}).then(function(r){
+    if(!r.ok){sessionStorage.removeItem('rva_ap');document.getElementById('aLock').style.display='block';document.getElementById('aTools').style.display='none';document.getElementById('aList').innerHTML='';aMsg(r.error||'Could not load.');return;}
+    ADATA=r;aMsg('');document.getElementById('aLock').style.display='none';document.getElementById('aTools').style.display='flex';
+    var f=document.getElementById('aFilter'),cur=f.value;f.innerHTML='<option value="">All statuses</option>'+r.statuses.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
+    renderA();
+  }).catch(function(){aMsg('Could not reach the assessments service.');});
+}
+function renderA(){
+  var f=document.getElementById('aFilter').value,rows=ADATA.assessments.filter(function(a){return!f||a.status===f;});
+  if(!rows.length){document.getElementById('aList').innerHTML='<div class="tbl"><div class="tbl-empty">No asset profiles yet.</div></div>';return;}
+  var tc={A:'#16a34a',B:'#2C7C3B',C:'#d97706',D:'#dc2626'};
+  document.getElementById('aList').innerHTML=rows.map(function(a,i){
+    var wa=String(a.phone||'').replace(/\D/g,'');
+    return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
+      '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">'+
+        '<div style="min-width:240px;flex:1;"><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
+        '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(a.type)+' · '+esc(a.location)+' · Ref '+esc(a.id)+' · '+esc(a.submitted)+'</div>'+
+        '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>'+esc(a.developer)+'</b> · '+esc(a.company)+'<br><a href="mailto:'+esc(a.email)+'" style="color:#2C7C3B;">'+esc(a.email)+'</a>'+
+        (wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(a.phone)+'</a>':'')+'</div></div>'+
+        '<div style="text-align:right;min-width:150px;"><div style="font-size:30px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';line-height:1;">'+esc(a.score)+'<span style="font-size:13px;color:#9ca3af;">/100</span></div>'+
+        '<div style="font-size:13px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';">Tier '+esc(a.tier)+'</div>'+
+        '<div style="font-size:12px;color:#6b7280;">ACR '+esc(a.acr||'n/a')+'</div></div>'+
+      '</div>'+
+      (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
+      '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(a.answers)+'</pre></details>'+
+      '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
+        '<select id="st_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.statuses.map(function(x){return '<option'+(x===a.status?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select>'+
+        '<input id="nt_'+i+'" value="'+esc(a.note)+'" placeholder="Note shown to the developer (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
+        '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="nf_'+i+'" checked> Email developer</label>'+
+        '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveA(\''+esc(a.id)+'\','+i+')">Save</button>'+
+        '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(a.updated)+'</span>'+
+      '</div></div>';
+  }).join('');
+}
+function saveA(id,i){
+  var body={action:'admin_set_status',password:sessionStorage.getItem('rva_ap')||'',id:id,status:document.getElementById('st_'+i).value,note:document.getElementById('nt_'+i).value,notify:document.getElementById('nf_'+i).checked};
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();})
+    .then(function(r){if(r.ok){toast('Status saved'+(body.notify?' and developer emailed':''));loadA();}else toast(r.error||'Could not save');})
+    .catch(function(){toast('Could not reach the assessments service');});
 }
 </script>
 

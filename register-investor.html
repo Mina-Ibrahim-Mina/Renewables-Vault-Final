@@ -128,6 +128,19 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
   .nav-inner{padding:0 20px;}
   .footer{padding:40px 20px;}
 }
+
+/* RV mobile fix v10 */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;}
+  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="display:flex"]{flex-wrap:wrap;}
+  img,video,table{max-width:100%;}
+  h1{font-size:30px !important;line-height:1.2 !important;}
+  .footer-inner>div{text-align:left !important;}
+  .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
+}
 </style>
 </head>
 <body style="background:#0f1f14;">
@@ -190,6 +203,7 @@ function genRC(e){
     <div><label class="lbl">First Name *</label><input class="field" id="i_first" type="text" placeholder="First name"></div>
     <div><label class="lbl">Last Name *</label><input class="field" id="i_last" type="text" placeholder="Last name"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Email Address *</label><input class="field" id="i_email" type="email" placeholder="you@company.com"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Mobile / WhatsApp</label><input class="field" id="i_phone" type="tel" placeholder="+20 10 1234 5678 (optional)"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Password *</label><input class="field" id="i_pass" type="password" placeholder="Create a password (min 6 characters)"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Organisation *</label><input class="field" id="i_org" type="text" placeholder="Company or fund name"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Investor Type *</label>
@@ -201,12 +215,19 @@ function genRC(e){
     </div>
     <div style="grid-column:1/-1;"><label class="lbl">Indicative Ticket Size</label><input class="field" id="i_ticket" type="text" placeholder="e.g. $500K – $2M"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Investment Note (Optional)</label><textarea class="field" id="i_note" rows="3" placeholder="Tell us about your investment mandate"></textarea></div>
+    <div style="grid-column:1/-1;margin-top:4px;">
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#374151;line-height:1.55;cursor:pointer;">
+        <input type="checkbox" id="i_consent" style="margin-top:3px;width:16px;height:16px;accent-color:#2C7C3B;flex-shrink:0;">
+        <span>I agree that Renewables Vault may store and use the information I provide to review my profile and contact me, as described in the <a href="legal.html" target="_blank" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
+      </label>
+    </div>
     <div class="err" id="i_err" style="grid-column:1/-1;"></div>
     <div style="grid-column:1/-1;"><button class="btn-lime full" id="i_btn" onclick="subInv()">Create Investor Account</button></div>
   </div>
   <p style="text-align:center;font-size:13px;color:#9ca3af;margin-top:16px;">Already registered? <a href="login.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Log in &#8594;</a></p>
 </div>
 </section>
+<script src="rv-config.js"></script>
 <script>
 function subInv() {
   var first=document.getElementById('i_first').value.trim(),last=document.getElementById('i_last').value.trim();
@@ -214,18 +235,21 @@ function subInv() {
   var org=document.getElementById('i_org').value.trim(),itype=document.getElementById('i_type').value;
   var ticket=document.getElementById('i_ticket').value.trim(),note=document.getElementById('i_note').value.trim();
   var err=document.getElementById('i_err'),btn=document.getElementById('i_btn');
+  var phone=document.getElementById('i_phone').value.trim(),consent=document.getElementById('i_consent').checked;
   err.style.display='none';
   if(!first||!last||!email||!pass||!org||!itype){err.style.display='block';err.textContent='Please fill in all required fields.';return;}
+  if(!consent){err.style.display='block';err.textContent='Please tick the box to agree to the Privacy Policy.';return;}
   if(pass.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
   if(users.find(function(u){return u.email===email;})){err.style.display='block';err.textContent='An account with this email already exists.';return;}
-  var user={firstName:first,lastName:last,email:email,password:pass,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
+  var user={firstName:first,lastName:last,email:email,phone:phone,consent:true,password:pass,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
   users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
   btn.disabled=true;btn.textContent='Creating account...';
   var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_investor&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&org='+encodeURIComponent(org)+'&investorType='+encodeURIComponent(itype)+'&ticket='+encodeURIComponent(ticket)+'&note='+encodeURIComponent(note);
-  var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration — '+first+' '+last+' — '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
+  var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration — '+first+' '+last+' — '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+(phone||'Not provided')+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
   var sheet=fetch(sheetUrl,{mode:'no-cors'});
-  Promise.allSettled([w3f,sheet]).then(function(){window.location.href='dashboard-investor.html';});
+  var api=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?fetch(RV_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'register',type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true})}):Promise.resolve();
+  Promise.allSettled([w3f,sheet,api]).then(function(){window.location.href='dashboard-investor.html';});
 }
 </script></div>
 <footer class="footer">

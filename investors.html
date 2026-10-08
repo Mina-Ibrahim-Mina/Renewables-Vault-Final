@@ -128,6 +128,19 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
   .nav-inner{padding:0 20px;}
   .footer{padding:40px 20px;}
 }
+
+/* RV mobile fix v10 */
+@media(max-width:768px){
+  html,body{overflow-x:hidden;}
+  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="display:flex"]{flex-wrap:wrap;}
+  img,video,table{max-width:100%;}
+  h1{font-size:30px !important;line-height:1.2 !important;}
+  .footer-inner>div{text-align:left !important;}
+  .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
+}
 </style>
 </head>
 <body style="background:#0f1f14;">
@@ -187,7 +200,7 @@ function genRC(e){
 <section class="s-white" style="padding:72px 48px;">
   <div class="prose" style="text-align:center;">
     <p>Renewables Vault provides investors access to asset-backed exposure to contracted renewable energy revenue — transactions structured around specific, operating clean energy assets, not projected cash flows.</p>
-    <p>Each transaction is underwritten through RARE&#8482;, Renewables Vault's proprietary risk methodology, and structured for a defined term. Current origination is focused in Egypt, across multiple clean energy asset classes including biofuel, solar, and circular economy infrastructure.</p>
+    <p>Each transaction is underwritten through RARE&#8482;, Renewables Vault's proprietary risk methodology, and structured for a defined term. Current origination is focused in Egypt, across three clean energy asset classes: biofuel and biodiesel, solar C&amp;I, and circular economy infrastructure.</p>
     <p>Transaction-level detail — including structure, terms, and underlying off-takers — is shared only with registered investors Renewables Vault has engaged with directly.</p>
   </div>
   <div style="text-align:center;margin-top:24px;">

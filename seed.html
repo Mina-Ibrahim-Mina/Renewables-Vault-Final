@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<title>Account Setup — Renewables Vault</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#0f1f14;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.wrap{width:100%;max-width:460px;margin:40px auto;padding:0 20px;}
+.card{background:#fff;border-radius:14px;padding:40px 36px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.logo-row{text-align:center;margin-bottom:28px;}
+.logo-row img{height:44px;width:auto;}
+h1{font-size:22px;font-weight:700;color:#1A472A;margin:0 0 6px;text-align:center;}
+.sub{font-size:13px;color:#6b7280;text-align:center;margin:0 0 28px;line-height:1.5;}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2C7C3B;display:block;margin-bottom:6px;}
+.field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:8px;padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:border .15s;margin-bottom:16px;}
+.field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,.08);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.btn{width:100%;background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:8px;padding:14px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;transition:opacity .15s;margin-top:4px;}
+.btn:hover{opacity:.88;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;font-size:13px;color:#dc2626;display:none;margin-bottom:14px;}
+.ok{background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:16px 14px;font-size:14px;color:#166534;display:none;text-align:center;margin-bottom:14px;}
+.note{font-size:11px;color:#9ca3af;text-align:center;margin-top:20px;line-height:1.5;border-top:1px solid #f0f5f2;padding-top:16px;}
+.note a{color:#2C7C3B;text-decoration:none;}
+.radio-grp{display:flex;gap:10px;margin-bottom:16px;}
+.radio-grp label{flex:1;display:flex;align-items:center;gap:8px;cursor:pointer;background:#f8faf8;border:1px solid #d1e8d8;border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:#1c2b1f;transition:all .15s;}
+.radio-grp input{accent-color:#2C7C3B;}
+.radio-grp label:has(input:checked){background:#f0fdf4;border-color:#4ADE80;color:#1A472A;}
+.existing{background:#f0f5f2;border-radius:8px;padding:14px;font-size:13px;color:#374151;margin-bottom:16px;display:none;}
+.existing a{color:#2C7C3B;font-weight:700;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="logo-row">
+      <img src="logo.png" alt="Renewables Vault">
+    </div>
+    <h1>Account Setup</h1>
+    <p class="sub">Set up your Renewables Vault account on this browser. Use the same email you registered with.</p>
+    <div class="err" id="err"></div>
+    <div class="ok" id="ok">
+      <i class="fa-solid fa-circle-check" style="font-size:20px;margin-bottom:8px;display:block;"></i>
+      <strong>Account ready!</strong><br>Redirecting to your dashboard...
+    </div>
+    <div class="existing" id="existingBox">
+      <i class="fa-solid fa-info-circle" style="color:#2C7C3B;"></i>
+      An account with this email already exists in this browser.
+      <a href="login.html">Go to Login &rarr;</a>
+    </div>
+
+    <div id="formWrap">
+      <label class="lbl">Account Type</label>
+      <div class="radio-grp">
+        <label><input type="radio" name="atype" value="investor" checked> Investor</label>
+        <label><input type="radio" name="atype" value="developer"> Developer</label>
+      </div>
+
+      <!-- Investor fields -->
+      <div id="invFields">
+        <div class="row2">
+          <div>
+            <label class="lbl">First Name</label>
+            <input class="field" id="i_first" type="text" placeholder="First name">
+          </div>
+          <div>
+            <label class="lbl">Last Name</label>
+            <input class="field" id="i_last" type="text" placeholder="Last name">
+          </div>
+        </div>
+        <label class="lbl">Email</label>
+        <input class="field" id="i_email" type="email" placeholder="your@email.com">
+        <label class="lbl">Password</label>
+        <input class="field" id="i_pass" type="password" placeholder="Must match your registration password">
+        <label class="lbl">Organisation</label>
+        <input class="field" id="i_org" type="text" placeholder="Company / Fund name">
+        <label class="lbl">Investor Type</label>
+        <select class="field" id="i_itype">
+          <option value="">Select type...</option>
+          <option>Family Office</option>
+          <option>Private Equity</option>
+          <option>Venture Capital</option>
+          <option>DFI / IFI</option>
+          <option>HNWI</option>
+          <option>Corporate Treasury</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <!-- Developer fields -->
+      <div id="devFields" style="display:none;">
+        <div class="row2">
+          <div>
+            <label class="lbl">First Name</label>
+            <input class="field" id="d_first" type="text" placeholder="First name">
+          </div>
+          <div>
+            <label class="lbl">Last Name</label>
+            <input class="field" id="d_last" type="text" placeholder="Last name">
+          </div>
+        </div>
+        <label class="lbl">Email</label>
+        <input class="field" id="d_email" type="email" placeholder="your@email.com">
+        <label class="lbl">Password</label>
+        <input class="field" id="d_pass" type="password" placeholder="Must match your registration password">
+        <label class="lbl">Company</label>
+        <input class="field" id="d_company" type="text" placeholder="Company name">
+        <label class="lbl">Energy Type</label>
+        <select class="field" id="d_energy">
+          <option value="">Select energy type...</option>
+          <option>Biofuel &amp; Biodiesel</option>
+          <option>Solar (Utility Scale)</option>
+          <option>Solar (C&amp;I / Distributed)</option>
+          <option>Wind</option>
+          <option>Waste-to-Energy</option>
+          <option>Circular Economy Infrastructure</option>
+          <option>Carbon Capture</option>
+          <option>Hydro</option>
+          <option>Geothermal</option>
+        </select>
+      </div>
+
+      <button class="btn" id="setupBtn" onclick="doSetup()">Set Up My Account &rarr;</button>
+    </div>
+
+    <div class="note">
+      Already set up on this browser?
+      <a href="login.html">Log in here</a> &middot;
+      <a href="register.html">New registration</a>
+    </div>
+  </div>
+</div>
+<script>
+var RVAuth={
+  get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
+  set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));}
+};
+
+/* Toggle investor / developer fields */
+document.querySelectorAll('input[name="atype"]').forEach(function(r){
+  r.addEventListener('change',function(){
+    var inv=r.value==='investor';
+    document.getElementById('invFields').style.display=inv?'block':'none';
+    document.getElementById('devFields').style.display=inv?'none':'block';
+    document.getElementById('existingBox').style.display='none';
+  });
+});
+
+function showErr(msg){
+  var e=document.getElementById('err');
+  e.textContent=msg;e.style.display='block';
+  document.getElementById('existingBox').style.display='none';
+}
+function hideErr(){document.getElementById('err').style.display='none';}
+
+function doSetup(){
+  hideErr();
+  var type=document.querySelector('input[name="atype"]:checked').value;
+  var btn=document.getElementById('setupBtn');
+  btn.disabled=true;btn.textContent='Setting up...';
+
+  var user;
+  if(type==='investor'){
+    var first=document.getElementById('i_first').value.trim();
+    var last=document.getElementById('i_last').value.trim();
+    var email=document.getElementById('i_email').value.trim();
+    var pass=document.getElementById('i_pass').value;
+    var org=document.getElementById('i_org').value.trim();
+    var itype=document.getElementById('i_itype').value;
+    if(!first||!last||!email||!pass||!org||!itype){
+      showErr('Please fill in all fields.');btn.disabled=false;btn.textContent='Set Up My Account →';return;
+    }
+    if(pass.length<6){showErr('Password must be at least 6 characters.');btn.disabled=false;btn.textContent='Set Up My Account →';return;}
+    user={firstName:first,lastName:last,email:email,password:pass,org:org,investorType:itype,ticket:'',note:'',type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
+  } else {
+    var first=document.getElementById('d_first').value.trim();
+    var last=document.getElementById('d_last').value.trim();
+    var email=document.getElementById('d_email').value.trim();
+    var pass=document.getElementById('d_pass').value;
+    var company=document.getElementById('d_company').value.trim();
+    var energy=document.getElementById('d_energy').value;
+    if(!first||!last||!email||!pass||!company||!energy){
+      showErr('Please fill in all fields.');btn.disabled=false;btn.textContent='Set Up My Account →';return;
+    }
+    if(pass.length<6){showErr('Password must be at least 6 characters.');btn.disabled=false;btn.textContent='Set Up My Account →';return;}
+    user={firstName:first,lastName:last,email:email,password:pass,company:company,energy:energy,country:'Egypt',stage:'',description:'',type:'developer',status:'pending',registered:new Date().toLocaleDateString()};
+  }
+
+  /* Check if this email already exists in rv_users */
+  var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
+  var existing=null;
+  for(var i=0;i<users.length;i++){
+    if(users[i].email===user.email){existing=users[i];break;}
+  }
+
+  if(existing){
+    /* Email exists — verify password, restore session */
+    if(existing.password!==user.password){
+      showErr('An account with this email exists but the password does not match. Check your password or use the recovery flow.');
+      btn.disabled=false;btn.textContent='Set Up My Account →';return;
+    }
+    /* Password matches — restore session */
+    RVAuth.set(existing);
+  } else {
+    /* New entry for this browser — add and set session */
+    users.push(user);
+    localStorage.setItem('rv_users',JSON.stringify(users));
+    RVAuth.set(user);
+  }
+
+  document.getElementById('formWrap').style.display='none';
+  var ok=document.getElementById('ok');ok.style.display='block';
+  var dest=user.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
+  setTimeout(function(){window.location.href=dest;},2200);
+}
+</script>
+</body></html>

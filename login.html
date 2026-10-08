@@ -7,6 +7,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Login — Renewables Vault</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#0f1f14">
+<meta name="description" content="Log in to your Renewables Vault account.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Renewables Vault">
+<meta property="og:title" content="Login — Renewables Vault">
+<meta property="og:description" content="Log in to your Renewables Vault account.">
+<meta property="og:url" content="https://renewablesvault.com/login.html">
+<meta property="og:image" content="https://renewablesvault.com/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 *,*::before,*::after{box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;margin:0;padding:0;}
@@ -247,10 +259,12 @@ function genRC(e){
   </div>
 </div>
 </section>
+<script src="rv-config.js"></script>
+<script src="rv-auth.js"></script>
 <script>
 var vEmail='';
 function sv(id){['v1','v2','v3'].forEach(function(v){document.getElementById(v).className=v===id?'view on':'view';})}
-document.getElementById('forgotLink').addEventListener('click',function(e){e.preventDefault();sv('v2');});
+document.getElementById('forgotLink').addEventListener('click',function(e){e.preventDefault();if(RV.api()){location.href='forgot-password.html';}else{sv('v2');}});
 document.getElementById('backLink').addEventListener('click',function(e){e.preventDefault();sv('v1');});
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('verifyBtn').addEventListener('click',verifyRC);
@@ -259,15 +273,23 @@ document.getElementById('l_pass').addEventListener('keydown',function(e){if(e.ke
 function doLogin(){
   var email=document.getElementById('l_email').value.trim();
   var pass=document.getElementById('l_pass').value;
-  var err=document.getElementById('l_err');
+  var err=document.getElementById('l_err'),btn=document.getElementById('loginBtn');
+  var fail=function(m){err.style.display='block';err.textContent=m;btn.disabled=false;btn.textContent='Log In';};
   err.style.display='none';
-  if(!email||!pass){err.style.display='block';err.textContent='Please enter your email and password.';return;}
-  var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-  var user=null;
-  for(var i=0;i<users.length;i++){if(users[i].email===email&&users[i].password===pass){user=users[i];break;}}
-  if(!user){err.style.display='block';err.textContent='Incorrect email or password. Use "Forgot password?" to reset.';return;}
-  RVAuth.set(user);
-  window.location.href=user.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
+  if(!email||!pass){return fail('Please enter your email and password.');}
+  var users=JSON.parse(localStorage.getItem('rv_users')||'[]'),user=null;
+  for(var i=0;i<users.length;i++){if(String(users[i].email).toLowerCase()===email.toLowerCase()&&users[i].password===pass){user=users[i];break;}}
+  if(user){RVAuth.set(user);window.location.href=RV.home(user);return;}
+  if(!RV.api()){return fail('Incorrect email or password. Use "Forgot password?" to reset.');}
+  btn.disabled=true;btn.textContent='Checking...';
+  RV.key(email,pass).then(function(k){return RV.post({action:'login',email:email,key:k});}).then(function(r){
+    if(r&&r.ok){var u=RV.restore(r.profile,r.assets,pass);window.location.href=RV.home(u);return;}
+    var e=r&&r.error;
+    if(e==='wrong_password')fail('Incorrect password. Use "Forgot password?" to reset it.');
+    else if(e==='not_found')fail('No account found with this email. Please register first.');
+    else if(e==='locked')fail('Too many attempts. Please wait 15 minutes, or use "Forgot password?".');
+    else fail('Incorrect email or password. Use "Forgot password?" to reset.');
+  }).catch(function(){fail('Could not connect. Please check your internet connection and try again.');});
 }
 function verifyRC(){
   var email=document.getElementById('r_email').value.trim();
@@ -303,7 +325,7 @@ function savePass(){
       <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
       <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
       <div style="margin-top:10px;">
-        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
+        <a href="legal.html#privacy" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
         <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
       </div>
     </div>

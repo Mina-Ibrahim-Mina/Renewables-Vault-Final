@@ -7,6 +7,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Investor Registration — Renewables Vault</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#0f1f14">
+<meta name="description" content="Renewables Vault — structured capital for operating clean energy assets in Egypt.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Renewables Vault">
+<meta property="og:title" content="Investor Registration — Renewables Vault">
+<meta property="og:description" content="Renewables Vault — structured capital for operating clean energy assets in Egypt.">
+<meta property="og:url" content="https://renewablesvault.com/register-investor.html">
+<meta property="og:image" content="https://renewablesvault.com/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 *,*::before,*::after{box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;margin:0;padding:0;}
@@ -218,7 +230,7 @@ function genRC(e){
     <div style="grid-column:1/-1;margin-top:4px;">
       <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#374151;line-height:1.55;cursor:pointer;">
         <input type="checkbox" id="i_consent" style="margin-top:3px;width:16px;height:16px;accent-color:#2C7C3B;flex-shrink:0;">
-        <span>I agree that Renewables Vault may store and use the information I provide to review my profile and contact me, as described in the <a href="legal.html" target="_blank" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
+        <span>I agree that Renewables Vault may store and use the information I provide to review my profile and contact me, as described in the <a href="legal.html#privacy" target="_blank" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
       </label>
     </div>
     <div class="err" id="i_err" style="grid-column:1/-1;"></div>
@@ -228,6 +240,7 @@ function genRC(e){
 </div>
 </section>
 <script src="rv-config.js"></script>
+<script src="rv-auth.js"></script>
 <script>
 function subInv() {
   var first=document.getElementById('i_first').value.trim(),last=document.getElementById('i_last').value.trim();
@@ -241,14 +254,14 @@ function subInv() {
   if(!consent){err.style.display='block';err.textContent='Please tick the box to agree to the Privacy Policy.';return;}
   if(pass.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-  if(users.find(function(u){return u.email===email;})){err.style.display='block';err.textContent='An account with this email already exists.';return;}
+  if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){err.style.display='block';err.textContent='An account with this email already exists.';return;}
   var user={firstName:first,lastName:last,email:email,phone:phone,consent:true,password:pass,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
   users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
   btn.disabled=true;btn.textContent='Creating account...';
   var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_investor&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&org='+encodeURIComponent(org)+'&investorType='+encodeURIComponent(itype)+'&ticket='+encodeURIComponent(ticket)+'&note='+encodeURIComponent(note);
   var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration — '+first+' '+last+' — '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+(phone||'Not provided')+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
   var sheet=fetch(sheetUrl,{mode:'no-cors'});
-  var api=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?fetch(RV_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'register',type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true})}):Promise.resolve();
+  var api=RV.api()?RV.key(email,pass).then(function(k){return RV.post({action:'register',type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true,key:k});}):Promise.resolve();
   Promise.allSettled([w3f,sheet,api]).then(function(){window.location.href='dashboard-investor.html';});
 }
 </script></div>
@@ -263,7 +276,7 @@ function subInv() {
       <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
       <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
       <div style="margin-top:10px;">
-        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
+        <a href="legal.html#privacy" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
         <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
       </div>
     </div>

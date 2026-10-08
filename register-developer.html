@@ -7,6 +7,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Developer Registration — Renewables Vault</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="theme-color" content="#0f1f14">
+<meta name="description" content="Create your Renewables Vault developer profile and register your biofuel, waste recycling or solar C&amp;I asset for financing.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Renewables Vault">
+<meta property="og:title" content="Developer Registration — Renewables Vault">
+<meta property="og:description" content="Create your Renewables Vault developer profile and register your biofuel, waste recycling or solar C&amp;I asset for financing.">
+<meta property="og:url" content="https://renewablesvault.com/register-developer.html">
+<meta property="og:image" content="https://renewablesvault.com/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 *,*::before,*::after{box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;margin:0;padding:0;}
@@ -154,6 +166,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
   </div>
 </nav>
 <script src="rv-config.js"></script>
+<script src="rv-auth.js"></script>
 <script>
 var RVAuth={
   get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
@@ -226,7 +239,7 @@ function genRC(e){
     <div style="grid-column:1/-1;margin-top:4px;">
       <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#374151;line-height:1.55;cursor:pointer;">
         <input type="checkbox" id="d_consent" style="margin-top:3px;width:16px;height:16px;accent-color:#2C7C3B;flex-shrink:0;">
-        <span>I agree that Renewables Vault may store and use the information I provide to review my assets and contact me, as described in the <a href="legal.html" target="_blank" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
+        <span>I agree that Renewables Vault may store and use the information I provide to review my assets and contact me, as described in the <a href="legal.html#privacy" target="_blank" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
       </label>
     </div>
     <div class="err" id="d_err" style="grid-column:1/-1;"></div>
@@ -258,8 +271,8 @@ function subDev() {
     fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration — '+first+' '+last+' — '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})}),
     fetch(sheetUrl,{mode:'no-cors'})
   ];
-  if(typeof RV_API==='string'&&/^https:\/\//.test(RV_API)){
-    calls.push(fetch(RV_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true})}));
+  if(RV.api()){
+    calls.push(RV.key(email,pass).then(function(k){return RV.post({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,key:k});}));
   }
   var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-developer.html';}};
   Promise.allSettled(calls).then(go);setTimeout(go,8000);
@@ -278,7 +291,7 @@ function subDev() {
       <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
       <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
       <div style="margin-top:10px;">
-        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
+        <a href="legal.html#privacy" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
         <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
       </div>
     </div>

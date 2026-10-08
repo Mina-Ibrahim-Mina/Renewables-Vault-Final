@@ -252,9 +252,9 @@ function genRC(e){
 function subDev() {
   var g=function(id){return document.getElementById(id);};
   var first=g('d_first').value.trim(),last=g('d_last').value.trim(),email=g('d_email').value.trim(),pass=g('d_pass').value;
-  var phone=g('d_phone').value.trim(),company=g('d_company').value.trim(),energy=g('d_energy').value,country=g('d_country').value;
+  var phone=RV.ascii(g('d_phone').value.trim()),company=g('d_company').value.trim(),energy=g('d_energy').value,country=g('d_country').value;
   var consent=g('d_consent').checked,err=g('d_err'),btn=g('d_btn');
-  var fail=function(m){err.style.display='block';err.textContent=m;};
+  var fail=function(m,html){err.style.display='block';if(html)err.innerHTML=m;else err.textContent=m;btn.disabled=false;btn.textContent='Create Developer Account';};
   err.style.display='none';
   if(!first||!last||!email||!phone||!pass||!company||!energy){return fail('Please fill in all required fields.');}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
@@ -262,20 +262,21 @@ function subDev() {
   if(pass.length<6){return fail('Password must be at least 6 characters.');}
   if(!consent){return fail('Please tick the box to agree to the Privacy Policy.');}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-  if(users.find(function(u){return u.email.toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists on this browser. Please log in instead.');}
-  var user={firstName:first,lastName:last,email:email,phone:phone,password:pass,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
-  users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
+  if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}
   btn.disabled=true;btn.textContent='Creating account...';
-  var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_developer&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&company='+encodeURIComponent(company)+'&energy='+encodeURIComponent(energy)+'&country='+encodeURIComponent(country)+'&stage=&description='+encodeURIComponent('Phone: '+phone);
-  var calls=[
-    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration — '+first+' '+last+' — '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})}),
-    fetch(sheetUrl,{mode:'no-cors'})
-  ];
-  if(RV.api()){
-    calls.push(RV.key(email,pass).then(function(k){return RV.post({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,key:k});}));
-  }
-  var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-developer.html';}};
-  Promise.allSettled(calls).then(go);setTimeout(go,8000);
+  RV.serverRegister({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true},pass,function(res){
+    if(res==='restored'){window.location.href='dashboard-developer.html';return;}
+    if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
+    var user={firstName:first,lastName:last,email:email,phone:phone,password:pass,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
+    users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
+    var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_developer&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&company='+encodeURIComponent(company)+'&energy='+encodeURIComponent(energy)+'&country='+encodeURIComponent(country)+'&stage=&description='+encodeURIComponent('Phone: '+phone);
+    var calls=[
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration — '+first+' '+last+' — '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})}),
+      fetch(sheetUrl,{mode:'no-cors'})
+    ];
+    var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-developer.html';}};
+    Promise.allSettled(calls).then(go);setTimeout(go,8000);
+  });
 }
 (function(){var t=(location.search.match(/type=(\w+)/)||[])[1],m={biofuel:0,circular:1,solar:2};
   if(t in m){var s=document.getElementById('d_energy');s.selectedIndex=m[t]+1;}})();

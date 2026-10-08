@@ -243,26 +243,30 @@ function genRC(e){
 <script src="rv-auth.js"></script>
 <script>
 function subInv() {
-  var first=document.getElementById('i_first').value.trim(),last=document.getElementById('i_last').value.trim();
-  var email=document.getElementById('i_email').value.trim(),pass=document.getElementById('i_pass').value;
-  var org=document.getElementById('i_org').value.trim(),itype=document.getElementById('i_type').value;
-  var ticket=document.getElementById('i_ticket').value.trim(),note=document.getElementById('i_note').value.trim();
-  var err=document.getElementById('i_err'),btn=document.getElementById('i_btn');
-  var phone=document.getElementById('i_phone').value.trim(),consent=document.getElementById('i_consent').checked;
+  var g=function(id){return document.getElementById(id);};
+  var first=g('i_first').value.trim(),last=g('i_last').value.trim(),email=g('i_email').value.trim(),pass=g('i_pass').value;
+  var org=g('i_org').value.trim(),itype=g('i_type').value,ticket=g('i_ticket').value.trim(),note=g('i_note').value.trim();
+  var phone=RV.ascii(g('i_phone').value.trim()),consent=g('i_consent').checked,err=g('i_err'),btn=g('i_btn');
+  var fail=function(m,html){err.style.display='block';if(html)err.innerHTML=m;else err.textContent=m;btn.disabled=false;btn.textContent='Create Investor Account';};
   err.style.display='none';
-  if(!first||!last||!email||!pass||!org||!itype){err.style.display='block';err.textContent='Please fill in all required fields.';return;}
-  if(!consent){err.style.display='block';err.textContent='Please tick the box to agree to the Privacy Policy.';return;}
-  if(pass.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
+  if(!first||!last||!email||!pass||!org||!itype){return fail('Please fill in all required fields.');}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
+  if(pass.length<6){return fail('Password must be at least 6 characters.');}
+  if(!consent){return fail('Please tick the box to agree to the Privacy Policy.');}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-  if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){err.style.display='block';err.textContent='An account with this email already exists.';return;}
-  var user={firstName:first,lastName:last,email:email,phone:phone,consent:true,password:pass,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
-  users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
+  if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}
   btn.disabled=true;btn.textContent='Creating account...';
-  var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_investor&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&org='+encodeURIComponent(org)+'&investorType='+encodeURIComponent(itype)+'&ticket='+encodeURIComponent(ticket)+'&note='+encodeURIComponent(note);
-  var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration — '+first+' '+last+' — '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+(phone||'Not provided')+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
-  var sheet=fetch(sheetUrl,{mode:'no-cors'});
-  var api=RV.api()?RV.key(email,pass).then(function(k){return RV.post({action:'register',type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true,key:k});}):Promise.resolve();
-  Promise.allSettled([w3f,sheet,api]).then(function(){window.location.href='dashboard-investor.html';});
+  RV.serverRegister({action:'register',type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true},pass,function(res){
+    if(res==='restored'){window.location.href='dashboard-investor.html';return;}
+    if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
+    var user={firstName:first,lastName:last,email:email,phone:phone,consent:true,password:pass,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
+    users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
+    var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_investor&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&org='+encodeURIComponent(org)+'&investorType='+encodeURIComponent(itype)+'&ticket='+encodeURIComponent(ticket)+'&note='+encodeURIComponent(note);
+    var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration — '+first+' '+last+' — '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+(phone||'Not provided')+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
+    var sheet=fetch(sheetUrl,{mode:'no-cors'});
+    var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-investor.html';}};
+    Promise.allSettled([w3f,sheet]).then(go);setTimeout(go,8000);
+  });
 }
 </script></div>
 <footer class="footer">

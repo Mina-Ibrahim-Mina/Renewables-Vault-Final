@@ -32,5 +32,21 @@ var RV = {
     }
     return u;
   },
+  ascii: function (s) {
+    return String(s == null ? '' : s)
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+      .replace(/\u066C/g, ',').replace(/\u066B/g, '.');
+  },
+  /* Register on the server first. cb(result): 'new' | 'restored' (same email+password existed) | 'exists' | 'offline' */
+  serverRegister: function (body, pass, cb) {
+    if (!RV.api()) return cb('offline');
+    RV.key(body.email, pass).then(function (k) { body.key = k; return RV.post(body); }).then(function (r) {
+      if (r && r.ok && r.existing) { RV.restore(r.profile, r.assets, pass); cb('restored'); }
+      else if (r && r.ok) cb('new');
+      else if (r && r.error === 'exists') cb('exists');
+      else cb('offline');
+    }).catch(function () { cb('offline'); });
+  },
   home: function (u) { return u.type === 'investor' ? 'dashboard-investor.html' : 'dashboard-developer.html'; }
 };

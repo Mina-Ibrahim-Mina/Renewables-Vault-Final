@@ -290,7 +290,7 @@ function renderApproved(u){
     var rows=[['Off-taker',dl.offtaker],['Structure',dl.structure],['Security',dl.security],['Target Return',dl.returns]];
     for(var r=0;r<rows.length;r++){var bg=rows[r][0]==='Target Return'?'background:#dcfce7;':'background:#f8faf8;';h+='<div style="'+bg+'border-radius:8px;padding:14px;">';h+='<div style="font-size:10px;color:'+(rows[r][0]==='Target Return'?'#166534':'#9ca3af')+';font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">'+rows[r][0]+'</div>';h+='<div style="font-size:13px;font-weight:600;color:'+(rows[r][0]==='Target Return'?'#166534':'#1c2b1f')+';line-height:1.4;">'+rows[r][1]+'</div></div>';}
     h+='</div>';
-    h+='<button id="btn_'+dl.id+'" onclick="xInt(''+dl.id+'',''+dl.type+'')" class="btn-green" style="width:100%;padding:13px;border-radius:8px;font-size:14px;">Express Interest in This Opportunity &#8594;</button>';
+    h+='<button id="btn_'+dl.id+'" onclick="xInt(\''+dl.id+'\',\''+dl.type+'\')" class="btn-green" style="width:100%;padding:13px;border-radius:8px;font-size:14px;">Express Interest in This Opportunity &#8594;</button>';
     h+='</div>';
   }
   h+='<div class="card" style="margin-top:8px;"><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.7;text-align:center;">Indicative returns are not guaranteed. Off-taker identities disclosed under separate NDA. Contact <a href="mailto:contact@renewablesvault.com" style="color:#2C7C3B;text-decoration:none;">contact@renewablesvault.com</a> for further information.</p></div>';
@@ -301,7 +301,7 @@ function xInt(id,type){
   var btn=document.getElementById('btn_'+id);
   if(!btn||!u)return;
   btn.disabled=true;btn.textContent='Sending...';
-  fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'Investor Interest — '+id+' — '+u.firstName+' '+u.lastName,name:u.firstName+' '+u.lastName,email:u.email,message:'INVESTOR INTEREST\n=================\nDeal: '+id+' — '+type+'\nInvestor: '+u.firstName+' '+u.lastName+'\nEmail: '+u.email+'\nOrg: '+(u.org||'')+'\nTicket: '+(u.ticket||'Not specified')+'\nDate: '+new Date().toLocaleDateString()+'\n=================\nACTION: Share NDA and progress to term sheet.'})}).finally(function(){btn.textContent='&#10003; Interest Registered — Our team will be in touch';btn.style.background='#16a34a';btn.disabled=true;});
+  fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'Investor Interest — '+id+' — '+u.firstName+' '+u.lastName,name:u.firstName+' '+u.lastName,email:u.email,message:'INVESTOR INTEREST\n=================\nDeal: '+id+' — '+type+'\nInvestor: '+u.firstName+' '+u.lastName+'\nEmail: '+u.email+'\nOrg: '+(u.org||'')+'\nTicket: '+(u.ticket||'Not specified')+'\nDate: '+new Date().toLocaleDateString()+'\n=================\nACTION: Share NDA and progress to term sheet.'})}).finally(function(){btn.textContent='\u2713 Interest Registered — Our team will be in touch';btn.style.background='#16a34a';btn.disabled=true;});
 }
 </script></div>
 <footer class="footer">

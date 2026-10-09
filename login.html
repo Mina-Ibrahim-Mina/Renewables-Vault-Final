@@ -6,14 +6,14 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<title>Login — Renewables Vault</title>
+<title>Login | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
 <meta name="description" content="Log in to your Renewables Vault account.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Renewables Vault">
-<meta property="og:title" content="Login — Renewables Vault">
+<meta property="og:title" content="Login | Renewables Vault">
 <meta property="og:description" content="Log in to your Renewables Vault account.">
 <meta property="og:url" content="https://renewablesvault.com/login.html">
 <meta property="og:image" content="https://renewablesvault.com/og-image.png">
@@ -327,7 +327,7 @@ function savePass(){
   var found=false,user=null;
   for(var i=0;i<users.length;i++){if(users[i].email===vEmail){users[i].password=p1;found=true;user=users[i];}}
   if(found){localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);window.location.href=user.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';}
-  else{err.style.display='block';err.textContent='Account not found in this browser. Please register again — your profile is saved on our side.';}
+  else{err.style.display='block';err.textContent='Account not found in this browser. Please register again. Your profile is saved on our side.';}
 }
 </script></div>
 <footer class="footer">

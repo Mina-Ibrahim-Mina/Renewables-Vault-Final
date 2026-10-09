@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin Panel — Renewables Vault</title>
+<title>Admin Panel | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
@@ -100,7 +100,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     <div style="text-align:center;margin-bottom:28px;">
       <img src="logo.png" style="height:44px;width:auto;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
       <h1>Admin Panel</h1>
-      <p>Renewables Vault — Internal Access Only</p>
+      <p>Renewables Vault · Internal Access Only</p>
     </div>
     <input type="password" id="passIn" placeholder="Admin password" class="field-d">
     <button class="btn-g" id="loginBtn">Login</button>
@@ -121,10 +121,10 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
   </div>
   <div class="body">
     <div class="stats">
-      <div class="stat"><div class="stat-n" id="s1">—</div><div class="stat-l">Total Investors</div></div>
-      <div class="stat"><div class="stat-n" id="s2" style="color:#d97706;">—</div><div class="stat-l">Pending Review</div></div>
-      <div class="stat"><div class="stat-n" id="s3" style="color:#16a34a;">—</div><div class="stat-l">Approved</div></div>
-      <div class="stat"><div class="stat-n" id="s4">—</div><div class="stat-l">Total Developers</div></div>
+      <div class="stat"><div class="stat-n" id="s1">-</div><div class="stat-l">Total Investors</div></div>
+      <div class="stat"><div class="stat-n" id="s2" style="color:#d97706;">-</div><div class="stat-l">Pending Review</div></div>
+      <div class="stat"><div class="stat-n" id="s3" style="color:#16a34a;">-</div><div class="stat-l">Approved</div></div>
+      <div class="stat"><div class="stat-n" id="s4">-</div><div class="stat-l">Total Developers</div></div>
     </div>
     <div class="tabs">
       <button class="tab on" id="t1" onclick="showTab('inv')">Investors</button>
@@ -147,7 +147,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     </div>
     <div id="va" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Asset Assessments <span style="font-size:12px;color:#9ca3af;font-weight:600;">(RARE™ — internal only)</span></h2>
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Asset Assessments <span style="font-size:12px;color:#9ca3af;font-weight:600;">(RARE™, internal only)</span></h2>
         <div id="aTools" style="display:none;gap:8px;align-items:center;">
           <select id="aFilter" onchange="renderA()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;">
             <option value="">All statuses</option></select>
@@ -315,12 +315,12 @@ function makeInvRow(r){
     '<div style="font-size:12px;color:#6b7280;">'+esc(email)+'</div>'+
     '<div style="font-size:11px;color:#9ca3af;margin-top:3px;">'+esc(r['Timestamp']||'')+'</div>';
   var c2=document.createElement('div');
-  c2.innerHTML='<div class="fl">Organisation</div><div class="fv b">'+esc(r['Organisation']||'—')+'</div>'+
-    '<div class="fl" style="margin-top:8px;">Investor Type</div><div class="fv">'+esc(r['Investor Type']||'—')+'</div>';
+  c2.innerHTML='<div class="fl">Organisation</div><div class="fv b">'+esc(r['Organisation']||'Not provided')+'</div>'+
+    '<div class="fl" style="margin-top:8px;">Investor Type</div><div class="fv">'+esc(r['Investor Type']||'Not provided')+'</div>';
   var c3=document.createElement('div');
-  c3.innerHTML='<div class="fl">Ticket Size</div><div class="fv">'+esc(r['Ticket Size']||'—')+'</div>';
+  c3.innerHTML='<div class="fl">Ticket Size</div><div class="fv">'+esc(r['Ticket Size']||'Not provided')+'</div>';
   var c4=document.createElement('div');
-  c4.innerHTML='<div class="fl">Note</div><div class="fv" style="max-height:55px;overflow:hidden;">'+esc(r['Note']||'—')+'</div>';
+  c4.innerHTML='<div class="fl">Note</div><div class="fv" style="max-height:55px;overflow:hidden;">'+esc(r['Note']||'Not provided')+'</div>';
   var c5=document.createElement('div');
   c5.innerHTML='<span class="ba '+bc+'">'+esc(status)+'</span>';
   var c6=document.createElement('div');
@@ -351,8 +351,8 @@ function makeDevRow(r){
     '<div style="font-size:12px;color:#6b7280;">'+esc(email)+'</div>'+
     '<div style="font-size:11px;color:#9ca3af;margin-top:3px;">'+esc(r['Timestamp']||'')+'</div>';
   var c2=document.createElement('div');
-  c2.innerHTML='<div class="fl">Company</div><div class="fv b">'+esc(r['Company']||'—')+'</div>'+
-    '<div class="fl" style="margin-top:8px;">Energy Type</div><div class="fv" style="color:#2C7C3B;font-weight:600;">'+esc(r['Energy Type']||'—')+'</div>'+
+  c2.innerHTML='<div class="fl">Company</div><div class="fv b">'+esc(r['Company']||'Not provided')+'</div>'+
+    '<div class="fl" style="margin-top:8px;">Energy Type</div><div class="fv" style="color:#2C7C3B;font-weight:600;">'+esc(r['Energy Type']||'Not provided')+'</div>'+
     '<div style="font-size:12px;color:#6b7280;margin-top:4px;">'+esc(r['Country']||'')+' &middot; '+esc(r['Asset Stage']||'')+'</div>';
   var c3=document.createElement('div');
   c3.innerHTML='<div class="fl">Project Description</div><div class="fv">'+esc(r['Description']||'Not provided')+'</div>';
@@ -373,7 +373,7 @@ function approveInv(email,fname,btn){
   fetch(SHEET+'?action=approve_investor&password='+encodeURIComponent(PASS)+'&email='+encodeURIComponent(email))
     .then(function(r){return r.json();})
     .then(function(){toast('Investor approved');loadData();setTimeout(function(){showCode(email,genCode(email),'Approval Code',fname,'approval');},800);})
-    .catch(function(){btn.disabled=false;btn.textContent='Approve';toast('Error — try again');});
+    .catch(function(){btn.disabled=false;btn.textContent='Approve';toast('Error, please try again');});
 }
 function rejectInv(email,btn){
   if(!confirm('Reject this investor?'))return;
@@ -396,7 +396,7 @@ function rejectDev(email,btn){
     .catch(function(){btn.disabled=false;btn.textContent='Reject';});
 }
 function showCode(email,code,title,fname,type){
-  var subj=type==='recovery'?'Your Renewables Vault Password Recovery Code':'Your Renewables Vault Investor Access — Approved';
+  var subj=type==='recovery'?'Your Renewables Vault Password Recovery Code':'Your Renewables Vault Investor Access Is Approved';
   var body=type==='recovery'?[
     'Subject: '+subj,'',
     'Dear '+(fname||'User')+',','',

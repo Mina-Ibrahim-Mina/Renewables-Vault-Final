@@ -6,14 +6,14 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<title>Developer Registration — Renewables Vault</title>
+<title>Developer Registration | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
 <meta name="description" content="Create your Renewables Vault developer profile and register your biofuel, waste recycling or solar C&amp;I asset for financing.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Renewables Vault">
-<meta property="og:title" content="Developer Registration — Renewables Vault">
+<meta property="og:title" content="Developer Registration | Renewables Vault">
 <meta property="og:description" content="Create your Renewables Vault developer profile and register your biofuel, waste recycling or solar C&amp;I asset for financing.">
 <meta property="og:url" content="https://renewablesvault.com/register-developer.html">
 <meta property="og:image" content="https://renewablesvault.com/og-image.png">
@@ -233,24 +233,24 @@ function genRC(e){
     <div><label class="lbl">First Name *</label><input class="field" id="d_first" type="text" placeholder="First name" autocomplete="given-name"></div>
     <div><label class="lbl">Last Name *</label><input class="field" id="d_last" type="text" placeholder="Last name" autocomplete="family-name"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Email Address *</label><input class="field" id="d_email" type="email" placeholder="you@company.com" autocomplete="email"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Mobile / WhatsApp *</label><input class="field" id="d_phone" type="tel" placeholder="+20 10 1234 5678" autocomplete="tel"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Mobile or WhatsApp *</label><input class="field" id="d_phone" type="tel" placeholder="+20 10 1234 5678" autocomplete="tel"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Password *</label><input class="field" id="d_pass" type="password" placeholder="Create a password (min 6 characters)" autocomplete="new-password"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Company Name *</label><input class="field" id="d_company" type="text" placeholder="Your company" autocomplete="organization"></div>
     <div><label class="lbl">Main Asset Type *</label>
       <select class="field" id="d_energy">
         <option value="" disabled selected>Select asset type</option>
         <option value="Biofuel &amp; Biodiesel">Biofuel &amp; Biodiesel</option>
-        <option value="Circular Economy — Waste Recycling">Circular Economy — Waste Recycling</option>
-        <option value="Solar C&amp;I — Commercial &amp; Industrial">Solar C&amp;I — Commercial &amp; Industrial</option>
+        <option value="Circular Economy (Waste Recycling)">Circular Economy (Waste Recycling)</option>
+        <option value="Solar C&amp;I (Commercial &amp; Industrial)">Solar C&amp;I (Commercial &amp; Industrial)</option>
       </select>
     </div>
     <div><label class="lbl">Country *</label>
       <select class="field" id="d_country">
         <option value="Egypt" selected>Egypt</option>
-        <option disabled>KSA — Coming Soon</option>
-        <option disabled>Morocco — Coming Soon</option>
-        <option disabled>Kenya — Coming Soon</option>
-        <option disabled>South Africa — Coming Soon</option>
+        <option disabled>KSA (Coming Soon)</option>
+        <option disabled>Morocco (Coming Soon)</option>
+        <option disabled>Kenya (Coming Soon)</option>
+        <option disabled>South Africa (Coming Soon)</option>
       </select>
     </div>
     <div style="grid-column:1/-1;margin-top:4px;">
@@ -275,7 +275,7 @@ function subDev() {
   err.style.display='none';
   if(!first||!last||!email||!phone||!pass||!company||!energy){return fail('Please fill in all required fields.');}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
-  if(phone.replace(/\D/g,'').length<8){return fail('Please enter a valid mobile / WhatsApp number, including the country code.');}
+  if(phone.replace(/\D/g,'').length<8){return fail('Please enter a valid mobile or WhatsApp number, including the country code.');}
   if(pass.length<6){return fail('Password must be at least 6 characters.');}
   if(!consent){return fail('Please tick the box to agree to the Privacy Policy.');}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
@@ -288,7 +288,7 @@ function subDev() {
     users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
     var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_developer&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&company='+encodeURIComponent(company)+'&energy='+encodeURIComponent(energy)+'&country='+encodeURIComponent(country)+'&stage=&description='+encodeURIComponent('Phone: '+phone);
     var calls=[
-      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration — '+first+' '+last+' — '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile / WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})}),
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration: '+first+' '+last+' | '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile or WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})}),
       fetch(sheetUrl,{mode:'no-cors'})
     ];
     var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-developer.html';}};

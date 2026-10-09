@@ -1,4 +1,4 @@
-/* Renewables Vault — shared account helpers (do not edit) */
+/* Renewables Vault: shared account helpers (do not edit) */
 var RV = {
   api: function () { return (typeof RV_API === 'string' && /^https:\/\//.test(RV_API)) ? RV_API : ''; },
   key: function (email, pass) {

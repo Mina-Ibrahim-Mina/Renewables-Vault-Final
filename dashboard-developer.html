@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Developer Dashboard — Renewables Vault</title>
+<title>Developer Dashboard | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
@@ -204,7 +204,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <div id="emptyCta" style="display:none;background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;">
         <div class="eyebrow">NEXT STEP</div>
         <h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Register your first asset</h2>
-        <p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">Tell us about the asset you would like to finance. It is a short asset profile — about 5 minutes — and you can save and continue later. Our team reviews every profile and contacts you within 5 business days.</p>
+        <p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">Tell us about the asset you would like to finance. It is a short asset profile of about 5 minutes, and you can save and continue later. Our team reviews every profile and contacts you within 5 business days.</p>
         <button class="btn-lime" onclick="newAsset()"><i class="fa-solid fa-plus"></i> Register an Asset</button>
       </div>
 
@@ -329,8 +329,8 @@ function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 /* ───────────── Asset types & questions ───────────── */
 var TYPES={
   biofuel:{label:'Biofuel & Biodiesel',icon:'fa-gas-pump',desc:'Biodiesel and biofuel plants selling to industrial buyers.'},
-  circular:{label:'Circular Economy — Waste Recycling',icon:'fa-recycle',desc:'Recycling and recovery facilities.'},
-  solar:{label:'Solar C&I — Commercial & Industrial',icon:'fa-solar-panel',desc:'Solar systems supplying businesses, factories and farms.'}
+  circular:{label:'Circular Economy (Waste Recycling)',icon:'fa-recycle',desc:'Recycling and recovery facilities.'},
+  solar:{label:'Solar C&I (Commercial & Industrial)',icon:'fa-solar-panel',desc:'Solar systems supplying businesses, factories and farms.'}
 };
 function typeKey(label){label=String(label||'');return /circular|recycl/i.test(label)?'circular':/solar/i.test(label)?'solar':/bio/i.test(label)?'biofuel':'';}
 
@@ -338,36 +338,36 @@ function O(pairs){return pairs.map(function(p){return{v:p[0],t:p[1]};});}
 var SPECIFIC={
   biofuel:[
     {k:'b_cap',t:'text',q:'Production capacity',ph:'e.g. 15,000 tonnes per year',req:1},
-    {k:'b_feed',t:'radio',q:'Main feedstock',req:1,o:O([['uco','Used cooking oil'],['veg','Vegetable oils'],['fat','Animal fats'],['res','Agricultural or other residues'],['mix','Mixed / other']])},
-    {k:'b_prod',t:'radio',q:'Main product sold',req:1,o:O([['bd','Biodiesel (B100 or blends)'],['ind','Bio-heavy fuel / industrial fuel'],['gly','Glycerin and by-products'],['oth','Other']])}
+    {k:'b_feed',t:'radio',q:'Main feedstock',req:1,o:O([['uco','Used cooking oil'],['veg','Vegetable oils'],['fat','Animal fats'],['res','Agricultural or other residues'],['mix','Mixed or other']])},
+    {k:'b_prod',t:'radio',q:'Main product sold',req:1,o:O([['bd','Biodiesel (B100 or blends)'],['ind','Bio-heavy fuel or industrial fuel'],['gly','Glycerin and by-products'],['oth','Other']])}
   ],
   circular:[
-    {k:'c_stream',t:'radio',q:'Main waste stream processed',req:1,o:O([['pl','Plastics (PET, HDPE, etc.)'],['pa','Paper and cardboard'],['me','Metals'],['or','Organic / food waste'],['cd','Construction and demolition waste'],['mx','Mixed municipal waste'],['ot','Other']])},
+    {k:'c_stream',t:'radio',q:'Main waste stream processed',req:1,o:O([['pl','Plastics (PET, HDPE, etc.)'],['pa','Paper and cardboard'],['me','Metals'],['or','Organic or food waste'],['cd','Construction and demolition waste'],['mx','Mixed municipal waste'],['ot','Other']])},
     {k:'c_cap',t:'text',q:'Processing capacity',ph:'e.g. 30,000 tonnes per year',req:1},
     {k:'c_rev',t:'radio',q:'Main source of revenue',req:1,o:O([['sale','Sale of recycled material'],['gate','Gate or tipping fees'],['svc','Collection or service contract'],['mix','A mix of these']])}
   ],
   solar:[
     {k:'s_cap',t:'text',q:'Installed capacity',ph:'e.g. 2.5 MWp',req:1},
-    {k:'s_model',t:'radio',q:'Business model',req:1,o:O([['ppa','Power purchase agreement — client pays per kWh'],['lease','Lease or rental — fixed monthly payment'],['oth','Other']])},
-    {k:'s_client',t:'radio',q:'Client sector',req:1,o:O([['ind','Industrial / factory'],['agr','Agriculture'],['com','Commercial and retail'],['hos','Hospitality'],['oth','Other']])}
+    {k:'s_model',t:'radio',q:'Business model',req:1,o:O([['ppa','Power purchase agreement (client pays per kWh)'],['lease','Lease or rental (fixed monthly payment)'],['oth','Other']])},
+    {k:'s_client',t:'radio',q:'Client sector',req:1,o:O([['ind','Industrial or factory'],['agr','Agriculture'],['com','Commercial and retail'],['hos','Hospitality'],['oth','Other']])}
   ]
 };
 var CONTRACT={
-  biofuel:O([['fsa','Supply or offtake agreement with agreed pricing'],['ota','Framework or service contract'],['other','Spot sales / no long-term contract']]),
-  circular:O([['fsa','Long-term offtake contract for recycled material'],['ota','Gate-fee or waste-service contract'],['other','Spot sales / no long-term contract']]),
-  solar:O([['ppa','PPA with the client (per-kWh tariff)'],['ota','Lease or rental agreement'],['other','Other / no long-term contract']])
+  biofuel:O([['fsa','Supply or offtake agreement with agreed pricing'],['ota','Framework or service contract'],['other','Spot sales, no long-term contract']]),
+  circular:O([['fsa','Long-term offtake contract for recycled material'],['ota','Gate-fee or waste-service contract'],['other','Spot sales, no long-term contract']]),
+  solar:O([['ppa','PPA with the client (per-kWh tariff)'],['ota','Lease or rental agreement'],['other','Other, no long-term contract']])
 };
 function steps(type){return [
   {title:'The asset',desc:'Basic information about the asset you would like to finance.',qs:[
     {k:'a_name',t:'text',q:'Asset name',ph:'e.g. 10th of Ramadan Biodiesel Plant',req:1},
-    {k:'a_loc',t:'text',q:'Location (city / governorate)',ph:'e.g. 10th of Ramadan City, Sharqia',req:1}
+    {k:'a_loc',t:'text',q:'Location (city or governorate)',ph:'e.g. 10th of Ramadan City, Sharqia',req:1}
   ].concat(SPECIFIC[type]).concat([
     {k:'q21',t:'radio',q:'How long has the asset been operating?',req:1,o:O([['gt7','More than 7 years'],['3to7','3 to 7 years'],['1to3','1 to 3 years'],['lt1','Less than 1 year'],['not_yet','Not yet operating']])},
     {k:'q23',t:'radio',q:'Current output compared with full capacity',req:1,o:O([['gt80','Above 80%'],['60to80','60% to 80%'],['40to60','40% to 60%'],['lt40','Below 40%']])}
   ])},
   {title:'Revenue & contracts',desc:'How the asset earns its revenue.',qs:[
     {k:'q11',t:'radio',q:'What kind of contract does the revenue come from?',req:1,o:CONTRACT[type]},
-    {k:'q12',t:'radio',q:'Who is the main buyer / client?',req:1,o:O([['gov','Government entity or public utility'],['ig_corp','Large corporate or multinational'],['local_corp','Established local or regional company'],['sme','Small business']])},
+    {k:'q12',t:'radio',q:'Who is the main buyer or client?',req:1,o:O([['gov','Government entity or public utility'],['ig_corp','Large corporate or multinational'],['local_corp','Established local or regional company'],['sme','Small business']])},
     {k:'q13',t:'radio',q:'Time remaining on the main contract',req:1,o:O([['gt5','More than 5 years'],['2to5','2 to 5 years'],['1to2','1 to 2 years'],['lt1','Less than 1 year']])},
     {k:'q15',t:'radio',q:"Buyer's payment record over the last 12 months",req:1,o:O([['perfect','Always on time'],['minor','1–2 short delays'],['first_year','Less than one year of history'],['issues','3 or more late or missed payments']])},
     {k:'q51',t:'radio',q:'Currency of the revenue',req:1,o:O([['usd','US dollars'],['usd_indexed','Egyptian pounds, indexed to USD'],['egp','Egyptian pounds'],['other','Other']])},
@@ -375,11 +375,11 @@ function steps(type){return [
   ]},
   {title:'Company & legal',desc:'About your company and the legal position of the asset.',qs:[
     {k:'q31',t:'radio',q:'How long has your company operated in this sector?',req:1,o:O([['gt10','More than 10 years'],['5to10','5 to 10 years'],['2to5','2 to 5 years'],['lt2','Less than 2 years']])},
-    {k:'q33',t:'radio',q:'Do you have audited financial statements?',req:1,o:O([['3y','Yes — 3 years or more'],['1y','Yes — 1 to 2 years'],['first_year','First year of operation'],['none','No']])},
+    {k:'q33',t:'radio',q:'Do you have audited financial statements?',req:1,o:O([['3y','Yes, 3 years or more'],['1y','Yes, 1 to 2 years'],['first_year','First year of operation'],['none','No']])},
     {k:'q52',t:'radio',q:'Licences and permits for the asset',req:1,o:O([['licensed','All licences in place'],['provisional','Provisional licence'],['in_process','Application in progress'],['dispute','Under dispute']])},
-    {k:'q43',t:'radio',q:'Are there existing loans secured on the asset or its revenue?',req:1,o:O([['none','No — the asset and revenue are free of loans'],['no_restrict','Yes — but there is no security over the revenue'],['restrict','Yes — a lender has security over the revenue']])},
-    {k:'q42',t:'radio',q:'Can the contract revenue be assigned to a financing partner?',req:1,o:O([['yes','Yes'],['review','Possibly — would need buyer consent'],['unsure','Not sure'],['no','No — the contract does not allow it']])},
-    {k:'q35',t:'radio',q:'Any legal disputes or investigations involving the asset?',req:1,o:O([['no','No'],['minor','A minor commercial dispute'],['yes','Yes — an active dispute or investigation']])}
+    {k:'q43',t:'radio',q:'Are there existing loans secured on the asset or its revenue?',req:1,o:O([['none','No, the asset and revenue are free of loans'],['no_restrict','Yes, but there is no security over the revenue'],['restrict','Yes, a lender has security over the revenue']])},
+    {k:'q42',t:'radio',q:'Can the contract revenue be assigned to a financing partner?',req:1,o:O([['yes','Yes'],['review','Possibly, with buyer consent'],['unsure','Not sure'],['no','No, the contract does not allow it']])},
+    {k:'q35',t:'radio',q:'Any legal disputes or investigations involving the asset?',req:1,o:O([['no','No'],['minor','A minor commercial dispute'],['yes','Yes, an active dispute or investigation']])}
   ]},
   {title:'Financing',desc:'What you are looking for.',qs:[
     {k:'q61',t:'text',q:'Estimated current value of the asset (USD equivalent)',ph:'e.g. 6,000,000',req:1},
@@ -414,12 +414,12 @@ function goMain(){
   var assets=lsGet(kA(),[]);
   DRAFT=lsGet(kD(),null);
   var db=document.getElementById('draftBanner');
-  if(DRAFT&&DRAFT.type){db.style.display='block';document.getElementById('draftTxt').textContent=TYPES[DRAFT.type].label+(DRAFT.ans&&DRAFT.ans.a_name?' — '+DRAFT.ans.a_name:'')+' · step '+((DRAFT.step||0)+1)+' of 4';}
+  if(DRAFT&&DRAFT.type){db.style.display='block';document.getElementById('draftTxt').textContent=TYPES[DRAFT.type].label+(DRAFT.ans&&DRAFT.ans.a_name?': '+DRAFT.ans.a_name:'')+' · step '+((DRAFT.step||0)+1)+' of 4';}
   else db.style.display='none';
   document.getElementById('emptyCta').style.display=assets.length?'none':'block';
   document.getElementById('assetsBox').style.display=assets.length?'block':'none';
   renderAssets(assets);
-  var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone / WhatsApp',U.phone||'—'],['Company',U.company||'—'],['Main asset type',U.energy||'—'],['Registered',U.registered||'—']];
+  var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone or WhatsApp',U.phone||'Not provided'],['Company',U.company||'Not provided'],['Main asset type',U.energy||'Not provided'],['Registered',U.registered||'Not provided']];
   document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('');
   var j=[['Create your profile','Done',1],['Register your asset','A short asset profile for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
   var nextIdx=j.findIndex(function(x){return!x[2];});
@@ -542,10 +542,10 @@ function submitAsset(){
     show('vDone');
   };
   var w3f=function(){
-    var txt='ASSET PROFILE (server not connected — not yet scored)\n==============================\nRef: '+rec.id+'\nType: '+TYPES[type].label+'\nDeveloper: '+U.firstName+' '+U.lastName+'\nCompany: '+(U.company||'')+'\nEmail: '+U.email+'\nPhone: '+(U.phone||'')+'\n';
-    var sec='';items.forEach(function(it){if(it.sec!==sec){sec=it.sec;txt+='\n— '+sec.toUpperCase()+' —\n';}txt+=it.q+': '+(it.a||'—')+'\n';});
+    var txt='ASSET PROFILE (server not connected, not yet scored)\n==============================\nRef: '+rec.id+'\nType: '+TYPES[type].label+'\nDeveloper: '+U.firstName+' '+U.lastName+'\nCompany: '+(U.company||'')+'\nEmail: '+U.email+'\nPhone: '+(U.phone||'')+'\n';
+    var sec='';items.forEach(function(it){if(it.sec!==sec){sec=it.sec;txt+='\n['+sec.toUpperCase()+']\n';}txt+=it.q+': '+(it.a||'Not provided')+'\n';});
     return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({access_key:W3F,subject:'Asset Profile — '+rec.name+' — '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
+      body:JSON.stringify({access_key:W3F,subject:'Asset Profile: '+rec.name+' | '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
   };
   if(API){
     post(payload).then(function(r){if(r&&r.ok)finish(true);else{w3f().finally(function(){finish(false);});}})

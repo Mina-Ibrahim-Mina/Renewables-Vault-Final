@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<title>Account Setup — Renewables Vault</title>
+<title>Account Setup | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
@@ -93,14 +93,14 @@ h1{font-size:22px;font-weight:700;color:#1A472A;margin:0 0 6px;text-align:center
         <label class="lbl">Password</label>
         <input class="field" id="i_pass" type="password" placeholder="Must match your registration password">
         <label class="lbl">Organisation</label>
-        <input class="field" id="i_org" type="text" placeholder="Company / Fund name">
+        <input class="field" id="i_org" type="text" placeholder="Company or fund name">
         <label class="lbl">Investor Type</label>
         <select class="field" id="i_itype">
           <option value="">Select type...</option>
           <option>Family Office</option>
           <option>Private Equity</option>
           <option>Venture Capital</option>
-          <option>DFI / IFI</option>
+          <option>DFI or IFI</option>
           <option>HNWI</option>
           <option>Corporate Treasury</option>
           <option>Other</option>
@@ -129,8 +129,8 @@ h1{font-size:22px;font-weight:700;color:#1A472A;margin:0 0 6px;text-align:center
         <select class="field" id="d_energy">
           <option value="">Select asset type...</option>
           <option>Biofuel &amp; Biodiesel</option>
-          <option>Circular Economy — Waste Recycling</option>
-          <option>Solar C&amp;I — Commercial &amp; Industrial</option>
+          <option>Circular Economy (Waste Recycling)</option>
+          <option>Solar C&amp;I (Commercial &amp; Industrial)</option>
         </select>
       </div>
 
@@ -150,7 +150,7 @@ var RVAuth={
   set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));}
 };
 
-/* Toggle investor / developer fields */
+/* Toggle investor or developer fields */
 document.querySelectorAll('input[name="atype"]').forEach(function(r){
   r.addEventListener('change',function(){
     var inv=r.value==='investor';
@@ -208,15 +208,15 @@ function doSetup(){
   }
 
   if(existing){
-    /* Email exists — verify password, restore session */
+    /* Email exists: verify password, restore session */
     if(existing.password!==user.password){
       showErr('An account with this email exists but the password does not match. Check your password or use the recovery flow.');
       btn.disabled=false;btn.textContent='Set Up My Account →';return;
     }
-    /* Password matches — restore session */
+    /* Password matches: restore session */
     RVAuth.set(existing);
   } else {
-    /* New entry for this browser — add and set session */
+    /* New entry for this browser: add and set session */
     users.push(user);
     localStorage.setItem('rv_users',JSON.stringify(users));
     RVAuth.set(user);

@@ -6,14 +6,14 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<title>Contact — Renewables Vault</title>
+<title>Contact | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
 <meta name="description" content="Contact Renewables Vault.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Renewables Vault">
-<meta property="og:title" content="Contact — Renewables Vault">
+<meta property="og:title" content="Contact | Renewables Vault">
 <meta property="og:description" content="Contact Renewables Vault.">
 <meta property="og:url" content="https://renewablesvault.com/contact.html">
 <meta property="og:image" content="https://renewablesvault.com/og-image.png">
@@ -245,7 +245,7 @@ function genRC(e){
     </div>
     <div id="cOk" style="display:none;text-align:center;padding:40px 0;">
       <i class="fa-solid fa-circle-check" style="color:#16a34a;font-size:48px;display:block;margin-bottom:16px;"></i>
-      <h3 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 10px;">Message sent — thank you.</h3>
+      <h3 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 10px;">Message sent. Thank you.</h3>
       <p style="font-size:14px;color:#6b7280;margin:0 auto;max-width:360px;line-height:1.65;">A member of the Renewables Vault team will follow up with you personally.</p>
     </div>
     <p style="font-size:13px;color:#9ca3af;text-align:center;margin:28px 0 0;">
@@ -268,7 +268,7 @@ function sendContact() {
     method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
     body:JSON.stringify({
       access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',
-      subject:'Contact Form — '+reason+' — '+name,
+      subject:'Contact Form: '+reason+' | '+name,
       name:name,email:email,
       message:'Name: '+name+'\nEmail: '+email+'\nOrg: '+document.getElementById('c_org').value+'\nReason: '+reason+'\nMessage: '+msg
     })

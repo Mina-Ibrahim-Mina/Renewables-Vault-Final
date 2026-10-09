@@ -381,12 +381,24 @@ window.addEventListener('DOMContentLoaded',function(){
   if(!U.password){stateMsg('Please log in again','For your security, please log out and log in again to continue.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
   RV.key(U.email,U.password).then(function(k){KEY=k;loadStatus();});
 });
+var LINKED=false;
+/* Accounts created before the server kept investor records are linked once, automatically */
+function linkAccount(){
+  stateMsg('Setting up your account...','This only happens once.','');
+  RV.serverRegister({action:'register',type:'investor',firstName:U.firstName,lastName:U.lastName,email:U.email,phone:U.phone||'',org:U.org||'',investorType:U.investorType||'',consent:true,link:true},U.password,function(res){
+    if(res==='new'||res==='restored'){U=RVAuth.get()||U;loadStatus();return;}
+    if(res==='exists'){stateMsg('Please log in again','The password for this account was changed on another device. Please log out and log in with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#6b7280;">Forgot your password?</a></div>');return;}
+    stateMsg('Connection problem','We could not reach our server. Please check your internet connection and try again.','<button class="btn-green" onclick="loadStatus()">Try again</button>');
+  });
+}
 function api(body){body.email=U.email;body.key=KEY;return RV.post(body);}
 
 function loadStatus(){
   stateMsg('Loading your dashboard...','','');
   api({action:'investor_status'}).then(function(r){
-    if(!r||!r.ok){stateMsg('Please log in again','We could not confirm your account. Please log out and log in again.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
+    if(r&&!r.ok&&r.error==='auth'&&!LINKED){LINKED=true;linkAccount();return;}
+    if(r&&!r.ok&&/unknown action/i.test(r.error||'')){stateMsg('Investor area being updated','We are finishing an update to the investor area. Please try again in a few minutes.','<button class="btn-green" onclick="loadStatus()">Try again</button>');return;}
+    if(!r||!r.ok){stateMsg('Please log in again','We could not confirm your account. Please log out and log in again with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#6b7280;">Forgot your password?</a></div>');return;}
     ST=r;renderMain();
     if(r.status==='Approved'&&r.activated)loadListings();
   }).catch(function(){stateMsg('Connection problem','We could not reach our server. Please check your internet connection and try again.','<button class="btn-green" onclick="loadStatus()">Try again</button>');});

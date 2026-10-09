@@ -386,7 +386,8 @@ function steps(type){return [
     {k:'q62',t:'text',q:'Amount of capital you are seeking (USD equivalent)',ph:'e.g. 3,000,000',req:1},
     {k:'q64',t:'radio',q:'Could a company or personal guarantee be provided?',req:1,o:O([['yes','Yes'],['no','No']])},
     {k:'q66',t:'area',q:'Anything else we should know? (optional)',ph:'e.g. expansion plans, key contracts, timing',req:0},
-    {k:'confirm',t:'check',q:'I confirm the information provided is accurate to the best of my knowledge.',req:1}
+    {k:'confirm',t:'check',q:'I confirm the information provided is accurate to the best of my knowledge.',req:1},
+    {k:'share',t:'check',q:'I agree that Renewables Vault may share an anonymised summary of this asset with KYC-approved investors. My company name, contact details and exact location are never shown.',req:1}
   ]}
 ];}
 
@@ -533,7 +534,7 @@ function submitAsset(){
     else{items.push({sec:s.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
   var rec={id:newId(),type:type,name:a.a_name,location:a.a_loc,submitted:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'Submitted',note:'',synced:false};
   var payload={action:'submit_asset',dev:{firstName:U.firstName,lastName:U.lastName,email:U.email,phone:toAscii(U.phone||''),company:U.company||''},
-    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,answers:answers,items:items}};
+    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,answers:answers,items:items}};
   var finish=function(synced){
     rec.synced=synced;if(!synced)rec.payload=payload;
     var L=lsGet(kA(),[]);L.push(rec);lsSet(kA(),L);lsSet(kD(),null);DRAFT=null;

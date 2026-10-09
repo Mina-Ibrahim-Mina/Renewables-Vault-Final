@@ -1,136 +1,96 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Investor Dashboard | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
 <meta name="robots" content="noindex,nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;margin:0;padding:0;}
+*{box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
+
 /* NAV */
 .nav-wrap{position:fixed;top:0;width:100%;z-index:50;background:rgba(7,23,12,.93);
-  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,0.12);}
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,222,128,.12);}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;height:68px;
   display:flex;align-items:center;justify-content:space-between;gap:20px;}
 .nav-links{display:flex;gap:22px;flex-shrink:0;}
 .nav-links a{font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;white-space:nowrap;}
-.nav-links a:hover,.nav-links a.active{color:#4ADE80;}
-.nav-auth{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.nav-auth a{font-size:12px;font-weight:600;text-decoration:none;}
+.nav-links a:hover{color:#4ADE80;}
 .btn-nav{background:transparent;border:1px solid #4ADE80;color:#4ADE80;padding:7px 16px;
   border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;
-  font-family:'Inter',sans-serif;transition:background .15s;}
-.btn-nav:hover{background:rgba(74,222,128,0.10);}
-/* FOOTER */
-.footer{background:#031107;border-top:1px solid rgba(74,222,128,0.08);padding:48px;}
+  font-family:'Inter',sans-serif;}
+.footer{background:#031107;border-top:1px solid rgba(74,222,128,.08);padding:48px;}
 .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;
   align-items:flex-start;flex-wrap:wrap;gap:24px;}
 .footer a{font-size:12px;color:#bccabb;text-decoration:none;margin-left:18px;}
-.footer a:hover{color:#4ADE80;}
-/* SECTIONS */
-.s-hero{background:linear-gradient(150deg,#07170c 0%,#1A472A 100%);color:#fff;
-  position:relative;overflow:hidden;}
-.s-hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;
-  background:radial-gradient(circle,rgba(74,222,128,.10) 0%,transparent 70%);pointer-events:none;}
-.s-dark{background:#0f1f14;color:#d4e8d6;}
-.s-card{background:#111d15;color:#d4e8d6;}
-.s-light{background:#f0f5f2;color:#1c2b1f;}
-.s-white{background:#ffffff;color:#1c2b1f;}
+
+/* VIEWS */
+.view{display:none;} .view.on{display:block;}
+.rview{display:none;} .rview.on{display:block;}
+
 /* CARDS */
 .card{background:#fff;border-radius:12px;border:1px solid #d1e8d8;padding:28px;}
-.card-dark{background:#162a1d;border:1px solid rgba(74,222,128,0.12);border-radius:10px;}
-.card-dark.lt{border-top:2px solid #4ADE80;}
 .card.lt{border-top:3px solid #2C7C3B;}
-/* BUTTONS */
-.btn-lime{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:12px 28px;
-  border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;
-  text-decoration:none;display:inline-block;transition:opacity .15s;}
-.btn-lime:hover{opacity:.88;}
-.btn-lime.full{width:100%;display:block;text-align:center;padding:13px;}
-.btn-lime:disabled{opacity:.5;cursor:not-allowed;}
-.btn-out{background:transparent;border:1px solid #4ADE80;color:#4ADE80;font-weight:600;
-  border-radius:6px;padding:11px 28px;cursor:pointer;text-decoration:none;
-  display:inline-block;font-family:'Inter',sans-serif;transition:background .15s;}
-.btn-out:hover{background:rgba(74,222,128,.08);}
-.btn-green{background:#1A472A;color:#fff;border:none;border-radius:6px;padding:11px 20px;
-  font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
-.btn-green:hover{background:#2C7C3B;}
-.btn-red{background:#fff;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;
-  padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
-/* FORMS */
-.field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
-  padding:12px 14px;color:#1c2b1f;font-size:14px;outline:none;
-  font-family:'Inter',sans-serif;transition:border .15s;}
-.field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,.08);}
-.field-dark{width:100%;background:#0f1f14;border:1px solid rgba(74,222,128,.20);
-  border-radius:6px;padding:12px 14px;color:#d4e8d6;font-size:14px;outline:none;
-  font-family:'Inter',sans-serif;}
-.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:#2C7C3B;display:block;margin-bottom:6px;}
-.lbl-dark{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:#4ADE80;display:block;margin-bottom:6px;}
-.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
-  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
-/* MISC */
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:#4ADE80;display:block;margin-bottom:12px;}
-.eyebrow-g{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:#2C7C3B;display:block;margin-bottom:12px;}
-.prose{max-width:720px;margin:0 auto;}
-.prose p{font-size:17px;line-height:1.8;color:#374151;margin-bottom:28px;}
-.prose p:first-of-type{font-size:19px;color:#1c2b1f;}
-.badge-pending{background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;
-  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
-.badge-approved{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;
-  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
-.badge-rejected{background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;
-  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
-.view{display:none;}
-.view.on{display:block;}
-/* ENERGY TILES */
-.etile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;
-  padding:20px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;
-  cursor:pointer;transition:all .15s;text-align:center;width:100%;border:none;}
-.etile:hover,.etile.sel{background:#1e3527;border:1px solid #4ADE80;}
-.etile.sel{border-top:2px solid #4ADE80;}
-.etile i{color:#bccabb;font-size:26px;}
-.etile.sel i{color:#4ADE80;}
-.etile span{font-size:12px;font-weight:600;color:#d4e8d6;}
-/* INVESTOR TILES */
-.inv-tile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;
-  padding:20px;position:relative;overflow:hidden;text-align:center;}
-.inv-lock{position:absolute;inset:0;background:rgba(15,31,20,.75);backdrop-filter:blur(4px);
-  display:flex;align-items:center;justify-content:center;border-radius:10px;}
-/* SDG */
-.sdg{background:#fff;border-radius:10px;padding:24px;border-left:3px solid #2C7C3B;}
-.sdg-n{font-size:26px;font-weight:700;color:#1A472A;}
-.sdg-t{font-size:14px;font-weight:600;color:#1c2b1f;margin:4px 0 8px;}
-.sdg-d{font-size:13px;color:#6b7280;line-height:1.5;}
-/* ADMIN */
-.tbl-row{border-bottom:1px solid #f0f5f2;padding:16px 20px;}
-.tbl-row:hover{background:#f8faf8;}
-.tbl-row:last-child{border-bottom:none;}
-.stat{background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;text-align:center;}
-.stat-n{font-size:32px;font-weight:700;color:#1A472A;line-height:1;}
-.stat-l{font-size:11px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
-/* STEP */
+
+/* STEPS */
 .step-done{background:#dcfce7;color:#166534;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;}
 .step-next{background:#dbeafe;color:#1d4ed8;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
 .step-grey{background:#f3f4f6;color:#9ca3af;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+
+/* BUTTONS */
+.btn-lime{background:#4ADE80;color:#0f1f14;font-weight:700;border-radius:6px;padding:12px 28px;
+  border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;transition:opacity .15s;
+  display:inline-flex;align-items:center;gap:8px;}
+.btn-lime:hover{opacity:.88;} .btn-lime:disabled{opacity:.5;cursor:not-allowed;}
+.btn-green{background:#1A472A;color:#fff;border:none;border-radius:6px;padding:10px 22px;
+  font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;
+  display:inline-flex;align-items:center;gap:8px;}
+.btn-green:hover{background:#2C7C3B;}
+.btn-out{background:transparent;border:1px solid #2C7C3B;color:#2C7C3B;border-radius:6px;
+  padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  display:inline-flex;align-items:center;gap:8px;}
+.btn-out:hover{background:#f0f5f2;}
+
+/* FORMS */
+.field{width:100%;background:#fff;border:1px solid #c8ddd0;border-radius:6px;
+  padding:11px 14px;color:#1c2b1f;font-size:14px;outline:none;font-family:'Inter',sans-serif;
+  transition:border .15s;}
+.field:focus{border-color:#2C7C3B;box-shadow:0 0 0 3px rgba(44,124,59,.08);}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#2C7C3B;display:block;margin-bottom:6px;}
+.err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
+  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
+
+/* PROGRESS BAR */
+.prog-wrap{display:flex;gap:6px;margin-bottom:32px;}
+.prog-step{flex:1;height:4px;border-radius:2px;background:#d1e8d8;transition:background .3s;}
+.prog-step.done{background:#4ADE80;}
+.prog-step.active{background:#2C7C3B;}
+
+/* BADGES */
+.badge-pending{background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+.badge-done{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+
+/* EYEBROW */
+.eyebrow-g{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#2C7C3B;display:block;margin-bottom:8px;}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4ADE80;display:block;margin-bottom:8px;}
+
 @media(max-width:768px){
-  .nav-links{display:none;}
-  .nav-inner{padding:0 20px;}
-  .footer{padding:40px 20px;}
+  .nav-links{display:none;} .nav-inner{padding:0 20px;}
+  .footer{padding:40px 20px;} .grid-2{grid-template-columns:1fr!important;}
 }
 
 /* RV mobile fix v10 */
@@ -145,6 +105,34 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
   .footer-inner>div{text-align:left !important;}
   .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
 }
+
+/* DASHBOARD v11 */
+.backlink{font-size:13px;color:#6b7280;background:none;border:none;cursor:pointer;padding:0;margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
+.backlink:hover{color:#1A472A;}
+.arow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid #f0f5f2;flex-wrap:wrap;}
+.arow:last-child{border-bottom:none;padding-bottom:0;}
+.aicon{width:42px;height:42px;border-radius:10px;background:#f0f5f2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.aicon i{color:#2C7C3B;font-size:18px;}
+.anote{margin-top:8px;font-size:13px;color:#374151;background:#f8faf8;border-left:3px solid #4ADE80;padding:8px 12px;border-radius:4px;}
+.chip{font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;white-space:nowrap;}
+.tcard{background:#fff;border:1px solid #d1e8d8;border-radius:12px;padding:24px 20px;text-align:left;cursor:pointer;font-family:'Inter',sans-serif;display:flex;flex-direction:column;gap:8px;transition:all .15s;position:relative;}
+.tcard:hover{border-color:#2C7C3B;transform:translateY(-2px);box-shadow:0 6px 18px rgba(26,71,42,.08);}
+.tcard.pre{border:2px solid #4ADE80;}
+.tcard i{color:#2C7C3B;font-size:26px;}
+.tcard-t{font-size:15px;font-weight:700;color:#1A472A;line-height:1.35;}
+.tcard-d{font-size:13px;color:#6b7280;line-height:1.5;}
+.tcard-b{font-size:11px;font-weight:700;color:#166534;background:#dcfce7;border-radius:20px;padding:3px 10px;align-self:flex-start;margin-top:4px;}
+.qrow{margin-bottom:22px;border-radius:8px;transition:background .2s;}
+.qrow.bad{background:#fef2f2;box-shadow:0 0 0 8px #fef2f2;}
+.qlab{font-size:14px;font-weight:600;color:#1c2b1f;display:block;margin-bottom:10px;line-height:1.4;}
+.pills{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #c8ddd0;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;color:#1c2b1f;background:#fff;transition:all .12s;line-height:1.35;}
+.pill:hover{border-color:#2C7C3B;}
+.pill.sel{border-color:#2C7C3B;background:#f0f7f0;box-shadow:inset 0 0 0 1px #2C7C3B;font-weight:600;}
+.pill input{accent-color:#2C7C3B;margin:0;}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#374151;cursor:pointer;line-height:1.5;}
+.chk input{margin-top:3px;accent-color:#2C7C3B;width:16px;height:16px;flex-shrink:0;}
+@media(max-width:768px){.pill{width:100%;}}
 
 /* RV mobile menu */
 .rv-burger{display:none;background:none;border:1px solid rgba(74,222,128,.35);border-radius:6px;width:38px;height:34px;padding:8px 9px;cursor:pointer;flex-direction:column;justify-content:space-between;flex-shrink:0;}
@@ -161,198 +149,454 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 }
 @media(max-width:400px){.nav-inner img{height:34px !important;}}
 @media(max-width:480px){#navAuth>span{display:none !important;}}
+
+/* INVESTOR DASHBOARD */
+.inv-tile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;padding:18px;position:relative;overflow:hidden;text-align:center;}
+.inv-lock{position:absolute;inset:0;background:rgba(15,31,20,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;border-radius:10px;}
+.flabel{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chipf{border:1px solid #c8ddd0;background:#fff;color:#374151;border-radius:20px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s;}
+.chipf.on{background:#1A472A;border-color:#1A472A;color:#fff;font-weight:600;}
+.opp{margin-bottom:16px;}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.fact{background:#f0f5f2;border-radius:8px;padding:12px 14px;}
+.fact-l{font-size:10px;color:#6b7280;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.fact-v{font-size:14px;font-weight:700;color:#1A472A;}
+.olines{margin:0 0 16px;padding-left:18px;font-size:13px;color:#374151;line-height:1.8;}
+@media(max-width:600px){.facts{grid-template-columns:1fr !important;}}
+.ctabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #e5efe8;padding-bottom:12px;}
+.ctab{border:1px solid #c8ddd0;background:#fff;color:#1c2b1f;border-radius:8px;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;}
+.ctab.on{background:#1A472A;border-color:#1A472A;color:#fff;}
+.ctab.soon{color:#6b7280;background:#f8faf8;}
+.ctab.soon.on{background:#374151;border-color:#374151;color:#fff;}
+.cnum{background:#4ADE80;color:#0f1f14;border-radius:10px;font-size:11px;padding:1px 7px;font-weight:700;}
+.csoon{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.75;}
+.int-done{background:#dcfce7;color:#166534;border-radius:8px;padding:12px 14px;font-size:14px;font-weight:600;}
 </style>
 </head>
-<body style="background:#0f1f14;">
+<body>
+
 <nav class="nav-wrap">
   <div class="nav-inner">
-    <a href="index.html" style="flex-shrink:0;">
-      <img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;">
-    </a>
-    <div class="nav-links"><a href="about.html">About</a><a href="how-it-works.html">How It Works</a><a href="rare.html">Our Approach</a><a href="impact.html">Impact</a><a href="investors.html">For Investors</a><a href="developers.html">For Developers</a><a href="contact.html">Contact</a></div>
-    <div class="nav-auth" id="navAuth"></div>
+    <a href="index.html"><img src="logo.png" alt="Renewables Vault" style="height:40px;width:auto;"></a>
+    <div class="nav-links">
+      <a href="about.html">About</a><a href="how-it-works.html">How It Works</a>
+      <a href="rare.html">Our Approach</a><a href="impact.html">Impact</a>
+      <a href="investors.html">For Investors</a><a href="developers.html">For Developers</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;" id="navAuth"></div>
   </div>
 </nav>
+
+<div style="padding-top:68px;min-height:100vh;">
+
+  <!-- No session or errors -->
+  <div id="loadState" style="max-width:480px;margin:80px auto;text-align:center;padding:48px 20px;">
+    <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+      <i class="fa-solid fa-user" style="color:#2C7C3B;font-size:28px;"></i>
+    </div>
+    <h2 id="lsTitle" style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Loading your dashboard...</h2>
+    <p id="lsText" style="font-size:14px;color:#6b7280;margin:0 0 20px;line-height:1.6;"></p>
+    <div id="lsBtns"></div>
+  </div>
+
+  <!-- ============ VIEW: MAIN ============ -->
+  <div id="vMain" class="view" style="padding:48px;">
+    <div style="max-width:1000px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div class="eyebrow-g">INVESTOR DASHBOARD</div>
+          <h1 id="dName" style="font-size:26px;font-weight:700;color:#1A472A;margin:0;"></h1>
+          <p id="dSub" style="font-size:14px;color:#6b7280;margin:6px 0 0;"></p>
+        </div>
+        <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
+      </div>
+
+      <div id="statusBox"></div>
+
+      <!-- Opportunities (approved only) -->
+      <div id="oppBox" style="display:none;margin-bottom:24px;">
+        <div class="card" style="padding:22px 24px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+            <div><div class="eyebrow-g" style="margin:0;">OPPORTUNITIES</div>
+              <div id="oppCount" style="font-size:13px;color:#6b7280;margin-top:4px;"></div></div>
+            <button class="btn-out" onclick="editPrefs()" style="font-size:13px;padding:8px 16px;"><i class="fa-solid fa-sliders"></i> Edit my preferences</button>
+          </div>
+          <div class="ctabs" id="fCountries"></div>
+          <div class="flabel" style="margin-top:14px;">Asset type</div><div class="chips" id="fTypes"></div>
+          
+        </div>
+        <div id="oppList"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+        <div class="card lt">
+          <div class="eyebrow-g" style="margin-bottom:16px;">YOUR PROFILE</div>
+          <div id="profFields" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
+        <div class="card">
+          <div class="eyebrow-g" style="margin-bottom:16px;">HOW IT WORKS</div>
+          <div id="journey"></div>
+        </div>
+      </div>
+
+      <div class="card" style="text-align:center;padding:20px;">
+        <p style="font-size:14px;color:#6b7280;margin:0 0 8px;">Questions about the process?</p>
+        <a href="contact.html" style="color:#2C7C3B;font-size:14px;font-weight:700;text-decoration:none;">Contact Renewables Vault &#8594;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VIEW: KYC AND PREFERENCES FORM ============ -->
+  <div id="vForm" class="view" style="padding:48px;">
+    <div style="max-width:720px;margin:0 auto;">
+      <button onclick="saveAndExit()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Save &amp; return to dashboard</button>
+      <div class="eyebrow-g" id="fEyebrow">KYC</div>
+      <h1 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 4px;" id="fTitle"></h1>
+      <p id="fIntro" style="font-size:13px;color:#6b7280;margin:0 0 22px;">All information is treated as strictly confidential and used only to verify your identity and match you with suitable opportunities.</p>
+      <div class="prog-wrap" id="prog"></div>
+      <div class="card" style="padding:28px 28px 22px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;flex-wrap:wrap;">
+          <h2 id="sTitle" style="font-size:19px;font-weight:700;color:#1A472A;margin:0;"></h2>
+          <span id="sCount" style="font-size:12px;color:#9ca3af;font-weight:600;"></span>
+        </div>
+        <p id="sDesc" style="font-size:13px;color:#6b7280;margin:0 0 22px;"></p>
+        <div id="qBox"></div>
+        <div class="err" id="fErr"></div>
+        <div style="display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap;">
+          <button class="btn-out" id="bPrev" onclick="prevS()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button class="btn-green" id="bNext" onclick="nextS()">Next <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VIEW: SUBMITTED ============ -->
+  <div id="vDone" class="view" style="padding:48px;">
+    <div style="max-width:640px;margin:0 auto;">
+      <div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:40px 32px;text-align:center;color:#fff;margin-bottom:20px;">
+        <div style="width:70px;height:70px;border-radius:50%;background:rgba(74,222,128,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+          <i class="fa-solid fa-check" style="color:#4ADE80;font-size:30px;"></i>
+        </div>
+        <h1 id="doneTitle" style="font-size:24px;font-weight:700;margin:0 0 10px;">KYC submitted</h1>
+        <p id="doneTxt" style="font-size:15px;color:#bccabb;line-height:1.7;margin:0;"></p>
+      </div>
+      <div style="text-align:center;"><button class="btn-green" onclick="loadStatus()">Back to Dashboard</button></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;display:block;">
+      <p style="font-size:12px;color:#869486;margin:0;">&#169; 2026 Renewables Vault. All rights reserved.</p>
+    </div>
+    <div style="text-align:right;">
+      <a href="about.html">About</a><a href="how-it-works.html">How It Works</a>
+      <a href="impact.html">Impact</a><a href="contact.html">Contact</a>
+      <a href="legal.html">Legal &amp; Disclaimer</a>
+    </div>
+  </div>
+</footer>
+
+<script src="rv-config.js"></script>
+<script src="rv-auth.js"></script>
 <script>
 var RVAuth={
   get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
   set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
   out:function(){localStorage.removeItem('rv_user');window.location.href='index.html';}
 };
-function genCode(e){
-  var s=e.toLowerCase().trim()+'RV_RENEWABLES_VAULT_2026',h=0;
-  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-  var c=Math.abs(h).toString(36).toUpperCase();
-  while(c.length<8)c='0'+c;
-  return c.substring(0,8);
-}
-function genRC(e){
-  var s=e.toLowerCase().trim()+'RV_RECOVERY_2026',h=0;
-  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-  var c=Math.abs(h).toString(36).toUpperCase();
-  while(c.length<6)c='0'+c;
-  return 'RC-'+c.substring(0,6);
-}
-(function(){
-  var u=RVAuth.get();
-  var el=document.getElementById('navAuth');
-  if(!el)return;
-  if(u){
-    var d=u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
-    el.innerHTML='<span style="font-size:12px;color:#bccabb;margin-right:4px;">Hi, '+u.firstName+'</span>'+
-      '<a href="'+d+'" class="btn-nav">My Account</a>'+
-      '<a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';
-  }else{
-    el.innerHTML='<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a>'+
-      '<a href="register.html" class="btn-nav">Register Now</a>';
-  }
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+(function(){var u=RVAuth.get(),el=document.getElementById('navAuth');if(!el)return;
+  if(u){el.innerHTML='<span style="font-size:12px;color:#bccabb;">Hi, '+esc(u.firstName)+'</span><a href="'+(u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html')+'" class="btn-nav">My Account</a><a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';}
+  else{el.innerHTML='<a href="login.html" style="font-size:12px;font-weight:600;color:#bccabb;text-decoration:none;">Login</a><a href="register.html" class="btn-nav">Register Now</a>';}
 })();
-</script>
-<div style="padding-top:68px;">
-<div style="padding:48px;min-height:80vh;background:#f0f5f2;" id="dw">
-  <div id="loadState" style="max-width:480px;margin:80px auto;text-align:center;">
-    <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-      <i class="fa-solid fa-user" style="color:#2C7C3B;font-size:28px;"></i>
-    </div>
-    <h2 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Session Expired</h2>
-    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.6;">Your session was not found. Please log in again.</p>
-    <p id="cntMsg" style="font-size:13px;color:#9ca3af;margin:0 0 20px;">Redirecting in <strong id="cnt">5</strong> seconds...</p>
-    <a href="login.html" class="btn-lime" style="display:inline-block;padding:12px 28px;text-decoration:none;border-radius:6px;">Go to Login</a>
-    <div style="margin-top:12px;"><a href="register.html" style="font-size:13px;color:#6b7280;text-decoration:none;">New user? Register &#8594;</a></div>
-  </div>
-  <div id="dashContent" style="max-width:1000px;margin:0 auto;display:none;"></div>
-</div>
-<script>
+
+/* ───────────── Reference data ───────────── */
+var TYPES={biofuel:{label:'Biofuel & Biodiesel',icon:'fa-gas-pump'},circular:{label:'Circular Economy (Waste Recycling)',icon:'fa-recycle'},solar:{label:'Solar C&I (Commercial & Industrial)',icon:'fa-solar-panel'}};
+var COUNTRIES=[['Egypt','Egypt'],['KSA','KSA (coming soon)'],['Morocco','Morocco (coming soon)'],['Kenya','Kenya (coming soon)'],['South Africa','South Africa (coming soon)']];
+function O(p){return p.map(function(x){return{v:x[0],t:x[1]};});}
+var PREF_QS=[
+  {k:'p_types',t:'multi',q:'Which asset types are you interested in?',req:1,o:O([['biofuel',TYPES.biofuel.label],['circular',TYPES.circular.label],['solar',TYPES.solar.label]])},
+  {k:'p_countries',t:'multi',q:'Which countries?',req:1,o:O(COUNTRIES)},
+  {k:'p_ticket',t:'radio',q:'Typical ticket size',req:1,o:O([['Under USD 250,000','Under USD 250,000'],['USD 250,000 to 1 million','USD 250,000 to 1 million'],['USD 1 to 5 million','USD 1 to 5 million'],['Above USD 5 million','Above USD 5 million']])},
+  {k:'p_tenor',t:'radio',q:'Preferred investment term',req:1,o:O([['1 to 2 years','1 to 2 years'],['2 to 3 years','2 to 3 years'],['3 to 5 years','3 to 5 years'],['Flexible','Flexible']])},
+  {k:'p_currency',t:'radio',q:'Preferred currency',req:1,o:O([['USD','US dollars'],['USD-indexed EGP','Egyptian pounds, indexed to USD'],['EGP','Egyptian pounds'],['Flexible','Flexible']])}
+];
+var KYC_STEPS=[
+  {title:'About you',desc:'Tell us who will be investing.',qs:[
+    {k:'category',t:'radio',q:'Are you investing as an individual or through a company?',req:1,rerender:1,o:O([['individual','As an individual'],['company','Through a company, fund or institution']])},
+    {k:'full_name',t:'text',q:'Full legal name (as on your ID)',req:1,when:'individual'},
+    {k:'nationality',t:'text',q:'Nationality',req:1,when:'individual'},
+    {k:'residence',t:'text',q:'Country of residence',req:1,when:'individual'},
+    {k:'dob',t:'text',q:'Date of birth',ph:'DD/MM/YYYY',req:1,when:'individual'},
+    {k:'id_type',t:'radio',q:'ID document',req:1,when:'individual',o:O([['Passport','Passport'],['National ID','National ID card']])},
+    {k:'id_number',t:'text',q:'ID document number',req:1,when:'individual'},
+    {k:'occupation',t:'text',q:'Occupation',req:1,when:'individual'},
+    {k:'address',t:'text',q:'Residential address (city and country)',req:1,when:'individual'},
+    {k:'company_name',t:'text',q:'Legal company name',req:1,when:'company'},
+    {k:'incorporation',t:'text',q:'Country of incorporation',req:1,when:'company'},
+    {k:'reg_number',t:'text',q:'Company registration number',req:1,when:'company'},
+    {k:'reg_address',t:'text',q:'Registered address',req:1,when:'company'},
+    {k:'regulated',t:'radio',q:'Is the company regulated by a financial authority?',req:1,when:'company',o:O([['Yes','Yes'],['No','No']])},
+    {k:'regulator',t:'text',q:'If yes, which regulator? (optional)',req:0,when:'company'},
+    {k:'rep_name',t:'text',q:'Authorised representative (full name)',req:1,when:'company'},
+    {k:'rep_title',t:'text',q:'Representative position',req:1,when:'company'}
+  ]},
+  {title:'Funds & compliance',desc:'Standard questions we are required to ask every investor.',qs:[
+    {k:'funds',t:'radio',q:'Main source of the funds you would invest',req:1,o:O([['Business income','Business income'],['Investment returns','Investment returns'],['Savings or salary','Savings or salary'],['Sale of assets or inheritance','Sale of assets or inheritance'],['Capital from fund investors','Capital from fund investors']])},
+    {k:'owners',t:'area',q:'Beneficial owners: name everyone who owns 25% or more of the company',req:1,when:'company',ph:'e.g. Ahmed Ali, 60%; Sara Hassan, 40%'},
+    {k:'pep',t:'radio',q:'Are you (or any owner or director) a politically exposed person, or a close family member of one?',req:1,o:O([['No','No'],['Yes','Yes']])},
+    {k:'sanctions',t:'radio',q:'Are you (or the company) subject to any international sanctions?',req:1,o:O([['No','No'],['Yes','Yes']])}
+  ]},
+  {title:'Investment preferences',desc:'We use these to show you the opportunities that fit. You can change them at any time.',qs:PREF_QS},
+  {title:'Declarations',desc:'Please read and confirm.',qs:[
+    {k:'declare_true',t:'check',q:'I confirm the information provided is true and complete.',req:1},
+    {k:'declare_verify',t:'check',q:'I agree that Renewables Vault may verify this information and ask me for supporting documents.',req:1},
+    {k:'declare_risk',t:'check',q:'I understand that investments carry risk, including possible loss of capital, and that opportunities shown are indicative and subject to due diligence and formal documentation.',req:1},
+    {k:'notes',t:'area',q:'Anything else we should know? (optional)',req:0,ph:'e.g. investment mandate, timing'}
+  ]}
+];
+var PREF_STEPS=[{title:'Investment preferences',desc:'Choose what you would like to see. You can change this at any time.',qs:PREF_QS}];
+
+/* ───────────── State ───────────── */
+var U=null,KEY='',ST=null,MODE='kyc',DRAFT=null,S=0,LIST=null,FILTER=null;
+function steps(){return MODE==='prefs'?PREF_STEPS:KYC_STEPS;}
+function kD(){return 'rv_kyc_'+U.email.toLowerCase();}
+function show(v){['vMain','vForm','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});document.getElementById('loadState').style.display=v?'none':'block';window.scrollTo(0,0);}
+function stateMsg(title,text,btns){show(null);document.getElementById('lsTitle').textContent=title;document.getElementById('lsText').textContent=text;document.getElementById('lsBtns').innerHTML=btns||'';}
+
 window.addEventListener('DOMContentLoaded',function(){
-  try{
-    var u=RVAuth.get();
-    if(!u){
-      /* Start countdown redirect */
-      var n=5;
-      var iv=setInterval(function(){
-        n--;document.getElementById('cnt').textContent=n;
-        if(n<=0){clearInterval(iv);window.location.href='login.html';}
-      },1000);
-      return;
-    }
-    if(u.type!=='investor'){window.location.href='dashboard-developer.html';return;}
-    document.getElementById('loadState').style.display='none';
-    document.getElementById('dashContent').style.display='block';
-    if(u.approved)renderApproved(u);else renderPending(u);
-  }catch(e){
-    document.getElementById('loadState').innerHTML='<div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;"><i class="fa-solid fa-triangle-exclamation" style="color:#dc2626;font-size:24px;"></i></div><h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 10px;">Something went wrong</h2><p style="font-size:14px;color:#6b7280;margin:0 0 20px;">Please log in again to access your dashboard.</p><a href="login.html" class="btn-lime" style="display:inline-block;padding:12px 28px;text-decoration:none;border-radius:6px;">Go to Login</a>';
-  }
+  U=RVAuth.get();
+  if(!U){var n=5;stateMsg('Please log in','Your session was not found on this browser. You can log in from any phone or computer.','<a href="login.html" class="btn-green" style="text-decoration:none;">Go to Login</a><p style="font-size:13px;color:#9ca3af;margin-top:14px;">Redirecting in <b id="cnt">5</b> seconds...</p>');
+    var iv=setInterval(function(){n--;var c=document.getElementById('cnt');if(c)c.textContent=n;if(n<=0){clearInterval(iv);location.href='login.html';}},1000);return;}
+  if(U.type!=='investor'){location.href='dashboard-developer.html';return;}
+  if(!RV.api()){stateMsg('Temporarily unavailable','Our investor service is being updated. Please try again shortly or contact us.','<a href="contact.html" class="btn-green" style="text-decoration:none;">Contact us</a>');return;}
+  if(!U.password){stateMsg('Please log in again','For your security, please log out and log in again to continue.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
+  RV.key(U.email,U.password).then(function(k){KEY=k;loadStatus();});
 });
-function renderPending(u){
-  var c=document.getElementById('dashContent');
-  var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">';
-  h+='<div><div class="eyebrow-g" style="margin-bottom:6px;">INVESTOR DASHBOARD</div>';
-  h+='<h1 style="font-size:26px;font-weight:700;color:#1A472A;margin:0;">Welcome, '+u.firstName+' '+u.lastName+'.</h1>';
-  h+='<p style="font-size:14px;color:#6b7280;margin:6px 0 0;">'+u.org+' &middot; '+u.investorType+'</p></div>';
-  h+='<button onclick="RVAuth.out()" style="font-size:13px;color:#6b7280;background:#fff;border:1px solid #d1e8d8;border-radius:6px;padding:8px 18px;cursor:pointer;">Logout</button></div>';
-  h+='<div style="background:#fff;border-radius:12px;border:1px solid #d1e8d8;border-left:4px solid #f59e0b;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">';
-  h+='<i class="fa-solid fa-clock" style="color:#f59e0b;font-size:26px;flex-shrink:0;"></i>';
-  h+='<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">Profile under review</div>';
-  h+='<p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">Our team will review your profile and reach out within <strong>48 hours</strong> to schedule an introductory call and begin KYC verification.</p></div></div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">';
-  h+='<div class="card" style="border-top:3px solid #2C7C3B;"><div class="eyebrow-g" style="margin-bottom:16px;">Your Profile</div><div style="display:flex;flex-direction:column;gap:12px;">';
-  var pf=[['Full Name',u.firstName+' '+u.lastName,true],['Email',u.email,false],['Organisation',u.org||'Not provided',true],['Investor Type',u.investorType||'Not provided',true],['Ticket Size',u.ticket||'Not specified',false],['Registered',u.registered||'Today',false]];
-  for(var i=0;i<pf.length;i++){h+='<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+pf[i][0]+'</div>';h+='<div style="font-size:14px;'+(pf[i][2]?'font-weight:600;color:#1c2b1f;':'color:#6b7280;')+'">'+pf[i][1]+'</div></div>';}
-  h+='<div><span class="badge-pending">Under Review</span></div></div></div>';
-  h+='<div class="card"><div class="eyebrow-g" style="margin-bottom:16px;">Your Journey</div>';
-  var steps=[['Registration complete','Submitted on '+(u.registered||'today'),'done'],['Profile review','Team reviews and contacts you within 48 hours.','next'],['KYC verification','Submit passport and proof of investor status.','grey'],['Receive approval code','We email your code once KYC is complete.','grey'],['Unlock deal access','Enter your code below to view live opportunities.','grey']];
-  for(var s=0;s<steps.length;s++){var st=steps[s],isL=(s===steps.length-1);var bl=isL?'none':(st[2]==='done'?'2px solid #4ADE80':'2px dashed #d1e8d8');var nc=st[2]==='done'?'step-done':(st[2]==='next'?'step-next':'step-grey');var ni=st[2]==='done'?'<i class="fa-solid fa-check" style="font-size:12px;"></i>':(s+1).toString();var tc=(st[2]==='grey'?'#9ca3af':'#1A472A');h+='<div style="margin-left:15px;padding-left:16px;padding-bottom:'+(isL?'0':'18px')+';position:relative;border-left:'+bl+';">';h+='<div class="'+nc+'" style="position:absolute;left:-16px;top:0;">'+ni+'</div>';h+='<div style="font-size:14px;font-weight:700;color:'+tc+';">'+st[0]+'</div>';h+='<div style="font-size:13px;color:'+(st[2]==='grey'?'#9ca3af':'#6b7280')+';margin-top:3px;">'+st[1]+'</div></div>';}
-  h+='</div></div>';
-  h+='<div class="card" style="margin-bottom:24px;"><div class="eyebrow-g" style="margin-bottom:10px;">Have an approval code?</div>';
-  h+='<p style="font-size:14px;color:#6b7280;margin:0 0 14px;line-height:1.6;">If our team has sent you an approval code after KYC, enter it below to unlock deal access immediately.</p>';
-  h+='<div style="display:flex;gap:12px;flex-wrap:wrap;">';
-  h+='<input id="codeIn" type="text" maxlength="8" placeholder="8-digit code" style="flex:1;min-width:160px;background:#fff;border:1px solid #c8ddd0;border-radius:6px;padding:12px 14px;color:#1c2b1f;font-size:16px;outline:none;letter-spacing:.12em;font-weight:700;font-family:monospace;text-transform:uppercase;">';
-  h+='<button onclick="applyCode()" class="btn-green" style="padding:12px 24px;white-space:nowrap;">Unlock Access</button></div>';
-  h+='<div id="codeErr" style="display:none;font-size:13px;color:#dc2626;margin-top:8px;"></div></div>';
-  h+='<div style="background:#0f1f14;border-radius:12px;padding:28px;">';
-  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div><div class="eyebrow" style="margin-bottom:4px;">Current Opportunities</div><div style="font-size:13px;color:#869486;">Complete KYC and enter your approval code to unlock.</div></div>';
-  h+='<i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div>';
-  h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">';
-  var tiles=[['fa-leaf','Biofuel & Biodiesel','Short to medium term'],['fa-sun','Solar (C&I)','Medium term'],['fa-recycle','Circular Economy','Various tenors']];
-  for(var t=0;t<tiles.length;t++){h+='<div class="inv-tile"><i class="fa-solid '+tiles[t][0]+'" style="color:#4ADE80;font-size:26px;margin-bottom:10px;display:block;"></i>';h+='<div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">'+tiles[t][1]+'</div>';h+='<div style="font-size:11px;color:#4ADE80;margin-bottom:3px;">Egypt</div>';h+='<div style="font-size:11px;color:#869486;">'+tiles[t][2]+'</div>';h+='<div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:20px;"></i></div></div>';}
-  h+='</div></div>';
-  h+='<div class="card" style="margin-top:24px;text-align:center;padding:20px;"><p style="font-size:14px;color:#6b7280;margin:0 0 8px;">Questions while you wait?</p><a href="contact.html" style="color:#2C7C3B;font-size:14px;font-weight:700;text-decoration:none;">Contact Renewables Vault &#8594;</a></div>';
-  c.innerHTML=h;
+function api(body){body.email=U.email;body.key=KEY;return RV.post(body);}
+
+function loadStatus(){
+  stateMsg('Loading your dashboard...','','');
+  api({action:'investor_status'}).then(function(r){
+    if(!r||!r.ok){stateMsg('Please log in again','We could not confirm your account. Please log out and log in again.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
+    ST=r;renderMain();
+    if(r.status==='Approved'&&r.activated)loadListings();
+  }).catch(function(){stateMsg('Connection problem','We could not reach our server. Please check your internet connection and try again.','<button class="btn-green" onclick="loadStatus()">Try again</button>');});
 }
-function applyCode(){
-  var u=RVAuth.get();
-  var code=document.getElementById('codeIn').value.trim().toUpperCase();
-  var err=document.getElementById('codeErr');
-  if(!code){err.style.display='block';err.textContent='Please enter your approval code.';return;}
-  if(code===genCode(u.email)){
-    u.approved=true;RVAuth.set(u);
-    var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-    for(var i=0;i<users.length;i++){if(users[i].email===u.email)users[i].approved=true;}
-    localStorage.setItem('rv_users',JSON.stringify(users));
-    renderApproved(u);
-  }else{err.style.display='block';err.textContent='Incorrect code. Contact contact@renewablesvault.com for help.';}
-}
-function renderApproved(u){
-  var c=document.getElementById('dashContent');
-  var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">';
-  h+='<div><div class="eyebrow-g" style="margin-bottom:6px;">INVESTOR DASHBOARD</div>';
-  h+='<h1 style="font-size:26px;font-weight:700;color:#1A472A;margin:0;">Welcome, '+u.firstName+' '+u.lastName+'.</h1>';
-  h+='<p style="font-size:14px;color:#6b7280;margin:6px 0 0;">'+u.org+' &middot; '+u.investorType+'</p></div>';
-  h+='<button onclick="RVAuth.out()" style="font-size:13px;color:#6b7280;background:#fff;border:1px solid #d1e8d8;border-radius:6px;padding:8px 18px;cursor:pointer;">Logout</button></div>';
-  h+='<div style="background:#fff;border-radius:12px;border:1px solid #d1e8d8;border-left:4px solid #4ADE80;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">';
-  h+='<i class="fa-solid fa-shield-halved" style="color:#16a34a;font-size:26px;flex-shrink:0;"></i>';
-  h+='<div><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">KYC Approved: Deal Access Unlocked</div>';
-  h+='<p style="font-size:14px;color:#6b7280;margin:0;">You have full access to current Renewables Vault opportunities. Click Express Interest on any deal to proceed.</p></div></div>';
-  h+='<div class="eyebrow-g" style="margin-bottom:16px;">Current Opportunities in Egypt</div>';
-  var deals=[
-    {id:'DEL-001',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'3 years',offtaker:'Investment Grade, Pharmaceutical Sector',structure:'Revenue Purchase Agreement (RPA)',security:'Registered asset pledge + escrow-controlled receivables assignment',returns:'Competitive, risk-adjusted, shared under NDA',status:'Active: Structuring Stage'},
-    {id:'DEL-002',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'2 years',offtaker:'Investment Grade, Cement Industry',structure:'Revenue Purchase Agreement (RPA)',security:'Registered asset pledge + escrow-controlled receivables assignment',returns:'Competitive, risk-adjusted, shared under NDA',status:'Active: Structuring Stage'},
-    {id:'DEL-003',type:'Biofuel & Biodiesel',country:'Egypt',tenor:'2 years',offtaker:'Investment Grade, Industrial Sector',structure:'Revenue Purchase Agreement (RPA)',security:'Registered asset pledge + escrow-controlled receivables assignment',returns:'Competitive, risk-adjusted, shared under NDA',status:'Active: Due Diligence Stage'}
-  ];
-  for(var d=0;d<deals.length;d++){var dl=deals[d];
-    h+='<div class="card" style="margin-bottom:16px;">';
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">';
-    h+='<div style="display:flex;align-items:center;gap:12px;">';
-    h+='<div style="width:44px;height:44px;background:#f0f5f2;border-radius:10px;display:flex;align-items:center;justify-content:center;">';
-    h+='<i class="fa-solid fa-leaf" style="color:#2C7C3B;font-size:22px;"></i></div>';
-    h+='<div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+dl.type+'</div>';
-    h+='<div style="font-size:13px;color:#6b7280;">'+dl.country+' &middot; '+dl.tenor+'</div></div></div>';
-    h+='<div style="display:flex;align-items:center;gap:10px;"><span style="background:#f0f5f2;color:#1A472A;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;">'+dl.status+'</span>';
-    h+='<span style="font-size:11px;color:#9ca3af;">'+dl.id+'</span></div></div>';
-    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">';
-    var rows=[['Off-taker',dl.offtaker],['Structure',dl.structure],['Security',dl.security],['Target Return',dl.returns]];
-    for(var r=0;r<rows.length;r++){var bg=rows[r][0]==='Target Return'?'background:#dcfce7;':'background:#f8faf8;';h+='<div style="'+bg+'border-radius:8px;padding:14px;">';h+='<div style="font-size:10px;color:'+(rows[r][0]==='Target Return'?'#166534':'#9ca3af')+';font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">'+rows[r][0]+'</div>';h+='<div style="font-size:13px;font-weight:600;color:'+(rows[r][0]==='Target Return'?'#166534':'#1c2b1f')+';line-height:1.4;">'+rows[r][1]+'</div></div>';}
-    h+='</div>';
-    h+='<button id="btn_'+dl.id+'" onclick="xInt(\''+dl.id+'\',\''+dl.type+'\')" class="btn-green" style="width:100%;padding:13px;border-radius:8px;font-size:14px;">Express Interest in This Opportunity &#8594;</button>';
-    h+='</div>';
+
+/* ───────────── Main view ───────────── */
+function prefLabel(p){if(!p)return '';return p.types.map(function(t){return TYPES[t]?TYPES[t].label:t;}).join(', ')+' · '+p.countries.join(', ');}
+function renderMain(){
+  show('vMain');
+  document.getElementById('dName').textContent='Welcome, '+U.firstName+' '+U.lastName+'.';
+  document.getElementById('dSub').textContent=[U.org,U.investorType].filter(Boolean).join(' · ');
+  var s=ST.status,h='',draft=lsGet(kD(),null);
+  var banner=function(color,icon,title,text,btn){return '<div class="card" style="border-left:4px solid '+color+';padding:20px 24px;margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid '+icon+'" style="color:'+color+';font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:220px;"><div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+title+'</div><div style="font-size:14px;color:#6b7280;line-height:1.6;">'+text+'</div></div>'+(btn||'')+'</div>';};
+  if(s==='Not started'){
+    h='<div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;"><div class="eyebrow">NEXT STEP</div><h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Complete your KYC</h2><p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">A short identity and preferences form, about 5 minutes. You can save and continue later. Once our team approves it, you will see the opportunities that match the asset types and countries you choose.</p><button class="btn-lime" onclick="startKyc()">'+(draft?'Continue my KYC':'Start KYC')+' <i class="fa-solid fa-arrow-right"></i></button></div>';
+  }else if(s==='Submitted'||s==='Under review'){
+    h=banner('#f59e0b','fa-clock','KYC '+(s==='Submitted'?'received':'under review'),'Our team is reviewing your information and will contact you within 2 business days. Your preferences: <b>'+esc(prefLabel(ST.prefs))+'</b>.','<button class="btn-out" onclick="startKyc(true)" style="font-size:13px;padding:8px 16px;">Edit my KYC</button>');
+    h+=lockedTiles();
+  }else if(s==='More information needed'){
+    h=banner('#ea580c','fa-circle-info','We need a little more information',(ST.note?'<b>Note from our team:</b> '+esc(ST.note):'Please review and update your KYC.'),'<button class="btn-green" onclick="startKyc(true)">Update my KYC</button>');
+    h+=lockedTiles();
+  }else if(s==='Not approved'){
+    h=banner('#6b7280','fa-circle-xmark','Profile not approved at this time',(ST.note?esc(ST.note):'Thank you for your interest. Please contact us if you have any questions.'),'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
+  }else if(s==='Approved'&&!ST.activated){
+    h='<div class="card" style="border-left:4px solid #16a34a;padding:24px;margin-bottom:24px;"><div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid fa-key" style="color:#16a34a;font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:240px;">'+
+      '<div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">Your KYC is approved. Enter your access code</div>'+
+      '<div style="font-size:14px;color:#6b7280;line-height:1.6;margin-bottom:14px;">We have emailed your personal access code to <b>'+esc(U.email)+'</b>. Enter it below to unlock the opportunities. You only need to do this once.</div>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;"><input id="accCode" class="field" maxlength="12" placeholder="e.g. K7MP-Q2XA" style="flex:1;min-width:180px;max-width:260px;font-family:monospace;font-size:17px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;" onkeydown="if(event.key===\'Enter\')activate()">'+
+      '<button class="btn-green" id="accBtn" onclick="activate()">Unlock opportunities</button></div>'+
+      '<div class="err" id="accErr"></div>'+
+      '<div style="font-size:12px;color:#9ca3af;margin-top:10px;">Did not receive it? Check your spam folder or <a href="contact.html" style="color:#2C7C3B;">contact us</a>.</div>'+
+      (ST.note?'<div style="font-size:13px;color:#374151;margin-top:10px;"><b>Note from our team:</b> '+esc(ST.note)+'</div>':'')+'</div></div></div>';
+    h+=lockedTiles();
+  }else if(s==='Approved'){
+    h=banner('#16a34a','fa-shield-halved','Access unlocked','You can see published opportunities by country. Express interest in any of them and our team will share full details under NDA.'+(ST.note?'<br><b>Note from our team:</b> '+esc(ST.note):''));
   }
-  h+='<div class="card" style="margin-top:8px;"><p style="font-size:12px;color:#9ca3af;margin:0;line-height:1.7;text-align:center;">Indicative returns are not guaranteed. Off-taker identities disclosed under separate NDA. Contact <a href="mailto:contact@renewablesvault.com" style="color:#2C7C3B;text-decoration:none;">contact@renewablesvault.com</a> for further information.</p></div>';
-  c.innerHTML=h;
+  document.getElementById('statusBox').innerHTML=h;
+  document.getElementById('oppBox').style.display=(s==='Approved'&&ST.activated)?'block':'none';
+  var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Mobile or WhatsApp',U.phone||'Not provided'],['Organisation',U.org||'Investing personally'],['Investor type',U.investorType||'Not provided'],['KYC status',s]];
+  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('');
+  var done=[1,s!=='Not started',s==='Approved'&&!!ST.activated,s==='Approved'&&LIST&&LIST.interested&&LIST.interested.length>0,0];
+  var j=[['Create your account','Done'],['Complete KYC and preferences','About 5 minutes'],['KYC approval','Our team reviews within 2 business days'],['Browse and express interest','See opportunities that match your preferences'],['NDA, due diligence and investment','Full details shared under NDA']];
+  var nx=done.findIndex(function(x){return !x;});
+  document.getElementById('journey').innerHTML=j.map(function(x,i){var last=i===j.length-1,d=!!done[i],n=i===nx;
+    return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(d?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';"><div class="'+(d?'step-done':n?'step-next':'step-grey')+'" style="position:absolute;left:-16px;top:0;">'+(d?'<i class="fa-solid fa-check"></i>':(i+1))+'</div><div style="font-size:14px;font-weight:700;color:'+(d||n?'#1A472A':'#9ca3af')+';">'+x[0]+'</div><div style="font-size:12px;color:'+(d||n?'#6b7280':'#9ca3af')+';margin-top:2px;">'+x[1]+'</div></div>';}).join('');
 }
-function xInt(id,type){
-  var u=RVAuth.get();
-  var btn=document.getElementById('btn_'+id);
-  if(!btn||!u)return;
-  btn.disabled=true;btn.textContent='Sending...';
-  fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'Investor Interest: '+id+' | '+u.firstName+' '+u.lastName,name:u.firstName+' '+u.lastName,email:u.email,message:'INVESTOR INTEREST\n=================\nDeal: '+id+' | '+type+'\nInvestor: '+u.firstName+' '+u.lastName+'\nEmail: '+u.email+'\nOrg: '+(u.org||'')+'\nTicket: '+(u.ticket||'Not specified')+'\nDate: '+new Date().toLocaleDateString()+'\n=================\nACTION: Share NDA and progress to term sheet.'})}).finally(function(){btn.textContent='\u2713 Interest Registered. Our team will be in touch';btn.style.background='#16a34a';btn.disabled=true;});
+function lockedTiles(){
+  return '<div style="background:#0f1f14;border-radius:12px;padding:24px;margin-bottom:24px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div><div class="eyebrow" style="margin-bottom:4px;">OPPORTUNITIES</div><div style="font-size:13px;color:#869486;">'+(ST&&ST.status==='Approved'?'Unlocked once you enter your access code.':'Unlocked once your KYC is approved.')+'</div></div><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">'+
+    Object.keys(TYPES).map(function(k){return '<div class="inv-tile"><i class="fa-solid '+TYPES[k].icon+'" style="color:#4ADE80;font-size:24px;margin-bottom:8px;display:block;"></i><div style="font-size:13px;font-weight:700;color:#fff;">'+TYPES[k].label+'</div><div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div></div>';}).join('')+'</div></div>';
 }
-</script></div>
-<footer class="footer">
-  <div class="footer-inner">
-    <div>
-      <img src="logo.png" alt="Renewables Vault" style="height:36px;width:auto;margin-bottom:10px;display:block;">
-      <p style="font-size:12px;color:#869486;margin:0;">© 2026 Renewables Vault. All rights reserved.</p>
-    </div>
-    <div style="text-align:right;">
-      <a href="about.html">About</a><a href="how-it-works.html">How It Works</a>
-      <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
-      <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
-      <div style="margin-top:10px;">
-        <a href="legal.html#privacy" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
-        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
-      </div>
-    </div>
-  </div>
-</footer>
+
+/* ───────────── Access code ───────────── */
+function activate(){
+  var c=document.getElementById('accCode').value.trim(),b=document.getElementById('accBtn'),e=document.getElementById('accErr');
+  e.style.display='none';
+  if(c.replace(/[^A-Za-z0-9]/g,'').length<8){e.textContent='Please enter the 8-character code from your email.';e.style.display='block';return;}
+  b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+  api({action:'activate',code:c}).then(function(r){
+    if(r&&r.ok){loadStatus();return;}
+    b.disabled=false;b.textContent='Unlock opportunities';
+    e.textContent=(r&&r.error==='locked')?'Too many attempts. Please wait 15 minutes and try again.':'That code is not correct. Please check the email and try again.';e.style.display='block';
+  }).catch(function(){b.disabled=false;b.textContent='Unlock opportunities';e.textContent='Connection problem. Please try again.';e.style.display='block';});
+}
+
+/* ───────────── Opportunities ───────────── */
+var OPEN=['Egypt'],FLAGS={'Egypt':'&#127466;&#127468;','KSA':'&#127480;&#127462;','Morocco':'&#127474;&#127462;','Kenya':'&#127472;&#127466;','South Africa':'&#127487;&#127462;'},CTRY='Egypt';
+function loadListings(){
+  document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;color:#6b7280;font-size:14px;">Loading opportunities...</div>';
+  api({action:'listings'}).then(function(r){
+    if(!r||!r.ok){document.getElementById('oppList').innerHTML='<div class="card" style="color:#6b7280;font-size:14px;">Opportunities are not available right now. Please try again later.</div>';return;}
+    LIST=r;FILTER={types:(r.prefs.types||[]).slice(),countries:(r.prefs.countries||[]).slice()};
+    if(!FILTER.types.length)FILTER.types=Object.keys(TYPES);if(!FILTER.countries.length)FILTER.countries=COUNTRIES.map(function(c){return c[0];});
+    renderChips();renderList();renderMain();
+  }).catch(function(){document.getElementById('oppList').innerHTML='<div class="card" style="color:#6b7280;font-size:14px;">Could not load opportunities. Please check your connection.</div>';});
+}
+function renderChips(){
+  document.getElementById('fTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<button class="chipf'+(FILTER.types.indexOf(k)>=0?' on':'')+'" onclick="toggleF(\'types\',\''+k+'\')">'+TYPES[k].label+'</button>';}).join('');
+  document.getElementById('fCountries').innerHTML=COUNTRIES.map(function(c){var open=OPEN.indexOf(c[0])>=0,n=(LIST.listings||[]).filter(function(x){return x.country===c[0];}).length;
+    return '<button class="ctab'+(CTRY===c[0]?' on':'')+(open?'':' soon')+'" onclick="pickC(\''+c[0]+'\')">'+FLAGS[c[0]]+' '+c[0]+(open?'<span class="cnum">'+n+'</span>':'<span class="csoon">Coming soon</span>')+'</button>';}).join('');
+}
+function pickC(c){CTRY=c;renderChips();renderList();}
+function toggleF(g,v){var a=FILTER[g],i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);renderChips();renderList();}
+function renderList(){
+  if(OPEN.indexOf(CTRY)<0){
+    document.getElementById('oppCount').textContent=CTRY+': coming soon';
+    var wants=(LIST.prefs.countries||[]).indexOf(CTRY)>=0;
+    document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:36px 24px;"><div style="font-size:30px;margin-bottom:10px;">'+FLAGS[CTRY]+'</div><div style="font-size:17px;font-weight:700;color:#1A472A;margin-bottom:6px;">Opportunities in '+esc(CTRY)+' are coming soon</div><div style="font-size:14px;color:#6b7280;line-height:1.6;max-width:460px;margin:0 auto;">We are building our pipeline in '+esc(CTRY)+'. '+(wants?'You chose '+esc(CTRY)+' in your preferences, so we will email you as soon as the first opportunity is published.':'Add '+esc(CTRY)+' to your preferences and we will email you as soon as the first opportunity is published.')+'</div>'+(wants?'':'<button class="btn-out" style="margin-top:16px;font-size:13px;padding:8px 16px;" onclick="editPrefs()">Edit my preferences</button>')+'</div>';
+    return;
+  }
+  var inC=(LIST.listings||[]).filter(function(x){return x.country===CTRY;}),L=inC.filter(function(x){return FILTER.types.indexOf(x.type)>=0;});
+  document.getElementById('oppCount').textContent=CTRY+': showing '+L.length+' of '+inC.length+' published opportunit'+(inC.length===1?'y':'ies');
+  if(!L.length){document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:30px;"><i class="fa-regular fa-folder-open" style="color:#9ca3af;font-size:28px;margin-bottom:10px;display:block;"></i><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+(inC.length?'No opportunities match these asset types yet':'No opportunities published in '+esc(CTRY)+' yet')+'</div><div style="font-size:13px;color:#6b7280;">We will email you as soon as a matching opportunity is published.</div></div>';return;}
+  document.getElementById('oppList').innerHTML=L.map(function(x){
+    var done=(LIST.interested||[]).indexOf(x.id)>=0,lines=String(x.summary||'').split('\n').filter(Boolean);
+    var facts=[['Capital sought',x.capital],['Term',x.tenor],['Currency',x.currency]].filter(function(f){return f[1];});
+    return '<div class="card opp" id="o_'+esc(x.id)+'">'+
+      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;"><div style="display:flex;gap:12px;align-items:center;"><div class="aicon"><i class="fa-solid '+(TYPES[x.type]?TYPES[x.type].icon:'fa-bolt')+'"></i></div><div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:13px;color:#6b7280;">'+esc(x.typeLabel)+' · '+esc((x.region?x.region+', ':'')+x.country)+'</div></div></div><span style="font-size:11px;color:#9ca3af;">Ref '+esc(x.id)+' · Published '+esc(x.published)+'</span></div>'+
+      (facts.length?'<div class="facts">'+facts.map(function(f){return '<div class="fact"><div class="fact-l">'+f[0]+'</div><div class="fact-v">'+esc(f[1])+'</div></div>';}).join('')+'</div>':'')+
+      (lines.length?'<ul class="olines">'+lines.map(function(l){return '<li>'+esc(l)+'</li>';}).join('')+'</ul>':'')+
+      (done?'<div class="int-done"><i class="fa-solid fa-circle-check"></i> Interest registered. Our team will contact you with the next steps.</div>':
+       '<div id="ib_'+esc(x.id)+'"><button class="btn-green" style="width:100%;justify-content:center;padding:13px;" onclick="openInt(\''+esc(x.id)+'\')">Express interest <i class="fa-solid fa-arrow-right"></i></button></div>')+
+      '</div>';}).join('')+
+    '<p style="font-size:12px;color:#9ca3af;line-height:1.7;text-align:center;margin:8px 0 0;">Indicative information only. Developer identities, terms and full transaction details are shared under NDA. Any investment is subject to due diligence, documentation and formal approval.</p>';
+}
+function openInt(id){
+  document.getElementById('ib_'+id).innerHTML='<label class="qlab" style="margin-top:4px;">Message to our team (optional)</label><textarea class="field" id="im_'+id+'" rows="2" placeholder="e.g. indicative amount, timing, questions"></textarea><div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;"><button class="btn-green" id="ic_'+id+'" onclick="sendInt(\''+id+'\')">Confirm interest</button><button class="btn-out" onclick="renderList()">Cancel</button></div><div class="err" id="ie_'+id+'"></div>';
+}
+function sendInt(id){
+  var b=document.getElementById('ic_'+id);b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+  api({action:'express_interest',id:id,message:document.getElementById('im_'+id).value.trim()}).then(function(r){
+    if(r&&r.ok){LIST.interested=(LIST.interested||[]).concat([id]);renderList();renderMain();}
+    else{var e=document.getElementById('ie_'+id);e.style.display='block';e.textContent='Could not register your interest. Please try again.';b.disabled=false;b.textContent='Confirm interest';}
+  }).catch(function(){var e=document.getElementById('ie_'+id);e.style.display='block';e.textContent='Connection problem. Please try again.';b.disabled=false;b.textContent='Confirm interest';});
+}
+
+/* ───────────── KYC & preferences form ───────────── */
+function startKyc(edit){
+  MODE='kyc';var d=lsGet(kD(),null);
+  if(d&&d.ans){DRAFT=d;}else{DRAFT={step:0,ans:{}};
+    if(edit&&ST.kyc){DRAFT.ans=JSON.parse(JSON.stringify(ST.kyc));}
+    if(ST.prefs){DRAFT.ans.p_types=ST.prefs.types;DRAFT.ans.p_countries=ST.prefs.countries;DRAFT.ans.p_ticket=ST.prefs.ticket;DRAFT.ans.p_tenor=ST.prefs.tenor;DRAFT.ans.p_currency=ST.prefs.currency;}
+    DRAFT.ans.declare_true=false;DRAFT.ans.declare_verify=false;DRAFT.ans.declare_risk=false;
+    if(!DRAFT.ans.category){DRAFT.ans.category=/high-net-worth/i.test(U.investorType||'')?'individual':(/capital|factory/i.test(U.investorType||'')?'company':undefined);}}
+  S=DRAFT.step||0;renderStep();show('vForm');
+}
+function editPrefs(){MODE='prefs';var p=(LIST&&LIST.prefs)||ST.prefs||{};DRAFT={step:0,ans:{p_types:p.types||[],p_countries:p.countries||[],p_ticket:p.ticket,p_tenor:p.tenor,p_currency:p.currency}};S=0;renderStep();show('vForm');}
+function saveAndExit(){collect();if(MODE==='kyc'){DRAFT.step=S;lsSet(kD(),DRAFT);}renderMain();window.scrollTo(0,0);}
+function visibleQs(s){var c=DRAFT.ans.category;return s.qs.filter(function(q){return !q.when||q.when===c;});}
+function renderStep(){
+  var st=steps(),s=st[S],a=DRAFT.ans;
+  document.getElementById('fEyebrow').textContent=MODE==='prefs'?'PREFERENCES':'KYC';
+  document.getElementById('fTitle').textContent=MODE==='prefs'?'Your investment preferences':'Investor KYC';
+  document.getElementById('fIntro').style.display=MODE==='prefs'?'none':'block';
+  document.getElementById('prog').innerHTML=st.length>1?st.map(function(x,i){return '<div class="prog-step'+(i<S?' done':i===S?' active':'')+'"></div>';}).join(''):'';
+  document.getElementById('sTitle').textContent=s.title;
+  document.getElementById('sCount').textContent=st.length>1?'Step '+(S+1)+' of '+st.length:'';
+  document.getElementById('sDesc').textContent=s.desc;
+  document.getElementById('fErr').style.display='none';
+  document.getElementById('qBox').innerHTML=visibleQs(s).map(function(q){
+    var lab='<label class="qlab">'+esc(q.q)+(q.req&&q.t!=='check'?' <span style="color:#dc2626">*</span>':'')+'</label>';
+    if(q.t==='text')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);autosave()"></div>';
+    if(q.t==='area')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
+    if(q.t==='check')return '<div class="qrow" id="row_'+q.k+'"><label class="chk"><input type="checkbox" id="'+q.k+'"'+(a[q.k]?' checked':'')+' onchange="clr(this);autosave()"> <span>'+esc(q.q)+'</span></label></div>';
+    var multi=q.t==='multi',cur=a[q.k]||(multi?[]:'');
+    return '<div class="qrow" id="row_'+q.k+'">'+lab+(multi?'<div style="font-size:12px;color:#9ca3af;margin:-4px 0 10px;">Choose one or more.</div>':'')+'<div class="pills">'+q.o.map(function(o){var on=multi?cur.indexOf(o.v)>=0:cur===o.v;
+      return '<label class="pill'+(on?' sel':'')+'"><input type="'+(multi?'checkbox':'radio')+'" name="'+q.k+'" value="'+esc(o.v)+'"'+(on?' checked':'')+' onchange="pick(this,'+(q.rerender?1:0)+')"><span>'+esc(o.t)+'</span></label>';}).join('')+'</div></div>';
+  }).join('');
+  document.getElementById('bPrev').style.visibility=S===0?'hidden':'visible';
+  var last=S===st.length-1,b=document.getElementById('bNext');
+  b.innerHTML=last?(MODE==='prefs'?'<i class="fa-solid fa-check"></i> Save preferences':'<i class="fa-solid fa-paper-plane"></i> Submit KYC'):'Next <i class="fa-solid fa-arrow-right"></i>';
+  b.className=last?'btn-lime':'btn-green';b.disabled=false;
+}
+function pick(el,rerender){
+  var row=el.closest('.qrow');row.classList.remove('bad');
+  if(el.type==='radio'){row.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.closest('.pill').classList.add('sel');}
+  else el.closest('.pill').classList.toggle('sel',el.checked);
+  if(rerender){collect();renderStep();}
+  autosave();
+}
+function clr(el){var r=el.closest('.qrow');if(r)r.classList.remove('bad');}
+function collect(){
+  if(!DRAFT)return;var s=steps()[S];
+  visibleQs(s).forEach(function(q){
+    if(q.t==='radio'){var r=document.querySelector('input[name="'+q.k+'"]:checked');if(r)DRAFT.ans[q.k]=r.value;}
+    else if(q.t==='multi'){DRAFT.ans[q.k]=Array.prototype.map.call(document.querySelectorAll('input[name="'+q.k+'"]:checked'),function(x){return x.value;});}
+    else if(q.t==='check'){DRAFT.ans[q.k]=document.getElementById(q.k).checked;}
+    else{DRAFT.ans[q.k]=RV.ascii(document.getElementById(q.k).value.trim());}
+  });
+}
+var asT=null;function autosave(){clearTimeout(asT);asT=setTimeout(function(){if(!DRAFT||MODE!=='kyc')return;collect();DRAFT.step=S;lsSet(kD(),DRAFT);},300);}
+function validate(){
+  collect();var bad=[];
+  visibleQs(steps()[S]).forEach(function(q){var v=DRAFT.ans[q.k],row=document.getElementById('row_'+q.k);row.classList.remove('bad');
+    if(q.req&&(v===undefined||v===''||v===false||(Array.isArray(v)&&!v.length))){bad.push(q);row.classList.add('bad');}});
+  if(bad.length){var e=document.getElementById('fErr');e.textContent=bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.';e.style.display='block';
+    document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
+  return true;
+}
+function nextS(){if(!validate())return;var st=steps();if(S<st.length-1){S++;DRAFT.step=S;if(MODE==='kyc')lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}else submitForm();}
+function prevS(){collect();if(S>0){S--;DRAFT.step=S;renderStep();window.scrollTo(0,0);}}
+function prefsOf(a){return {types:a.p_types||[],countries:a.p_countries||[],ticket:a.p_ticket||'',tenor:a.p_tenor||'',currency:a.p_currency||''};}
+function submitForm(){
+  clearTimeout(asT);
+  var b=document.getElementById('bNext'),err=document.getElementById('fErr');b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+  var fail=function(m){err.textContent=m;err.style.display='block';renderStepButtons();};
+  if(MODE==='prefs'){
+    api({action:'prefs_update',prefs:prefsOf(DRAFT.ans)}).then(function(r){if(r&&r.ok){ST.prefs=prefsOf(DRAFT.ans);loadStatus();}else fail((r&&r.error)||'Could not save. Please try again.');}).catch(function(){fail('Connection problem. Please try again.');});
+    return;
+  }
+  var a=DRAFT.ans,items=[],kyc={};
+  KYC_STEPS.forEach(function(s){visibleQs(s).forEach(function(q){var v=a[q.k];
+    if(q.k.indexOf('p_')===0)return;
+    kyc[q.k]=v;if(q.t==='check')return;
+    var txt=v;if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];txt=o?o.t:v;}
+    items.push({sec:s.title,q:q.q,a:txt||''});});});
+  var pr=prefsOf(a);
+  items.push({sec:'Investment preferences',q:'Asset types',a:pr.types.map(function(t){return TYPES[t].label;}).join(', ')});
+  items.push({sec:'Investment preferences',q:'Countries',a:pr.countries.join(', ')});
+  items.push({sec:'Investment preferences',q:'Ticket size',a:pr.ticket});
+  items.push({sec:'Investment preferences',q:'Term',a:pr.tenor});
+  items.push({sec:'Investment preferences',q:'Currency',a:pr.currency});
+  api({action:'kyc_submit',kyc:kyc,prefs:pr,items:items}).then(function(r){
+    if(r&&r.ok){lsSet(kD(),null);DRAFT=null;
+      document.getElementById('doneTitle').textContent=r.status==='Approved'?'Information updated':'KYC submitted';
+      document.getElementById('doneTxt').textContent=r.status==='Approved'?'Thank you. Your information and preferences have been updated.':'Thank you. Our team will review your information and contact you within 2 business days. A confirmation has been sent to '+U.email+'.';
+      show('vDone');}
+    else fail((r&&r.error)||'Could not submit. Please try again.');
+  }).catch(function(){fail('Connection problem. Please check your internet connection and try again.');});
+}
+function renderStepButtons(){var b=document.getElementById('bNext');b.disabled=false;b.innerHTML=MODE==='prefs'?'<i class="fa-solid fa-check"></i> Save preferences':'<i class="fa-solid fa-paper-plane"></i> Submit KYC';}
+</script>
 <script>(function(){var n=document.querySelector('.nav-inner'),l=n&&n.querySelector('.nav-links');if(!l||n.querySelector('.rv-burger'))return;var b=document.createElement('button');b.className='rv-burger';b.type='button';b.setAttribute('aria-label','Open menu');b.innerHTML='<span></span><span></span><span></span>';n.appendChild(b);b.addEventListener('click',function(e){e.stopPropagation();document.body.classList.toggle('rv-menu-open');});document.addEventListener('click',function(e){if(!l.contains(e.target))document.body.classList.remove('rv-menu-open');});})();</script>
 </body></html>

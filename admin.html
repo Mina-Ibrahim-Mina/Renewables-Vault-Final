@@ -91,6 +91,8 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
   .footer-inner>div{text-align:left !important;}
   .footer a{margin-left:0 !important;margin-right:14px;display:inline-block;margin-bottom:6px;}
 }
+.tdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-left:4px;vertical-align:middle;}
+@media(max-width:768px){.tabs{flex-wrap:wrap;}}
 </style>
 </head>
 <body>
@@ -121,17 +123,29 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
   </div>
   <div class="body">
     <div class="stats">
-      <div class="stat"><div class="stat-n" id="s1">-</div><div class="stat-l">Total Investors</div></div>
-      <div class="stat"><div class="stat-n" id="s2" style="color:#d97706;">-</div><div class="stat-l">Pending Review</div></div>
-      <div class="stat"><div class="stat-n" id="s3" style="color:#16a34a;">-</div><div class="stat-l">Approved</div></div>
-      <div class="stat"><div class="stat-n" id="s4">-</div><div class="stat-l">Total Developers</div></div>
+      <div class="stat"><div class="stat-n" id="s1">-</div><div class="stat-l">Assets submitted</div></div>
+      <div class="stat"><div class="stat-n" id="s2" style="color:#d97706;">-</div><div class="stat-l">Published to investors</div></div>
+      <div class="stat"><div class="stat-n" id="s3" style="color:#16a34a;">-</div><div class="stat-l">KYC awaiting review</div></div>
+      <div class="stat"><div class="stat-n" id="s4">-</div><div class="stat-l">Approved investors</div></div>
     </div>
     <div class="tabs">
-      <button class="tab on" id="t1" onclick="showTab('inv')">Investors</button>
-      <button class="tab" id="t2" onclick="showTab('dev')">Developers</button>
-      <button class="tab" id="t3" onclick="showTab('ast')"><i class="fa-solid fa-shield-halved"></i> Asset Assessments</button>
+      <button class="tab on" id="t3" onclick="showTab('ast')"><i class="fa-solid fa-shield-halved"></i> Asset Assessments</button>
+      <button class="tab" id="t4" onclick="showTab('kyc')"><i class="fa-solid fa-id-card"></i> Investor KYC</button>
+      <button class="tab" id="t5" onclick="showTab('int')"><i class="fa-solid fa-handshake"></i> Investor Interest</button>
+      <button class="tab" id="t2" onclick="showTab('dev')">Developers (old list)</button>
+      <button class="tab" id="t1" onclick="showTab('inv')" style="display:none;">Investors (old)</button>
     </div>
-    <div id="vi">
+    <div id="lockWrap">
+      <div id="aLock" class="tbl" style="padding:28px;text-align:center;">
+        <p style="font-size:14px;color:#6b7280;margin:0 0 14px;">Enter your assessments password (the one on line 16 of the RV Assessments script) to see assets, investor KYC and interest.</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <input type="password" id="aPass" placeholder="Assessments password" style="padding:10px 14px;border:1px solid #c8ddd0;border-radius:6px;font-size:14px;min-width:240px;">
+          <button class="tbtn" onclick="unlockA()" style="background:#1A472A;color:#fff;padding:10px 18px;">Unlock</button>
+        </div>
+        <div id="aMsg" style="font-size:13px;color:#dc2626;margin-top:10px;"></div>
+      </div>
+    </div>
+    <div id="vi" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Registered Investors</h2>
         <span style="font-size:13px;color:#6b7280;">Approve to generate access code</span>
@@ -145,7 +159,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       </div>
       <div class="tbl" id="devTbl"><div class="tbl-empty">Loading...</div></div>
     </div>
-    <div id="va" style="display:none;">
+    <div id="va">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
         <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Asset Assessments <span style="font-size:12px;color:#9ca3af;font-weight:600;">(RARE™, internal only)</span></h2>
         <div id="aTools" style="display:none;gap:8px;align-items:center;">
@@ -154,15 +168,24 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
           <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
         </div>
       </div>
-      <div id="aLock" class="tbl" style="padding:28px;text-align:center;">
-        <p style="font-size:14px;color:#6b7280;margin:0 0 14px;">Enter the assessments password (the one you set in the RV Assessments script).</p>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <input type="password" id="aPass" placeholder="Assessments password" style="padding:10px 14px;border:1px solid #c8ddd0;border-radius:6px;font-size:14px;min-width:240px;">
-          <button class="tbtn" onclick="unlockA()" style="background:#1A472A;color:#fff;padding:10px 18px;">Unlock</button>
-        </div>
-        <div id="aMsg" style="font-size:13px;color:#dc2626;margin-top:10px;"></div>
-      </div>
       <div id="aList"></div>
+    </div>
+    <div id="vk" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Investor KYC</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="kFilter" onchange="renderK()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">All statuses</option></select>
+          <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+      </div>
+      <div id="kList"></div>
+    </div>
+    <div id="vn" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Investor Interest</h2>
+        <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+      <div id="nList"></div>
     </div>
 
   </div>
@@ -207,23 +230,21 @@ function doLogin(){
     sessionStorage.setItem('rva','1');
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('adminPanel').style.display='block';
-    loadData();
+    loadData();showTab('ast');
   }else{document.getElementById('loginErr').style.display='block';}
 }
 function doLogout(){sessionStorage.removeItem('rva');document.getElementById('loginScreen').style.display='flex';document.getElementById('adminPanel').style.display='none';document.getElementById('passIn').value='';}
 
 window.addEventListener('DOMContentLoaded',function(){
-  if(sessionStorage.getItem('rva')==='1'){document.getElementById('loginScreen').style.display='none';document.getElementById('adminPanel').style.display='block';loadData();}
+  if(sessionStorage.getItem('rva')==='1'){document.getElementById('loginScreen').style.display='none';document.getElementById('adminPanel').style.display='block';loadData();showTab('ast');}
 });
 
 function showTab(t){
-  document.getElementById('vi').style.display=t==='inv'?'block':'none';
-  document.getElementById('vd').style.display=t==='dev'?'block':'none';
-  document.getElementById('va').style.display=t==='ast'?'block':'none';
-  document.getElementById('t1').className='tab'+(t==='inv'?' on':'');
-  document.getElementById('t2').className='tab'+(t==='dev'?' on':'');
-  document.getElementById('t3').className='tab'+(t==='ast'?' on':'');
-  if(t==='ast'&&sessionStorage.getItem('rva_ap'))loadA();
+  var map={inv:['vi','t1'],dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5']};
+  for(var k in map){document.getElementById(map[k][0]).style.display=k===t?'block':'none';document.getElementById(map[k][1]).className='tab'+(k===t?' on':'');}
+  var needs=(t==='ast'||t==='kyc'||t==='int');
+  document.getElementById('lockWrap').style.display=needs&&!ADATA?'block':'none';
+  if(needs&&!ADATA&&sessionStorage.getItem('rva_ap'))loadA();
 }
 
 /* ── ASSET ASSESSMENTS (RV Assessments service) ── */
@@ -234,8 +255,15 @@ function loadA(){
   if(!AAPI){aMsg('The assessments service is not connected yet. Add its URL to rv-config.js (see the setup guide).');return;}
   var pw=sessionStorage.getItem('rva_ap')||'';aMsg('Loading...');
   fetch(AAPI+'?action=admin_list&password='+encodeURIComponent(pw)).then(function(r){return r.json();}).then(function(r){
-    if(!r.ok){sessionStorage.removeItem('rva_ap');document.getElementById('aLock').style.display='block';document.getElementById('aTools').style.display='none';document.getElementById('aList').innerHTML='';aMsg(r.error||'Could not load.');return;}
-    ADATA=r;aMsg('');document.getElementById('aLock').style.display='none';document.getElementById('aTools').style.display='flex';
+    if(!r.ok){sessionStorage.removeItem('rva_ap');ADATA=null;document.getElementById('lockWrap').style.display='block';document.getElementById('aTools').style.display='none';['aList','kList','nList'].forEach(function(id){document.getElementById(id).innerHTML='';});aMsg(r.error||'Could not load.');return;}
+    ADATA=r;aMsg('');document.getElementById('lockWrap').style.display='none';document.getElementById('aTools').style.display='flex';
+    var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All statuses</option>'+r.invStatuses.map(function(x){return '<option'+(x===kc?' selected':'')+'>'+esc(x)+'</option>';}).join('');
+    document.getElementById('s1').textContent=r.assessments.length;
+    document.getElementById('s2').textContent=r.assessments.filter(function(a){return a.published;}).length;
+    document.getElementById('s3').textContent=r.investors.filter(function(x){return x.status==='Submitted'||x.status==='Under review';}).length;
+    document.getElementById('s4').textContent=r.investors.filter(function(x){return x.status==='Approved';}).length;
+    document.getElementById('t4').innerHTML='<i class="fa-solid fa-id-card"></i> Investor KYC'+(r.investors.filter(function(x){return x.status==='Submitted'||x.status==='Under review';}).length?' <span class="tdot"></span>':'');
+    renderK();renderN();
     var f=document.getElementById('aFilter'),cur=f.value;f.innerHTML='<option value="">All statuses</option>'+r.statuses.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
     renderA();
   }).catch(function(){aMsg('Could not reach the assessments service.');});
@@ -258,6 +286,7 @@ function renderA(){
       '</div>'+
       (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
       '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(a.answers)+'</pre></details>'+
+      listingEditor(a,i)+
       '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
         '<select id="st_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.statuses.map(function(x){return '<option'+(x===a.status?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select>'+
         '<input id="nt_'+i+'" value="'+esc(a.note)+'" placeholder="Note shown to the developer (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
@@ -265,6 +294,76 @@ function renderA(){
         '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveA(\''+esc(a.id)+'\','+i+')">Save</button>'+
         '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(a.updated)+'</span>'+
       '</div></div>';
+  }).join('');
+}
+function listingEditor(a,i){
+  var L=a.listing||{},F='width:100%;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box;';
+  var chip=a.published?'<span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;">Published '+esc(a.publishedOn)+'</span>':'<span style="background:#f3f4f6;color:#4b5563;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;">Not published</span>';
+  if(!a.share)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;">Investor listing: not available. This asset was submitted before developers were asked to consent to sharing.</div>';
+  var lab=function(t){return '<div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7280;margin:10px 0 4px;">'+t+'</div>';};
+  return '<details style="margin-top:12px;"'+(a.published?' open':'')+'><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">Investor listing'+chip+'</summary>'+
+    '<div style="background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:14px 16px;margin-top:8px;">'+
+    '<div style="font-size:12px;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 10px;">Investors see only what is in these fields. Make sure nothing here identifies the developer (no company name, exact address or buyer name).</div>'+
+    lab('Title')+'<input id="lt_'+i+'" style="'+F+'" value="'+esc(L.title)+'">'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div>'+lab('Country')+'<select id="lc_'+i+'" style="'+F+'">'+(ADATA.countries||['Egypt']).map(function(c){var open=(ADATA.openCountries||['Egypt']).indexOf(c)>=0;return '<option value="'+esc(c)+'"'+(c===(L.country||'Egypt')?' selected':'')+(open?'':' disabled')+'>'+esc(c)+(open?'':' (coming soon)')+'</option>';}).join('')+'</select></div>'+
+    '<div>'+lab('Region (keep general)')+'<input id="lr_'+i+'" style="'+F+'" placeholder="e.g. Sharqia Governorate" value="'+esc(L.region)+'"></div>'+
+    '<div>'+lab('Capital sought')+'<input id="lk_'+i+'" style="'+F+'" value="'+esc(L.capital)+'"></div>'+
+    '<div>'+lab('Term')+'<input id="lm_'+i+'" style="'+F+'" placeholder="e.g. 2 to 3 years" value="'+esc(L.tenor)+'"></div>'+
+    '<div>'+lab('Currency')+'<input id="lu_'+i+'" style="'+F+'" value="'+esc(L.currency)+'"></div></div>'+
+    lab('Key facts (one per line)')+'<textarea id="ls_'+i+'" rows="5" style="'+F+'">'+esc(L.summary)+'</textarea>'+
+    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;">'+
+    (a.published?'<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="pubA(\''+esc(a.id)+'\','+i+',true)">Save listing</button><button class="tbtn" style="background:#fff;color:#dc2626;border:1px solid #fca5a5;" onclick="pubA(\''+esc(a.id)+'\','+i+',false)">Unpublish</button>'
+      :'<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="ln_'+i+'" checked> Email approved investors whose preferences match</label><button class="tbtn" style="background:#16a34a;color:#fff;" onclick="pubA(\''+esc(a.id)+'\','+i+',true)">Publish to investors</button>')+
+    '</div></div></details>';
+}
+function pubA(id,i,publish){
+  var g=function(k){var e=document.getElementById(k+'_'+i);return e?e.value:'';};
+  if(!publish&&!confirm('Unpublish this listing? Investors will no longer see it.'))return;
+  var n=document.getElementById('ln_'+i);
+  var body={action:'admin_publish',password:sessionStorage.getItem('rva_ap')||'',id:id,publish:publish,title:g('lt'),country:g('lc'),region:g('lr'),capital:g('lk'),tenor:g('lm'),currency:g('lu'),summary:g('ls'),notifyInvestors:!!(n&&n.checked)};
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();})
+    .then(function(r){if(r.ok){toast(publish?('Published'+(r.notified?' and '+r.notified+' investor'+(r.notified>1?'s':'')+' emailed':'')):'Unpublished');loadA();}else toast(r.error||'Could not save');})
+    .catch(function(){toast('Could not reach the assessments service');});
+}
+var KC={'Submitted':['#e0f2fe','#075985'],'Under review':['#fef3c7','#92400e'],'More information needed':['#ffedd5','#9a3412'],'Approved':['#dcfce7','#166534'],'Not approved':['#f3f4f6','#4b5563']};
+var TL={biofuel:'Biofuel & Biodiesel',circular:'Circular Economy',solar:'Solar C&I'};
+function renderK(){
+  if(!ADATA)return;var f=document.getElementById('kFilter').value,rows=ADATA.investors.filter(function(x){return!f||x.status===f;});
+  if(!rows.length){document.getElementById('kList').innerHTML='<div class="tbl"><div class="tbl-empty">No investor KYC submissions yet.</div></div>';return;}
+  document.getElementById('kList').innerHTML=rows.map(function(x,i){
+    var c=KC[x.status]||KC.Submitted,wa=String(x.phone||'').replace(/\D/g,'');
+    return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
+      '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;"><div style="flex:1;min-width:240px;">'+
+      '<div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.org)+'</span>':'')+'</div>'+
+      '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(x.category)+' · '+esc(x.type)+' · KYC submitted '+esc(x.submitted)+'</div>'+
+      '<div style="font-size:13px;margin-top:8px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+'</div>'+
+      '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>Wants:</b> '+esc(x.prefs.types.map(function(t){return TL[t]||t;}).join(', '))+' · <b>Countries:</b> '+esc(x.prefs.countries.join(', '))+(x.prefs.ticket?' · <b>Ticket:</b> '+esc(x.prefs.ticket):'')+'</div></div>'+
+      '<span style="background:'+c[0]+';color:'+c[1]+';font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;height:fit-content;white-space:nowrap;">'+esc(x.status)+'</span></div>'+
+      (x.status==='Approved'&&x.code?'<div style="margin-top:10px;font-size:13px;background:#f0f5f2;border-radius:6px;padding:8px 12px;display:inline-block;">Access code: <b style="font-family:monospace;letter-spacing:.08em;">'+esc(x.code)+'</b> · '+(x.activatedOn?'<span style="color:#166534;font-weight:600;">Unlocked on '+esc(x.activatedOn)+'</span>':'<span style="color:#92400e;font-weight:600;">Not yet entered by the investor</span>')+'</div>':'')+
+      '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View KYC answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(x.details)+'</pre></details>'+
+      '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
+      '<select id="ks_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.invStatuses.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>'+
+      '<input id="kn_'+i+'" value="'+esc(x.note)+'" placeholder="Note shown to the investor (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
+      '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;" title="Approving always emails the access code. Tick to also email other updates, or to resend the code."><input type="checkbox" id="ke_'+i+'"'+(x.status==='Approved'?'':' checked')+'> '+(x.status==='Approved'?'Resend access code':'Email investor')+'</label>'+
+      '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveK(\''+esc(x.email)+'\','+i+')">Save</button>'+
+      '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(x.updated)+'</span></div></div>';
+  }).join('');
+}
+function saveK(email,i){
+  var body={action:'admin_set_investor',password:sessionStorage.getItem('rva_ap')||'',email:email,status:document.getElementById('ks_'+i).value,note:document.getElementById('kn_'+i).value,notify:document.getElementById('ke_'+i).checked};
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();})
+    .then(function(r){if(r.ok){toast(r.code&&r.emailed&&body.status==='Approved'?'Approved. Access code '+r.code+' emailed to the investor':('Investor updated'+(r.emailed?' and emailed':'')));loadA();}else toast(r.error||'Could not save');})
+    .catch(function(){toast('Could not reach the assessments service');});
+}
+function renderN(){
+  if(!ADATA)return;var rows=ADATA.interest||[];
+  if(!rows.length){document.getElementById('nList').innerHTML='<div class="tbl"><div class="tbl-empty">No investor interest yet.</div></div>';return;}
+  document.getElementById('nList').innerHTML=rows.map(function(x){
+    return '<div class="tbl" style="padding:18px 22px;margin-bottom:12px;"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">'+
+      '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">INVESTOR</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' · '+esc(x.org):'')+'</div><a href="mailto:'+esc(x.email)+'" style="font-size:13px;color:#2C7C3B;">'+esc(x.email)+'</a></div>'+
+      '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">OPPORTUNITY</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:12px;color:#6b7280;">Ref '+esc(x.id)+' · Developer: '+esc(x.developer)+' · '+esc(x.company)+' · <a href="mailto:'+esc(x.devEmail)+'" style="color:#2C7C3B;">'+esc(x.devEmail)+'</a></div></div>'+
+      '<div style="font-size:12px;color:#9ca3af;">'+esc(x.date)+'</div></div>'+
+      (x.message?'<div style="margin-top:10px;font-size:13px;color:#374151;background:#f8faf8;border-left:3px solid #4ADE80;padding:8px 12px;border-radius:4px;">'+esc(x.message)+'</div>':'')+'</div>';
   }).join('');
 }
 function saveA(id,i){
@@ -284,10 +383,6 @@ function loadData(){
     .then(function(data){
       if(data.error){toast('Error: '+data.error);return;}
       var inv=data.investors||[],dev=data.developers||[];
-      document.getElementById('s1').textContent=inv.length;
-      document.getElementById('s2').textContent=inv.filter(function(x){return x['Status']==='Pending';}).length;
-      document.getElementById('s3').textContent=inv.filter(function(x){return x['Status']==='Approved';}).length;
-      document.getElementById('s4').textContent=dev.length;
       buildInv(inv);buildDev(dev);
     })
     .catch(function(){

@@ -225,24 +225,23 @@ function genRC(e){
   <div style="text-align:center;margin-bottom:40px;">
     <span class="eyebrow-g" style="display:block;margin-bottom:10px;">Investor Registration</span>
     <h1 style="font-size:clamp(22px,3vw,32px);font-weight:700;color:#1A472A;margin:0 0 10px;">Create Your Investor Profile</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0;">Our team will review your profile and follow up personally.</p>
+    <p style="font-size:15px;color:#6b7280;margin:0;">Takes about 2 minutes. Next, you will complete a short KYC and choose what you want to invest in.</p>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
     <div><label class="lbl">First Name *</label><input class="field" id="i_first" type="text" placeholder="First name"></div>
     <div><label class="lbl">Last Name *</label><input class="field" id="i_last" type="text" placeholder="Last name"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Email Address *</label><input class="field" id="i_email" type="email" placeholder="you@company.com"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Mobile or WhatsApp</label><input class="field" id="i_phone" type="tel" placeholder="+20 10 1234 5678 (optional)"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Mobile or WhatsApp *</label><input class="field" id="i_phone" type="tel" placeholder="+20 10 1234 5678"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Password *</label><input class="field" id="i_pass" type="password" placeholder="Create a password (min 6 characters)"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Organisation *</label><input class="field" id="i_org" type="text" placeholder="Company or fund name"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">Organisation</label><input class="field" id="i_org" type="text" placeholder="Company or fund name (leave blank if investing personally)"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Investor Type *</label>
       <select class="field" id="i_type">
         <option value="" disabled selected>Select type</option>
-        <option>Family Office</option><option>Institutional Investor</option>
-        <option>Bank or Financial Institution</option><option>Angel or HNWI</option><option>Other</option>
+        <option value="Capital">Capital (fund, bank or investment company)</option>
+        <option value="Factory">Factory (industrial company)</option>
+        <option value="High-net-worth individual">High-net-worth individual</option>
       </select>
     </div>
-    <div style="grid-column:1/-1;"><label class="lbl">Indicative Ticket Size</label><input class="field" id="i_ticket" type="text" placeholder="e.g. $500K – $2M"></div>
-    <div style="grid-column:1/-1;"><label class="lbl">Investment Note (Optional)</label><textarea class="field" id="i_note" rows="3" placeholder="Tell us about your investment mandate"></textarea></div>
     <div style="grid-column:1/-1;margin-top:4px;">
       <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#374151;line-height:1.55;cursor:pointer;">
         <input type="checkbox" id="i_consent" style="margin-top:3px;width:16px;height:16px;accent-color:#2C7C3B;flex-shrink:0;">
@@ -261,11 +260,12 @@ function genRC(e){
 function subInv() {
   var g=function(id){return document.getElementById(id);};
   var first=g('i_first').value.trim(),last=g('i_last').value.trim(),email=g('i_email').value.trim(),pass=g('i_pass').value;
-  var org=g('i_org').value.trim(),itype=g('i_type').value,ticket=g('i_ticket').value.trim(),note=g('i_note').value.trim();
+  var org=g('i_org').value.trim(),itype=g('i_type').value,ticket='',note='';
   var phone=RV.ascii(g('i_phone').value.trim()),consent=g('i_consent').checked,err=g('i_err'),btn=g('i_btn');
   var fail=function(m,html){err.style.display='block';if(html)err.innerHTML=m;else err.textContent=m;btn.disabled=false;btn.textContent='Create Investor Account';};
   err.style.display='none';
-  if(!first||!last||!email||!pass||!org||!itype){return fail('Please fill in all required fields.');}
+  if(!first||!last||!email||!phone||!pass||!itype){return fail('Please fill in all required fields.');}
+  if(phone.replace(/\D/g,'').length<8){return fail('Please enter a valid mobile or WhatsApp number, including the country code.');}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
   if(pass.length<6){return fail('Password must be at least 6 characters.');}
   if(!consent){return fail('Please tick the box to agree to the Privacy Policy.');}

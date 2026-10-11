@@ -38,6 +38,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 .stat{background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;text-align:center;}
 .stat-n{font-size:32px;font-weight:700;color:#1A472A;line-height:1;}
 .stat-l{font-size:11px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr;gap:10px;}.stat{padding:14px 8px;}.stat-n{font-size:26px;}.stat-l{font-size:10px;letter-spacing:.03em;}}
 .tabs{display:inline-flex;background:#fff;border:1px solid #d1e8d8;border-radius:10px;padding:5px;margin-bottom:24px;}
 .tab{padding:10px 24px;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:'Inter',sans-serif;}
 .tab.on{background:#1A472A;color:#fff;}
@@ -104,9 +105,9 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       <h1>Admin Panel</h1>
       <p>Renewables Vault · Internal Access Only</p>
     </div>
-    <input type="password" id="passIn" placeholder="Admin password" class="field-d">
+    <input type="password" id="passIn" placeholder="Admin password (line 16 of the RV Assessments script)" class="field-d">
     <button class="btn-g" id="loginBtn">Login</button>
-    <div id="loginErr" style="color:#fc8181;font-size:13px;text-align:center;margin-top:10px;display:none;">Incorrect password.</div>
+    <div id="loginErr" style="color:#fc8181;font-size:13px;text-align:center;margin-top:10px;display:none;"></div>
   </div>
 </div>
 
@@ -125,39 +126,23 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     <div class="stats">
       <div class="stat"><div class="stat-n" id="s1">-</div><div class="stat-l">Assets submitted</div></div>
       <div class="stat"><div class="stat-n" id="s2" style="color:#d97706;">-</div><div class="stat-l">Published to investors</div></div>
-      <div class="stat"><div class="stat-n" id="s3" style="color:#16a34a;">-</div><div class="stat-l">KYC awaiting review</div></div>
+      <div class="stat"><div class="stat-n" id="s3" style="color:#16a34a;">-</div><div class="stat-l">Investors awaiting review</div></div>
       <div class="stat"><div class="stat-n" id="s4">-</div><div class="stat-l">Approved investors</div></div>
     </div>
     <div class="tabs">
       <button class="tab on" id="t3" onclick="showTab('ast')"><i class="fa-solid fa-shield-halved"></i> Asset Assessments</button>
-      <button class="tab" id="t4" onclick="showTab('kyc')"><i class="fa-solid fa-id-card"></i> Investor KYC</button>
+      <button class="tab" id="t4" onclick="showTab('kyc')"><i class="fa-solid fa-id-card"></i> Investors</button>
       <button class="tab" id="t5" onclick="showTab('int')"><i class="fa-solid fa-handshake"></i> Investor Interest</button>
-      <button class="tab" id="t2" onclick="showTab('dev')">Developers (old list)</button>
-      <button class="tab" id="t1" onclick="showTab('inv')" style="display:none;">Investors (old)</button>
+      <button class="tab" id="t2" onclick="showTab('dev')"><i class="fa-solid fa-users"></i> Registrations</button>
     </div>
-    <div id="lockWrap">
-      <div id="aLock" class="tbl" style="padding:28px;text-align:center;">
-        <p style="font-size:14px;color:#6b7280;margin:0 0 14px;">Enter your assessments password (the one on line 16 of the RV Assessments script) to see assets, investor KYC and interest.</p>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <input type="password" id="aPass" placeholder="Assessments password" style="padding:10px 14px;border:1px solid #c8ddd0;border-radius:6px;font-size:14px;min-width:240px;">
-          <button class="tbtn" onclick="unlockA()" style="background:#1A472A;color:#fff;padding:10px 18px;">Unlock</button>
-        </div>
-        <div id="aMsg" style="font-size:13px;color:#dc2626;margin-top:10px;"></div>
-      </div>
-    </div>
-    <div id="vi" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Registered Investors</h2>
-        <span style="font-size:13px;color:#6b7280;">Approve to generate access code</span>
-      </div>
-      <div class="tbl" id="invTbl"><div class="tbl-empty">Loading...</div></div>
-    </div>
+    <div id="aMsg" style="font-size:13px;color:#dc2626;margin:0 0 10px;"></div>
     <div id="vd" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Registered Developers</h2>
-        <span style="font-size:13px;color:#6b7280;">Review projects and approve or reject</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Registrations</h2>
+        <select id="rFilter" onchange="renderR()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">Developers and investors</option><option value="developer">Developers only</option><option value="investor">Investors only</option></select>
       </div>
-      <div class="tbl" id="devTbl"><div class="tbl-empty">Loading...</div></div>
+      <div id="rList"></div>
+      <p style="font-size:12px;color:#9ca3af;margin:10px 0 0;">People who registered before 9 October 2026 are in your older Google Sheet.</p>
     </div>
     <div id="va">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
@@ -172,7 +157,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     </div>
     <div id="vk" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Investor KYC</h2>
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Investors: access and KYC</h2>
         <div style="display:flex;gap:8px;align-items:center;">
           <select id="kFilter" onchange="renderK()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">All statuses</option></select>
           <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
@@ -191,82 +176,74 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
   </div>
 </div>
 
-<div id="codeModal" style="display:none;align-items:center;justify-content:center;">
-  <div class="mc">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h3 id="mTitle">Approval Code</h3>
-      <button onclick="closeModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#9ca3af;">&#215;</button>
-    </div>
-    <p style="font-size:14px;color:#6b7280;margin:0 0 4px;">For: <strong id="mEmail" style="color:#1A472A;"></strong></p>
-    <p style="font-size:13px;color:#6b7280;margin:0 0 4px;">Copy and email this code:</p>
-    <div class="mcode" id="mCode"></div>
-    <button class="mbtn mbp" onclick="copyCode()">Copy Code</button>
-    <div style="margin-top:20px;border-top:1px solid #d1e8d8;padding-top:16px;">
-      <div style="font-size:11px;font-weight:700;color:#2C7C3B;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Email template:</div>
-      <div class="memail" id="mBody"></div>
-    </div>
-    <button class="mbtn mbp" onclick="copyEmail()" style="margin-top:8px;">Copy Email Template</button>
-    <button class="mbtn mbs" onclick="closeModal()">Close</button>
-  </div>
-</div>
-
 <div id="toast"></div>
 
 <script src="rv-config.js"></script>
 <script>
-var SHEET='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec',PASS='RVault2026!',SEC='RV_RENEWABLES_VAULT_2026',REC='RV_RECOVERY_2026';
-
-function genCode(email){var s=email.toLowerCase().trim()+SEC,h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}var c=Math.abs(h).toString(36).toUpperCase();while(c.length<8)c='0'+c;return c.substring(0,8);}
-function genRC(email){var s=email.toLowerCase().trim()+REC,h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}var c=Math.abs(h).toString(36).toUpperCase();while(c.length<6)c='0'+c;return 'RC-'+c.substring(0,6);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('passIn').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 document.getElementById('logoutBtn').addEventListener('click',doLogout);
-document.getElementById('refreshBtn').addEventListener('click',function(){loadData();});
+document.getElementById('refreshBtn').addEventListener('click',function(){loadA();});
 
 function doLogin(){
-  if(document.getElementById('passIn').value===PASS){
-    sessionStorage.setItem('rva','1');
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('adminPanel').style.display='block';
-    loadData();showTab('ast');
-  }else{document.getElementById('loginErr').style.display='block';}
+  var pw=document.getElementById('passIn').value,e=document.getElementById('loginErr'),b=document.getElementById('loginBtn');
+  e.style.display='none';if(!pw)return;
+  if(!AAPI){e.textContent='The server is not connected. Check rv-config.js.';e.style.display='block';return;}
+  b.disabled=true;b.textContent='Checking...';
+  fetch(AAPI+'?action=admin_list&password='+encodeURIComponent(pw)).then(function(r){return r.json();}).then(function(r){
+    b.disabled=false;b.textContent='Login';
+    if(!r.ok){e.textContent=r.error==='Incorrect password'?'Incorrect password.':(r.error||'Could not log in.');e.style.display='block';return;}
+    sessionStorage.setItem('rva_ap',pw);enterPanel();useData(r);
+  }).catch(function(){b.disabled=false;b.textContent='Login';e.textContent='Could not reach the server. Please try again.';e.style.display='block';});
 }
-function doLogout(){sessionStorage.removeItem('rva');document.getElementById('loginScreen').style.display='flex';document.getElementById('adminPanel').style.display='none';document.getElementById('passIn').value='';}
+function enterPanel(){document.getElementById('loginScreen').style.display='none';document.getElementById('adminPanel').style.display='block';showTab('ast');}
+function doLogout(){sessionStorage.removeItem('rva_ap');sessionStorage.removeItem('rva');ADATA=null;document.getElementById('loginScreen').style.display='flex';document.getElementById('adminPanel').style.display='none';document.getElementById('passIn').value='';}
 
 window.addEventListener('DOMContentLoaded',function(){
-  if(sessionStorage.getItem('rva')==='1'){document.getElementById('loginScreen').style.display='none';document.getElementById('adminPanel').style.display='block';loadData();showTab('ast');}
+  sessionStorage.removeItem('rva');
+  if(sessionStorage.getItem('rva_ap')){enterPanel();loadA();}
 });
 
 function showTab(t){
-  var map={inv:['vi','t1'],dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5']};
-  for(var k in map){document.getElementById(map[k][0]).style.display=k===t?'block':'none';document.getElementById(map[k][1]).className='tab'+(k===t?' on':'');}
-  var needs=(t==='ast'||t==='kyc'||t==='int');
-  document.getElementById('lockWrap').style.display=needs&&!ADATA?'block':'none';
-  if(needs&&!ADATA&&sessionStorage.getItem('rva_ap'))loadA();
+  var map={dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5']};
+  for(var k in map){if(!document.getElementById(map[k][0]))continue;document.getElementById(map[k][0]).style.display=k===t?'block':'none';document.getElementById(map[k][1]).className='tab'+(k===t?' on':'');}
 }
 
 /* ── ASSET ASSESSMENTS (RV Assessments service) ── */
 var AAPI=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'',ADATA=null;
-function unlockA(){sessionStorage.setItem('rva_ap',document.getElementById('aPass').value);loadA();}
 function aMsg(m){document.getElementById('aMsg').textContent=m;}
 function loadA(){
   if(!AAPI){aMsg('The assessments service is not connected yet. Add its URL to rv-config.js (see the setup guide).');return;}
   var pw=sessionStorage.getItem('rva_ap')||'';aMsg('Loading...');
   fetch(AAPI+'?action=admin_list&password='+encodeURIComponent(pw)).then(function(r){return r.json();}).then(function(r){
-    if(!r.ok){sessionStorage.removeItem('rva_ap');ADATA=null;document.getElementById('lockWrap').style.display='block';document.getElementById('aTools').style.display='none';['aList','kList','nList'].forEach(function(id){document.getElementById(id).innerHTML='';});aMsg(r.error||'Could not load.');return;}
-    ADATA=r;aMsg('');document.getElementById('lockWrap').style.display='none';document.getElementById('aTools').style.display='flex';
-    var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All statuses</option>'+r.invStatuses.map(function(x){return '<option'+(x===kc?' selected':'')+'>'+esc(x)+'</option>';}).join('');
+    if(!r.ok){doLogout();var e=document.getElementById('loginErr');e.textContent=r.error==='Incorrect password'?'Please log in again.':(r.error||'Could not load.');e.style.display='block';return;}
+    useData(r);
+  }).catch(function(){aMsg('Could not reach the assessments service. Click Refresh to try again.');});
+}
+function useData(r){
+    ADATA=r;aMsg('');document.getElementById('aTools').style.display='flex';
+    var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All investors</option><optgroup label="Access">'+r.invStatuses.map(function(x){return '<option value="a:'+esc(x)+'"'+('a:'+x===kc?' selected':'')+'>Access: '+esc(x)+'</option>';}).join('')+'</optgroup><optgroup label="Full KYC">'+(r.kycStatuses||[]).map(function(x){return '<option value="k:'+esc(x)+'"'+('k:'+x===kc?' selected':'')+'>KYC: '+esc(x)+'</option>';}).join('')+'</optgroup>';
     document.getElementById('s1').textContent=r.assessments.length;
     document.getElementById('s2').textContent=r.assessments.filter(function(a){return a.published;}).length;
-    document.getElementById('s3').textContent=r.investors.filter(function(x){return x.status==='Submitted'||x.status==='Under review';}).length;
+    var waiting=r.investors.filter(function(x){return x.status==='Submitted'||x.status==='Under review'||x.kycStatus==='Submitted';}).length;
+    document.getElementById('s3').textContent=waiting;
     document.getElementById('s4').textContent=r.investors.filter(function(x){return x.status==='Approved';}).length;
-    document.getElementById('t4').innerHTML='<i class="fa-solid fa-id-card"></i> Investor KYC'+(r.investors.filter(function(x){return x.status==='Submitted'||x.status==='Under review';}).length?' <span class="tdot"></span>':'');
+    document.getElementById('t4').innerHTML='<i class="fa-solid fa-id-card"></i> Investors'+(waiting?' <span class="tdot"></span>':'');
     renderK();renderN();
     var f=document.getElementById('aFilter'),cur=f.value;f.innerHTML='<option value="">All statuses</option>'+r.statuses.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
-    renderA();
-  }).catch(function(){aMsg('Could not reach the assessments service.');});
+    renderA();renderR();
+}
+function renderR(){
+  if(!ADATA)return;var f=document.getElementById('rFilter').value,rows=(ADATA.registrations||[]).filter(function(x){return !f||String(x.type).toLowerCase()===f;});
+  if(!rows.length){document.getElementById('rList').innerHTML='<div class="tbl"><div class="tbl-empty">No registrations yet.</div></div>';return;}
+  document.getElementById('rList').innerHTML='<div class="tbl">'+rows.map(function(x){var wa=String(x.phone||'').replace(/\D/g,'');
+    return '<div style="padding:14px 20px;border-bottom:1px solid #f0f5f2;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;">'+
+      '<div style="flex:1;min-width:220px;"><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.company?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.company)+'</span>':'')+'</div>'+
+      '<div style="font-size:13px;margin-top:3px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+'</div>'+
+      '<div style="font-size:12px;color:#6b7280;margin-top:3px;">'+esc(x.detail)+'</div></div>'+
+      '<div style="text-align:right;"><span style="background:'+(String(x.type).toLowerCase()==='investor'?'#e0f2fe;color:#075985':'#dcfce7;color:#166534')+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;">'+esc(x.type)+'</span><div style="font-size:11px;color:#9ca3af;margin-top:6px;">'+esc(x.registered)+'</div></div></div>';}).join('')+'</div>';
 }
 function renderA(){
   var f=document.getElementById('aFilter').value,rows=ADATA.assessments.filter(function(a){return!f||a.status===f;});
@@ -282,7 +259,7 @@ function renderA(){
         (wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(a.phone)+'</a>':'')+'</div></div>'+
         '<div style="text-align:right;min-width:150px;"><div style="font-size:30px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';line-height:1;">'+esc(a.score)+'<span style="font-size:13px;color:#9ca3af;">/100</span></div>'+
         '<div style="font-size:13px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';">Tier '+esc(a.tier)+'</div>'+
-        '<div style="font-size:12px;color:#6b7280;">ACR '+esc(a.acr||'n/a')+'</div></div>'+
+        '<div style="font-size:12px;color:#6b7280;">ACR '+esc(a.acr||'not set')+'</div></div>'+
       '</div>'+
       (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
       '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(a.answers)+'</pre></details>'+
@@ -328,26 +305,45 @@ function pubA(id,i,publish){
 var KC={'Submitted':['#e0f2fe','#075985'],'Under review':['#fef3c7','#92400e'],'More information needed':['#ffedd5','#9a3412'],'Approved':['#dcfce7','#166534'],'Not approved':['#f3f4f6','#4b5563']};
 var TL={biofuel:'Biofuel & Biodiesel',circular:'Circular Economy',solar:'Solar C&I'};
 function renderK(){
-  if(!ADATA)return;var f=document.getElementById('kFilter').value,rows=ADATA.investors.filter(function(x){return!f||x.status===f;});
-  if(!rows.length){document.getElementById('kList').innerHTML='<div class="tbl"><div class="tbl-empty">No investor KYC submissions yet.</div></div>';return;}
+  if(!ADATA)return;var f=document.getElementById('kFilter').value,rows=ADATA.investors.filter(function(x){return!f||(f.indexOf('k:')===0?x.kycStatus===f.slice(2):x.status===f.slice(2));});
+  if(!rows.length){document.getElementById('kList').innerHTML='<div class="tbl"><div class="tbl-empty">'+(f?'No investors with this status.':'No investor access requests yet.')+'</div></div>';return;}
   document.getElementById('kList').innerHTML=rows.map(function(x,i){
     var c=KC[x.status]||KC.Submitted,wa=String(x.phone||'').replace(/\D/g,'');
     return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
       '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;"><div style="flex:1;min-width:240px;">'+
       '<div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.org)+'</span>':'')+'</div>'+
-      '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(x.category)+' · '+esc(x.type)+' · KYC submitted '+esc(x.submitted)+'</div>'+
+      '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(x.category)+' · '+esc(x.type)+' · Access requested '+esc(x.submitted)+'</div>'+
       '<div style="font-size:13px;margin-top:8px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+'</div>'+
       '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>Wants:</b> '+esc(x.prefs.types.map(function(t){return TL[t]||t;}).join(', '))+' · <b>Countries:</b> '+esc(x.prefs.countries.join(', '))+(x.prefs.ticket?' · <b>Ticket:</b> '+esc(x.prefs.ticket):'')+'</div></div>'+
       '<span style="background:'+c[0]+';color:'+c[1]+';font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;height:fit-content;white-space:nowrap;">'+esc(x.status)+'</span></div>'+
       (x.status==='Approved'&&x.code?'<div style="margin-top:10px;font-size:13px;background:#f0f5f2;border-radius:6px;padding:8px 12px;display:inline-block;">Access code: <b style="font-family:monospace;letter-spacing:.08em;">'+esc(x.code)+'</b> · '+(x.activatedOn?'<span style="color:#166534;font-weight:600;">Unlocked on '+esc(x.activatedOn)+'</span>':'<span style="color:#92400e;font-weight:600;">Not yet entered by the investor</span>')+'</div>':'')+
-      '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View KYC answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(x.details)+'</pre></details>'+
-      '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
+      '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View access request</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(x.details||'Preferences and declarations confirmed.')+'</pre></details>'+
+      '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;"><b style="font-size:12px;color:#1A472A;min-width:52px;">Access</b>'+
       '<select id="ks_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.invStatuses.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>'+
       '<input id="kn_'+i+'" value="'+esc(x.note)+'" placeholder="Note shown to the investor (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
       '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;" title="Approving always emails the access code. Tick to also email other updates, or to resend the code."><input type="checkbox" id="ke_'+i+'"'+(x.status==='Approved'?'':' checked')+'> '+(x.status==='Approved'?'Resend access code':'Email investor')+'</label>'+
       '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveK(\''+esc(x.email)+'\','+i+')">Save</button>'+
-      '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(x.updated)+'</span></div></div>';
+      '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(x.updated)+'</span></div>'+kycBlock(x,i)+'</div>';
   }).join('');
+}
+var YC={'Submitted':['#e0f2fe','#075985'],'Verified':['#dcfce7','#166534'],'More information needed':['#ffedd5','#9a3412'],'Rejected':['#fee2e2','#991b1b']};
+function kycChip(s,bare){var c=YC[s]||['#f3f4f6','#4b5563'];return '<span style="background:'+c[0]+';color:'+c[1]+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;">'+esc(bare?s:(s?'KYC '+s:'KYC not submitted'))+'</span>';}
+function kycBlock(x,i){
+  if(!x.kycStatus)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;"><b style="color:#6b7280;">Full KYC:</b> not submitted yet. The investor is asked for it when they express interest in an opportunity.</div>';
+  return '<div style="margin-top:14px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:12px 14px;">'+
+    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;"><b style="font-size:12px;color:#1A472A;">Full KYC</b>'+kycChip(x.kycStatus,1)+'<span style="font-size:12px;color:#6b7280;">Submitted '+esc(x.kycSubmitted)+'</span></div>'+
+    '<details style="margin-top:8px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View KYC answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#fff;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(x.kycDetails)+'</pre></details>'+
+    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">'+
+    '<select id="ys_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+(ADATA.kycStatuses||[]).map(function(s){return '<option'+(s===x.kycStatus?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>'+
+    '<input id="yn_'+i+'" value="'+esc(x.note)+'" placeholder="Note shown to the investor (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
+    '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="ye_'+i+'" checked> Email investor</label>'+
+    '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveY(\''+esc(x.email)+'\','+i+')">Save KYC</button></div></div>';
+}
+function saveY(email,i){
+  var body={action:'admin_set_kyc',password:sessionStorage.getItem('rva_ap')||'',email:email,status:document.getElementById('ys_'+i).value,note:document.getElementById('yn_'+i).value,notify:document.getElementById('ye_'+i).checked};
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();})
+    .then(function(r){if(r.ok){toast('KYC updated'+(body.notify?' and investor emailed':''));loadA();}else toast(r.error||'Could not save');})
+    .catch(function(){toast('Could not reach the assessments service');});
 }
 function saveK(email,i){
   var body={action:'admin_set_investor',password:sessionStorage.getItem('rva_ap')||'',email:email,status:document.getElementById('ks_'+i).value,note:document.getElementById('kn_'+i).value,notify:document.getElementById('ke_'+i).checked};
@@ -360,7 +356,7 @@ function renderN(){
   if(!rows.length){document.getElementById('nList').innerHTML='<div class="tbl"><div class="tbl-empty">No investor interest yet.</div></div>';return;}
   document.getElementById('nList').innerHTML=rows.map(function(x){
     return '<div class="tbl" style="padding:18px 22px;margin-bottom:12px;"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">'+
-      '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">INVESTOR</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' · '+esc(x.org):'')+'</div><a href="mailto:'+esc(x.email)+'" style="font-size:13px;color:#2C7C3B;">'+esc(x.email)+'</a></div>'+
+      '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">INVESTOR</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' · '+esc(x.org):'')+'</div><a href="mailto:'+esc(x.email)+'" style="font-size:13px;color:#2C7C3B;">'+esc(x.email)+'</a><div style="margin-top:6px;">'+kycChip(x.kycStatus)+'</div></div>'+
       '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">OPPORTUNITY</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:12px;color:#6b7280;">Ref '+esc(x.id)+' · Developer: '+esc(x.developer)+' · '+esc(x.company)+' · <a href="mailto:'+esc(x.devEmail)+'" style="color:#2C7C3B;">'+esc(x.devEmail)+'</a></div></div>'+
       '<div style="font-size:12px;color:#9ca3af;">'+esc(x.date)+'</div></div>'+
       (x.message?'<div style="margin-top:10px;font-size:13px;color:#374151;background:#f8faf8;border-left:3px solid #4ADE80;padding:8px 12px;border-radius:4px;">'+esc(x.message)+'</div>':'')+'</div>';
@@ -375,157 +371,6 @@ function saveA(id,i){
 </script>
 
 <script>
-function loadData(){
-  document.getElementById('invTbl').innerHTML='<div class="tbl-empty">Loading investors...</div>';
-  document.getElementById('devTbl').innerHTML='<div class="tbl-empty">Loading developers...</div>';
-  fetch(SHEET+'?action=getData&password='+encodeURIComponent(PASS))
-    .then(function(r){return r.json();})
-    .then(function(data){
-      if(data.error){toast('Error: '+data.error);return;}
-      var inv=data.investors||[],dev=data.developers||[];
-      buildInv(inv);buildDev(dev);
-    })
-    .catch(function(){
-      document.getElementById('invTbl').innerHTML='<div class="tbl-empty">Could not connect to database.<br><small>Check Apps Script deployment has "Anyone" access.</small><br><br><button onclick="loadData()" class="btn-ap" style="width:auto;display:inline-block;">Retry</button></div>';
-      document.getElementById('devTbl').innerHTML='<div class="tbl-empty">Could not load.</div>';
-    });
-}
-</script>
-
-<script>
-function buildInv(rows){
-  var el=document.getElementById('invTbl');
-  if(!rows.length){el.innerHTML='<div class="tbl-empty">No investor registrations yet.</div>';return;}
-  var frag=document.createDocumentFragment();
-  for(var i=0;i<rows.length;i++)frag.appendChild(makeInvRow(rows[i]));
-  el.innerHTML='';el.appendChild(frag);
-}
-function makeInvRow(r){
-  var email=r['Email']||'',status=r['Status']||'Pending',fname=r['First Name']||'';
-  var bc=status==='Approved'?'bap':(status==='Rejected'?'br':'bp');
-  var row=document.createElement('div');row.className='row';
-  var g=document.createElement('div');g.className='rg';g.style.gridTemplateColumns='2.5fr 2fr 1.5fr 1.5fr 1fr 110px';
-  var c1=document.createElement('div');
-  c1.innerHTML='<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(fname)+' '+esc(r['Last Name']||'')+'</div>'+
-    '<div style="font-size:12px;color:#6b7280;">'+esc(email)+'</div>'+
-    '<div style="font-size:11px;color:#9ca3af;margin-top:3px;">'+esc(r['Timestamp']||'')+'</div>';
-  var c2=document.createElement('div');
-  c2.innerHTML='<div class="fl">Organisation</div><div class="fv b">'+esc(r['Organisation']||'Not provided')+'</div>'+
-    '<div class="fl" style="margin-top:8px;">Investor Type</div><div class="fv">'+esc(r['Investor Type']||'Not provided')+'</div>';
-  var c3=document.createElement('div');
-  c3.innerHTML='<div class="fl">Ticket Size</div><div class="fv">'+esc(r['Ticket Size']||'Not provided')+'</div>';
-  var c4=document.createElement('div');
-  c4.innerHTML='<div class="fl">Note</div><div class="fv" style="max-height:55px;overflow:hidden;">'+esc(r['Note']||'Not provided')+'</div>';
-  var c5=document.createElement('div');
-  c5.innerHTML='<span class="ba '+bc+'">'+esc(status)+'</span>';
-  var c6=document.createElement('div');
-  if(status!=='Approved'){var ab=document.createElement('button');ab.className='btn-ap';ab.textContent='Approve';(function(e,f){ab.onclick=function(){approveInv(e,f,ab);};})(email,fname);c6.appendChild(ab);}
-  else{var vb=document.createElement('button');vb.className='btn-ap';vb.style.background='#16a34a';vb.textContent='View Code';(function(e,f){vb.onclick=function(){showCode(e,genCode(e),'Approval Code',f,'approval');};})(email,fname);c6.appendChild(vb);}
-  if(status!=='Rejected'){var rb=document.createElement('button');rb.className='btn-rj';rb.textContent='Reject';(function(e){rb.onclick=function(){rejectInv(e,rb);};})(email);c6.appendChild(rb);}
-  var rcb=document.createElement('button');rcb.className='btn-rc';rcb.textContent='Recovery Code';(function(e,f){rcb.onclick=function(){showCode(e,genRC(e),'Recovery Code',f,'recovery');};})(email,fname);c6.appendChild(rcb);
-  g.appendChild(c1);g.appendChild(c2);g.appendChild(c3);g.appendChild(c4);g.appendChild(c5);g.appendChild(c6);
-  row.appendChild(g);return row;
-}
-</script>
-
-<script>
-function buildDev(rows){
-  var el=document.getElementById('devTbl');
-  if(!rows.length){el.innerHTML='<div class="tbl-empty">No developer registrations yet.</div>';return;}
-  var frag=document.createDocumentFragment();
-  for(var i=0;i<rows.length;i++)frag.appendChild(makeDevRow(rows[i]));
-  el.innerHTML='';el.appendChild(frag);
-}
-function makeDevRow(r){
-  var email=r['Email']||'',status=r['Status']||'Pending',fname=r['First Name']||'';
-  var bc=status==='Approved'?'bap':(status==='Rejected'?'br':'bp');
-  var row=document.createElement('div');row.className='row';
-  var g=document.createElement('div');g.className='rg';g.style.gridTemplateColumns='2.5fr 2fr 2.5fr 1fr 110px';
-  var c1=document.createElement('div');
-  c1.innerHTML='<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(fname)+' '+esc(r['Last Name']||'')+'</div>'+
-    '<div style="font-size:12px;color:#6b7280;">'+esc(email)+'</div>'+
-    '<div style="font-size:11px;color:#9ca3af;margin-top:3px;">'+esc(r['Timestamp']||'')+'</div>';
-  var c2=document.createElement('div');
-  c2.innerHTML='<div class="fl">Company</div><div class="fv b">'+esc(r['Company']||'Not provided')+'</div>'+
-    '<div class="fl" style="margin-top:8px;">Energy Type</div><div class="fv" style="color:#2C7C3B;font-weight:600;">'+esc(r['Energy Type']||'Not provided')+'</div>'+
-    '<div style="font-size:12px;color:#6b7280;margin-top:4px;">'+esc(r['Country']||'')+' &middot; '+esc(r['Asset Stage']||'')+'</div>';
-  var c3=document.createElement('div');
-  c3.innerHTML='<div class="fl">Project Description</div><div class="fv">'+esc(r['Description']||'Not provided')+'</div>';
-  var c4=document.createElement('div');
-  c4.innerHTML='<span class="ba '+bc+'">'+esc(status)+'</span>';
-  var c5=document.createElement('div');
-  if(status!=='Approved'){var ab=document.createElement('button');ab.className='btn-ap';ab.textContent='Approve Project';(function(e){ab.onclick=function(){approveDev(e,ab);};})(email);c5.appendChild(ab);}
-  if(status!=='Rejected'){var rb=document.createElement('button');rb.className='btn-rj';rb.textContent='Reject';(function(e){rb.onclick=function(){rejectDev(e,rb);};})(email);c5.appendChild(rb);}
-  var rcb=document.createElement('button');rcb.className='btn-rc';rcb.textContent='Recovery Code';(function(e,f){rcb.onclick=function(){showCode(e,genRC(e),'Recovery Code',f,'recovery');};})(email,fname);c5.appendChild(rcb);
-  g.appendChild(c1);g.appendChild(c2);g.appendChild(c3);g.appendChild(c4);g.appendChild(c5);
-  row.appendChild(g);return row;
-}
-</script>
-
-<script>
-function approveInv(email,fname,btn){
-  btn.disabled=true;btn.textContent='...';
-  fetch(SHEET+'?action=approve_investor&password='+encodeURIComponent(PASS)+'&email='+encodeURIComponent(email))
-    .then(function(r){return r.json();})
-    .then(function(){toast('Investor approved');loadData();setTimeout(function(){showCode(email,genCode(email),'Approval Code',fname,'approval');},800);})
-    .catch(function(){btn.disabled=false;btn.textContent='Approve';toast('Error, please try again');});
-}
-function rejectInv(email,btn){
-  if(!confirm('Reject this investor?'))return;
-  btn.disabled=true;btn.textContent='...';
-  fetch(SHEET+'?action=reject_investor&password='+encodeURIComponent(PASS)+'&email='+encodeURIComponent(email))
-    .then(function(){toast('Investor rejected');loadData();})
-    .catch(function(){btn.disabled=false;btn.textContent='Reject';});
-}
-function approveDev(email,btn){
-  btn.disabled=true;btn.textContent='...';
-  fetch(SHEET+'?action=approve_developer&password='+encodeURIComponent(PASS)+'&email='+encodeURIComponent(email))
-    .then(function(){toast('Developer approved');loadData();})
-    .catch(function(){btn.disabled=false;btn.textContent='Approve Project';});
-}
-function rejectDev(email,btn){
-  if(!confirm('Reject this developer project?'))return;
-  btn.disabled=true;btn.textContent='...';
-  fetch(SHEET+'?action=reject_developer&password='+encodeURIComponent(PASS)+'&email='+encodeURIComponent(email))
-    .then(function(){toast('Developer rejected');loadData();})
-    .catch(function(){btn.disabled=false;btn.textContent='Reject';});
-}
-function showCode(email,code,title,fname,type){
-  var subj=type==='recovery'?'Your Renewables Vault Password Recovery Code':'Your Renewables Vault Investor Access Is Approved';
-  var body=type==='recovery'?[
-    'Subject: '+subj,'',
-    'Dear '+(fname||'User')+',','',
-    'We received a password reset request for your account.','',
-    '--- YOUR RECOVERY CODE ---',code,'-------------------------','',
-    'To reset your password:',
-    '1. Go to renewablesvault.com/login.html',
-    '2. Click "Forgot password?"',
-    '3. Enter your email: '+email,
-    '4. Enter the recovery code above',
-    '5. Set your new password','',
-    'Best regards,',
-    'Mina Ibrahim | Renewables Vault','contact@renewablesvault.com'
-  ]:[
-    'Subject: '+subj,'',
-    'Dear '+(fname||'Investor')+',','',
-    'Your investor profile has been reviewed and approved.','',
-    '--- YOUR APPROVAL CODE ---',code,'-------------------------','',
-    'To unlock your deal access:',
-    '1. Go to renewablesvault.com and log in',
-    '2. On your dashboard, click "Enter Approval Code"',
-    '3. Enter the code above','',
-    'Best regards,',
-    'Mina Ibrahim | Renewables Vault','contact@renewablesvault.com'
-  ];
-  document.getElementById('mTitle').textContent=title;
-  document.getElementById('mEmail').textContent=email;
-  document.getElementById('mCode').textContent=code;
-  document.getElementById('mBody').textContent=body.join('\n');
-  document.getElementById('codeModal').style.display='flex';
-}
-function closeModal(){document.getElementById('codeModal').style.display='none';}
-function copyCode(){navigator.clipboard.writeText(document.getElementById('mCode').textContent).then(function(){toast('Code copied!');});}
-function copyEmail(){navigator.clipboard.writeText(document.getElementById('mBody').textContent).then(function(){toast('Email template copied!');});}
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},3000);}
 </script>
 </body>

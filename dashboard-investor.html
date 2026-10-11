@@ -355,7 +355,6 @@ var KYC_STEPS=[
     {k:'pep',t:'radio',q:'Are you (or any owner or director) a politically exposed person, or a close family member of one?',req:1,o:O([['No','No'],['Yes','Yes']])},
     {k:'sanctions',t:'radio',q:'Are you (or the company) subject to any international sanctions?',req:1,o:O([['No','No'],['Yes','Yes']])}
   ]},
-  {title:'Investment preferences',desc:'We use these to show you the opportunities that fit. You can change them at any time.',qs:PREF_QS},
   {title:'Declarations',desc:'Please read and confirm.',qs:[
     {k:'declare_true',t:'check',q:'I confirm the information provided is true and complete.',req:1},
     {k:'declare_verify',t:'check',q:'I agree that Renewables Vault may verify this information and ask me for supporting documents.',req:1},
@@ -363,12 +362,21 @@ var KYC_STEPS=[
     {k:'notes',t:'area',q:'Anything else we should know? (optional)',req:0,ph:'e.g. investment mandate, timing'}
   ]}
 ];
+var ACC_STEPS=[
+  {title:'Investment preferences',desc:'We use these to show you the opportunities that fit. You can change them at any time.',qs:PREF_QS},
+  {title:'Declarations',desc:'Please read and confirm.',qs:[
+    {k:'declare_pro',t:'check',q:'I am a professional or institutional investor, or a high-net-worth individual.',req:1},
+    {k:'declare_conf',t:'check',q:'I will keep the details of any opportunity shared with me confidential.',req:1},
+    {k:'declare_true',t:'check',q:'I confirm the information provided is true.',req:1},
+    {k:'acc_notes',t:'area',q:'Anything else we should know? (optional)',req:0,ph:'e.g. investment mandate, timing'}
+  ]}
+];
 var PREF_STEPS=[{title:'Investment preferences',desc:'Choose what you would like to see. You can change this at any time.',qs:PREF_QS}];
 
 /* ───────────── State ───────────── */
-var U=null,KEY='',ST=null,MODE='kyc',DRAFT=null,S=0,LIST=null,FILTER=null;
-function steps(){return MODE==='prefs'?PREF_STEPS:KYC_STEPS;}
-function kD(){return 'rv_kyc_'+U.email.toLowerCase();}
+var U=null,KEY='',ST=null,MODE='kyc',DRAFT=null,S=0,LIST=null,FILTER=null,PENDING=null;
+function steps(){return MODE==='prefs'?PREF_STEPS:MODE==='access'?ACC_STEPS:KYC_STEPS;}
+function kD(){return 'rv_kyc2_'+U.email.toLowerCase();}
 function show(v){['vMain','vForm','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});document.getElementById('loadState').style.display=v?'none':'block';window.scrollTo(0,0);}
 function stateMsg(title,text,btns){show(null);document.getElementById('lsTitle').textContent=title;document.getElementById('lsText').textContent=text;document.getElementById('lsBtns').innerHTML=btns||'';}
 
@@ -379,6 +387,7 @@ window.addEventListener('DOMContentLoaded',function(){
   if(U.type!=='investor'){location.href='dashboard-developer.html';return;}
   if(!RV.api()){stateMsg('Temporarily unavailable','Our investor service is being updated. Please try again shortly or contact us.','<a href="contact.html" class="btn-green" style="text-decoration:none;">Contact us</a>');return;}
   if(!U.password){stateMsg('Please log in again','For your security, please log out and log in again to continue.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
+  try{localStorage.removeItem('rv_kyc_'+U.email.toLowerCase());}catch(e){}
   RV.key(U.email,U.password).then(function(k){KEY=k;loadStatus();});
 });
 var LINKED=false;
@@ -413,18 +422,18 @@ function renderMain(){
   var s=ST.status,h='',draft=lsGet(kD(),null);
   var banner=function(color,icon,title,text,btn){return '<div class="card" style="border-left:4px solid '+color+';padding:20px 24px;margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid '+icon+'" style="color:'+color+';font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:220px;"><div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+title+'</div><div style="font-size:14px;color:#6b7280;line-height:1.6;">'+text+'</div></div>'+(btn||'')+'</div>';};
   if(s==='Not started'){
-    h='<div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;"><div class="eyebrow">NEXT STEP</div><h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Complete your KYC</h2><p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">A short identity and preferences form, about 5 minutes. You can save and continue later. Once our team approves it, you will see the opportunities that match the asset types and countries you choose.</p><button class="btn-lime" onclick="startKyc()">'+(draft?'Continue my KYC':'Start KYC')+' <i class="fa-solid fa-arrow-right"></i></button></div>';
+    h='<div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;"><div class="eyebrow">NEXT STEP</div><h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Request access to the opportunities</h2><p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">About 2 minutes. Choose the asset types and countries you are interested in and confirm three short declarations. Once our team approves your request, you will receive a personal access code by email to view the anonymised opportunities.</p><button class="btn-lime" onclick="startAccess()">Request access <i class="fa-solid fa-arrow-right"></i></button></div>';
   }else if(s==='Submitted'||s==='Under review'){
-    h=banner('#f59e0b','fa-clock','KYC '+(s==='Submitted'?'received':'under review'),'Our team is reviewing your information and will contact you within 2 business days. Your preferences: <b>'+esc(prefLabel(ST.prefs))+'</b>.','<button class="btn-out" onclick="startKyc(true)" style="font-size:13px;padding:8px 16px;">Edit my KYC</button>');
+    h=banner('#f59e0b','fa-clock','Access request '+(s==='Submitted'?'received':'under review'),'Our team is reviewing your request and will contact you within 2 business days. Your preferences: <b>'+esc(prefLabel(ST.prefs))+'</b>.','<button class="btn-out" onclick="startAccess()" style="font-size:13px;padding:8px 16px;">Edit my request</button>');
     h+=lockedTiles();
   }else if(s==='More information needed'){
-    h=banner('#ea580c','fa-circle-info','We need a little more information',(ST.note?'<b>Note from our team:</b> '+esc(ST.note):'Please review and update your KYC.'),'<button class="btn-green" onclick="startKyc(true)">Update my KYC</button>');
+    h=banner('#ea580c','fa-circle-info','We need a little more information',(ST.note?'<b>Note from our team:</b> '+esc(ST.note):'Please review and update your access request.'),'<button class="btn-green" onclick="startAccess()">Update my request</button>');
     h+=lockedTiles();
   }else if(s==='Not approved'){
-    h=banner('#6b7280','fa-circle-xmark','Profile not approved at this time',(ST.note?esc(ST.note):'Thank you for your interest. Please contact us if you have any questions.'),'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
+    h=banner('#6b7280','fa-circle-xmark','Access not approved at this time',(ST.note?esc(ST.note):'Thank you for your interest. Please contact us if you have any questions.'),'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
   }else if(s==='Approved'&&!ST.activated){
     h='<div class="card" style="border-left:4px solid #16a34a;padding:24px;margin-bottom:24px;"><div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid fa-key" style="color:#16a34a;font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:240px;">'+
-      '<div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">Your KYC is approved. Enter your access code</div>'+
+      '<div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">Your access is approved. Enter your access code</div>'+
       '<div style="font-size:14px;color:#6b7280;line-height:1.6;margin-bottom:14px;">We have emailed your personal access code to <b>'+esc(U.email)+'</b>. Enter it below to unlock the opportunities. You only need to do this once.</div>'+
       '<div style="display:flex;gap:10px;flex-wrap:wrap;"><input id="accCode" class="field" maxlength="12" placeholder="e.g. K7MP-Q2XA" style="flex:1;min-width:180px;max-width:260px;font-family:monospace;font-size:17px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;" onkeydown="if(event.key===\'Enter\')activate()">'+
       '<button class="btn-green" id="accBtn" onclick="activate()">Unlock opportunities</button></div>'+
@@ -433,20 +442,25 @@ function renderMain(){
       (ST.note?'<div style="font-size:13px;color:#374151;margin-top:10px;"><b>Note from our team:</b> '+esc(ST.note)+'</div>':'')+'</div></div></div>';
     h+=lockedTiles();
   }else if(s==='Approved'){
-    h=banner('#16a34a','fa-shield-halved','Access unlocked','You can see published opportunities by country. Express interest in any of them and our team will share full details under NDA.'+(ST.note?'<br><b>Note from our team:</b> '+esc(ST.note):''));
+    var k=ST.kycStatus,nt=ST.note?'<br><b>Note from our team:</b> '+esc(ST.note):'';
+    if(k==='More information needed')h=banner('#ea580c','fa-circle-info','Your KYC needs a little more information',(ST.note?'<b>Note from our team:</b> '+esc(ST.note):'Please review and update your KYC.'),'<button class="btn-green" onclick="startKyc()">Update my KYC</button>');
+    else if(k==='Rejected')h=banner('#6b7280','fa-circle-xmark','We could not verify your KYC','You can still browse the opportunities. Please contact us if you have any questions.'+nt,'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
+    else if(k==='Verified')h=banner('#16a34a','fa-shield-halved','Access unlocked and KYC verified','Express interest in any opportunity and our team will share full details under NDA.'+nt);
+    else if(k==='Submitted')h=banner('#16a34a','fa-shield-halved','Access unlocked','Your KYC has been received and our team is verifying it. You can keep browsing and expressing interest.'+nt,'<button class="btn-out" onclick="startKyc()" style="font-size:13px;padding:8px 16px;">Edit my KYC</button>');
+    else h=banner('#16a34a','fa-shield-halved','Access unlocked','You can see published opportunities by country. When you express interest, we will ask you for a short KYC (about 5 minutes) before our team shares full details under NDA.'+nt,'<button class="btn-out" onclick="startKyc()" style="font-size:13px;padding:8px 16px;">Complete my KYC now</button>');
   }
   document.getElementById('statusBox').innerHTML=h;
   document.getElementById('oppBox').style.display=(s==='Approved'&&ST.activated)?'block':'none';
-  var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Mobile or WhatsApp',U.phone||'Not provided'],['Organisation',U.org||'Investing personally'],['Investor type',U.investorType||'Not provided'],['KYC status',s]];
+  var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Mobile or WhatsApp',U.phone||'Not provided'],['Organisation',U.org||'Investing personally'],['Investor type',U.investorType||'Not provided'],['Access status',s==='Not started'?'Not requested yet':s],['KYC status',ST.kycStatus||'Requested when you express interest']];
   document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('');
-  var done=[1,s!=='Not started',s==='Approved'&&!!ST.activated,s==='Approved'&&LIST&&LIST.interested&&LIST.interested.length>0,0];
-  var j=[['Create your account','Done'],['Complete KYC and preferences','About 5 minutes'],['KYC approval','Our team reviews within 2 business days'],['Browse and express interest','See opportunities that match your preferences'],['NDA, due diligence and investment','Full details shared under NDA']];
+  var done=[1,s!=='Not started',s==='Approved'&&!!ST.activated,s==='Approved'&&!!ST.kycStatus&&LIST&&LIST.interested&&LIST.interested.length>0,0];
+  var j=[['Create your account','Done'],['Request access','About 2 minutes: preferences and declarations'],['Approval and access code','Our team reviews within 2 business days'],['Express interest and short KYC','About 5 minutes, only when you find an opportunity you like'],['NDA, due diligence and investment','Full details shared under NDA']];
   var nx=done.findIndex(function(x){return !x;});
   document.getElementById('journey').innerHTML=j.map(function(x,i){var last=i===j.length-1,d=!!done[i],n=i===nx;
     return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(d?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';"><div class="'+(d?'step-done':n?'step-next':'step-grey')+'" style="position:absolute;left:-16px;top:0;">'+(d?'<i class="fa-solid fa-check"></i>':(i+1))+'</div><div style="font-size:14px;font-weight:700;color:'+(d||n?'#1A472A':'#9ca3af')+';">'+x[0]+'</div><div style="font-size:12px;color:'+(d||n?'#6b7280':'#9ca3af')+';margin-top:2px;">'+x[1]+'</div></div>';}).join('');
 }
 function lockedTiles(){
-  return '<div style="background:#0f1f14;border-radius:12px;padding:24px;margin-bottom:24px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div><div class="eyebrow" style="margin-bottom:4px;">OPPORTUNITIES</div><div style="font-size:13px;color:#869486;">'+(ST&&ST.status==='Approved'?'Unlocked once you enter your access code.':'Unlocked once your KYC is approved.')+'</div></div><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">'+
+  return '<div style="background:#0f1f14;border-radius:12px;padding:24px;margin-bottom:24px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div><div class="eyebrow" style="margin-bottom:4px;">OPPORTUNITIES</div><div style="font-size:13px;color:#869486;">'+(ST&&ST.status==='Approved'?'Unlocked once you enter your access code.':'Unlocked once your access request is approved.')+'</div></div><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">'+
     Object.keys(TYPES).map(function(k){return '<div class="inv-tile"><i class="fa-solid '+TYPES[k].icon+'" style="color:#4ADE80;font-size:24px;margin-bottom:8px;display:block;"></i><div style="font-size:13px;font-weight:700;color:#fff;">'+TYPES[k].label+'</div><div class="inv-lock"><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div></div>';}).join('')+'</div></div>';
 }
 
@@ -509,29 +523,40 @@ function openInt(id){
 function sendInt(id){
   var b=document.getElementById('ic_'+id);b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
   api({action:'express_interest',id:id,message:document.getElementById('im_'+id).value.trim()}).then(function(r){
-    if(r&&r.ok){LIST.interested=(LIST.interested||[]).concat([id]);renderList();renderMain();}
-    else{var e=document.getElementById('ie_'+id);e.style.display='block';e.textContent='Could not register your interest. Please try again.';b.disabled=false;b.textContent='Confirm interest';}
+    if(r&&r.ok){LIST.interested=(LIST.interested||[]).concat([id]);renderList();renderMain();return;}
+    if(r&&r.error==='kyc_required'){var t=(LIST.listings||[]).filter(function(x){return x.id===id;})[0];PENDING={id:id,message:document.getElementById('im_'+id).value.trim(),title:t?t.title:id};startKyc();return;}
+    var e=document.getElementById('ie_'+id);e.style.display='block';
+    e.textContent=(r&&/unknown action/i.test(r.error||''))?'We are finishing an update to the investor area. Please try again in a few minutes.':(r&&r.error==='kyc_rejected')?'We could not verify your KYC, so we cannot register interest at the moment. Please contact us.':'Could not register your interest. Please try again.';
+    b.disabled=false;b.textContent='Confirm interest';
   }).catch(function(){var e=document.getElementById('ie_'+id);e.style.display='block';e.textContent='Connection problem. Please try again.';b.disabled=false;b.textContent='Confirm interest';});
 }
 
 /* ───────────── KYC & preferences form ───────────── */
-function startKyc(edit){
+function startAccess(){
+  MODE='access';PENDING=null;var p=ST.prefs||{},pf=ST.profile||{};
+  DRAFT={step:0,ans:{p_types:p.types||[],p_countries:p.countries||[],p_ticket:p.ticket,p_tenor:p.tenor,p_currency:p.currency,acc_notes:pf.acc_notes||''}};
+  S=0;renderStep();show('vForm');
+}
+function startKyc(){
   MODE='kyc';var d=lsGet(kD(),null);
   if(d&&d.ans){DRAFT=d;}else{DRAFT={step:0,ans:{}};
-    if(edit&&ST.kyc){DRAFT.ans=JSON.parse(JSON.stringify(ST.kyc));}
-    if(ST.prefs){DRAFT.ans.p_types=ST.prefs.types;DRAFT.ans.p_countries=ST.prefs.countries;DRAFT.ans.p_ticket=ST.prefs.ticket;DRAFT.ans.p_tenor=ST.prefs.tenor;DRAFT.ans.p_currency=ST.prefs.currency;}
+    var src=ST.kyc||(ST.profile&&ST.profile.category?ST.profile:null);
+    if(src){DRAFT.ans=JSON.parse(JSON.stringify(src));}
     DRAFT.ans.declare_true=false;DRAFT.ans.declare_verify=false;DRAFT.ans.declare_risk=false;
     if(!DRAFT.ans.category){DRAFT.ans.category=/high-net-worth/i.test(U.investorType||'')?'individual':(/capital|factory/i.test(U.investorType||'')?'company':undefined);}}
-  S=DRAFT.step||0;renderStep();show('vForm');
+  S=Math.min(DRAFT.step||0,KYC_STEPS.length-1);renderStep();show('vForm');
 }
 function editPrefs(){MODE='prefs';var p=(LIST&&LIST.prefs)||ST.prefs||{};DRAFT={step:0,ans:{p_types:p.types||[],p_countries:p.countries||[],p_ticket:p.ticket,p_tenor:p.tenor,p_currency:p.currency}};S=0;renderStep();show('vForm');}
-function saveAndExit(){collect();if(MODE==='kyc'){DRAFT.step=S;lsSet(kD(),DRAFT);}renderMain();window.scrollTo(0,0);}
+function saveAndExit(){collect();if(MODE==='kyc'){DRAFT.step=S;lsSet(kD(),DRAFT);}PENDING=null;renderMain();if(ST.status==='Approved'&&ST.activated&&LIST){renderChips();renderList();}window.scrollTo(0,0);}
 function visibleQs(s){var c=DRAFT.ans.category;return s.qs.filter(function(q){return !q.when||q.when===c;});}
 function renderStep(){
   var st=steps(),s=st[S],a=DRAFT.ans;
-  document.getElementById('fEyebrow').textContent=MODE==='prefs'?'PREFERENCES':'KYC';
-  document.getElementById('fTitle').textContent=MODE==='prefs'?'Your investment preferences':'Investor KYC';
-  document.getElementById('fIntro').style.display=MODE==='prefs'?'none':'block';
+  document.getElementById('fEyebrow').textContent=MODE==='prefs'?'PREFERENCES':MODE==='access'?'ACCESS REQUEST':'KYC';
+  document.getElementById('fTitle').textContent=MODE==='prefs'?'Your investment preferences':MODE==='access'?'Request access':'Investor KYC';
+  document.querySelector('#vForm .backlink').innerHTML='<i class="fa-solid fa-arrow-left"></i> '+(MODE==='kyc'?'Save &amp; return to dashboard':'Back to dashboard');
+  var fi=document.getElementById('fIntro');fi.style.display=MODE==='prefs'?'none':'block';
+  fi.innerHTML=MODE==='access'?'About 2 minutes. All information is treated as strictly confidential.':
+    (PENDING?'<b style="color:#1A472A;">One last step before we register your interest in '+esc(PENDING.title)+'.</b> A short KYC, about 5 minutes. You can save and continue later. ':'A short KYC, about 5 minutes. You can save and continue later. ')+'All information is treated as strictly confidential and used only to verify your identity.';
   document.getElementById('prog').innerHTML=st.length>1?st.map(function(x,i){return '<div class="prog-step'+(i<S?' done':i===S?' active':'')+'"></div>';}).join(''):'';
   document.getElementById('sTitle').textContent=s.title;
   document.getElementById('sCount').textContent=st.length>1?'Step '+(S+1)+' of '+st.length:'';
@@ -548,7 +573,7 @@ function renderStep(){
   }).join('');
   document.getElementById('bPrev').style.visibility=S===0?'hidden':'visible';
   var last=S===st.length-1,b=document.getElementById('bNext');
-  b.innerHTML=last?(MODE==='prefs'?'<i class="fa-solid fa-check"></i> Save preferences':'<i class="fa-solid fa-paper-plane"></i> Submit KYC'):'Next <i class="fa-solid fa-arrow-right"></i>';
+  b.innerHTML=last?lastLabel():'Next <i class="fa-solid fa-arrow-right"></i>';
   b.className=last?'btn-lime':'btn-green';b.disabled=false;
 }
 function pick(el,rerender){
@@ -583,32 +608,47 @@ function prefsOf(a){return {types:a.p_types||[],countries:a.p_countries||[],tick
 function submitForm(){
   clearTimeout(asT);
   var b=document.getElementById('bNext'),err=document.getElementById('fErr');b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-  var fail=function(m){err.textContent=m;err.style.display='block';renderStepButtons();};
+  var fail=function(m){if(/unknown action/i.test(m||''))m='We are finishing an update to the investor area. Please try again in a few minutes. Your answers are kept.';err.textContent=m;err.style.display='block';renderStepButtons();};
   if(MODE==='prefs'){
     api({action:'prefs_update',prefs:prefsOf(DRAFT.ans)}).then(function(r){if(r&&r.ok){ST.prefs=prefsOf(DRAFT.ans);loadStatus();}else fail((r&&r.error)||'Could not save. Please try again.');}).catch(function(){fail('Connection problem. Please try again.');});
     return;
   }
-  var a=DRAFT.ans,items=[],kyc={};
+  var a=DRAFT.ans,items=[];
+  var done=function(t,x){lsSet(kD(),null);DRAFT=null;document.getElementById('doneTitle').textContent=t;document.getElementById('doneTxt').textContent=x;show('vDone');};
+  if(MODE==='access'){
+    var pr=prefsOf(a),prof={declare_pro:!!a.declare_pro,declare_conf:!!a.declare_conf,declare_true:!!a.declare_true,acc_notes:a.acc_notes||''};
+    items.push({sec:'Investment preferences',q:'Asset types',a:pr.types.map(function(t){return TYPES[t].label;}).join(', ')});
+    items.push({sec:'Investment preferences',q:'Countries',a:pr.countries.join(', ')});
+    items.push({sec:'Investment preferences',q:'Ticket size',a:pr.ticket});
+    items.push({sec:'Investment preferences',q:'Term',a:pr.tenor});
+    items.push({sec:'Investment preferences',q:'Currency',a:pr.currency});
+    if(prof.acc_notes)items.push({sec:'Declarations',q:'Notes',a:prof.acc_notes});
+    api({action:'access_request',profile:prof,prefs:pr,items:items}).then(function(r){
+      if(r&&r.ok){DRAFT=null;
+        if(r.status==='Approved'){document.getElementById('doneTitle').textContent='Request updated';document.getElementById('doneTxt').textContent='Thank you. Your preferences have been updated.';}
+        else{document.getElementById('doneTitle').textContent='Access request sent';document.getElementById('doneTxt').textContent='Thank you. Our team will review your request and contact you within 2 business days. Once approved, your personal access code will be emailed to '+U.email+'.';}
+        show('vDone');}
+      else fail((r&&r.error)||'Could not send. Please try again.');
+    }).catch(function(){fail('Connection problem. Please check your internet connection and try again.');});
+    return;
+  }
+  var kyc={};
   KYC_STEPS.forEach(function(s){visibleQs(s).forEach(function(q){var v=a[q.k];
-    if(q.k.indexOf('p_')===0)return;
     kyc[q.k]=v;if(q.t==='check')return;
     var txt=v;if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];txt=o?o.t:v;}
     items.push({sec:s.title,q:q.q,a:txt||''});});});
-  var pr=prefsOf(a);
-  items.push({sec:'Investment preferences',q:'Asset types',a:pr.types.map(function(t){return TYPES[t].label;}).join(', ')});
-  items.push({sec:'Investment preferences',q:'Countries',a:pr.countries.join(', ')});
-  items.push({sec:'Investment preferences',q:'Ticket size',a:pr.ticket});
-  items.push({sec:'Investment preferences',q:'Term',a:pr.tenor});
-  items.push({sec:'Investment preferences',q:'Currency',a:pr.currency});
-  api({action:'kyc_submit',kyc:kyc,prefs:pr,items:items}).then(function(r){
-    if(r&&r.ok){lsSet(kD(),null);DRAFT=null;
-      document.getElementById('doneTitle').textContent=r.status==='Approved'?'Information updated':'KYC submitted';
-      document.getElementById('doneTxt').textContent=r.status==='Approved'?'Thank you. Your information and preferences have been updated.':'Thank you. Our team will review your information and contact you within 2 business days. A confirmation has been sent to '+U.email+'.';
-      show('vDone');}
-    else fail((r&&r.error)||'Could not submit. Please try again.');
+  var body={action:'full_kyc',kyc:kyc,items:items},pend=PENDING;
+  if(pend){body.interestId=pend.id;body.message=pend.message;}
+  api(body).then(function(r){
+    if(r&&r.ok){PENDING=null;
+      if(r.interest&&LIST)LIST.interested=(LIST.interested||[]).concat([pend.id]);
+      if(r.interest)done('KYC received and interest registered','Thank you. We have registered your interest in '+pend.title+'. Our team will verify your information and contact you with the next steps, including an NDA. A confirmation has been sent to '+U.email+'.');
+      else done('KYC submitted','Thank you. Our team will verify your information and contact you shortly. A confirmation has been sent to '+U.email+'.');}
+    else fail((r&&r.error==='not_approved')?'Your access is not active. Please return to the dashboard.':((r&&r.error)||'Could not submit. Please try again.'));
   }).catch(function(){fail('Connection problem. Please check your internet connection and try again.');});
 }
-function renderStepButtons(){var b=document.getElementById('bNext');b.disabled=false;b.innerHTML=MODE==='prefs'?'<i class="fa-solid fa-check"></i> Save preferences':'<i class="fa-solid fa-paper-plane"></i> Submit KYC';}
+function lastLabel(){return MODE==='prefs'?'<i class="fa-solid fa-check"></i> Save preferences':MODE==='access'?'<i class="fa-solid fa-paper-plane"></i> Send my request':'<i class="fa-solid fa-paper-plane"></i> '+(PENDING?'Submit KYC and register interest':'Submit KYC');}
+function renderStepButtons(){var b=document.getElementById('bNext');b.disabled=false;b.innerHTML=lastLabel();}
 </script>
 <script>(function(){var n=document.querySelector('.nav-inner'),l=n&&n.querySelector('.nav-links');if(!l||n.querySelector('.rv-burger'))return;var b=document.createElement('button');b.className='rv-burger';b.type='button';b.setAttribute('aria-label','Open menu');b.innerHTML='<span></span><span></span><span></span>';n.appendChild(b);b.addEventListener('click',function(e){e.stopPropagation();document.body.classList.toggle('rv-menu-open');});document.addEventListener('click',function(e){if(!l.contains(e.target))document.body.classList.remove('rv-menu-open');});})();</script>
 </body></html>

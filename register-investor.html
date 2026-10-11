@@ -225,7 +225,7 @@ function genRC(e){
   <div style="text-align:center;margin-bottom:40px;">
     <span class="eyebrow-g" style="display:block;margin-bottom:10px;">Investor Registration</span>
     <h1 style="font-size:clamp(22px,3vw,32px);font-weight:700;color:#1A472A;margin:0 0 10px;">Create Your Investor Profile</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0;">Takes about 2 minutes. Next, you will complete a short KYC and choose what you want to invest in.</p>
+    <p style="font-size:15px;color:#6b7280;margin:0;">Takes about 2 minutes. Next, you will choose what you want to invest in and request access. A short KYC is only asked later, when you express interest in an opportunity.</p>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
     <div><label class="lbl">First Name *</label><input class="field" id="i_first" type="text" placeholder="First name"></div>
@@ -277,11 +277,9 @@ function subInv() {
     if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
     var user={firstName:first,lastName:last,email:email,phone:phone,consent:true,password:pass,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
     users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
-    var sheetUrl='https://script.google.com/macros/s/AKfycbytiYlZfw81K_W-rAfhzIc2CFVRRa42eDo7dpfe0D7wY0MU3TgjmMAzJKh0igWE_KEN/exec?action=register_investor&firstName='+encodeURIComponent(first)+'&lastName='+encodeURIComponent(last)+'&email='+encodeURIComponent(email)+'&org='+encodeURIComponent(org)+'&investorType='+encodeURIComponent(itype)+'&ticket='+encodeURIComponent(ticket)+'&note='+encodeURIComponent(note);
     var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration: '+first+' '+last+' | '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile or WhatsApp: '+(phone||'Not provided')+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
-    var sheet=fetch(sheetUrl,{mode:'no-cors'});
     var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-investor.html';}};
-    Promise.allSettled([w3f,sheet]).then(go);setTimeout(go,8000);
+    Promise.allSettled([w3f]).then(go);setTimeout(go,8000);
   });
 }
 </script></div>

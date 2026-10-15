@@ -239,6 +239,15 @@ function av(email,name,size,square){var img=(ADATA&&ADATA.photos||{})[String(ema
   var ini=String(name||'?').trim().split(/\s+/).map(function(w){return w.charAt(0);}).join('').slice(0,2).toUpperCase();
   var st='width:'+size+'px;height:'+size+'px;border-radius:'+(square?'10px':'50%')+';flex-shrink:0;';
   return img?'<img src="'+img+'" alt="" style="'+st+'object-fit:cover;border:1px solid #d1e8d8;background:#fff;">':'<div style="'+st+'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:'+Math.round(size*0.38)+'px;">'+esc(ini)+'</div>';}
+function nextStep(x){
+  var em=String(x.email||'').toLowerCase(),dev=String(x.type).toLowerCase()==='developer',done;
+  if(dev)done=(ADATA.assessments||[]).some(function(a){return String(a.email).toLowerCase()===em;});
+  else done=(ADATA.investors||[]).some(function(v){return String(v.email).toLowerCase()===em;});
+  var rem=((ADATA.reminders||{})[em]||[]).filter(function(r){return r.kind===(dev?'asset':'access');})[0];
+  var chip=done?'<span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;">'+(dev?'Asset submitted':'Access requested')+'</span>'
+    :'<span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;">'+(dev?'No asset yet':'Access not requested yet')+'</span>';
+  return '<div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'+chip+(rem?'<span style="font-size:11px;color:#6b7280;">Automatic reminder sent '+esc(rem.times)+(Number(rem.times)===1?' time':' times')+', last '+esc(rem.last)+'</span>':(done?'':'<span style="font-size:11px;color:#9ca3af;">Automatic reminders after 1 and 4 days</span>'))+'</div>';
+}
 function renderR(){
   if(!ADATA)return;var f=document.getElementById('rFilter').value,rows=(ADATA.registrations||[]).filter(function(x){return !f||String(x.type).toLowerCase()===f;});
   if(!rows.length){document.getElementById('rList').innerHTML='<div class="tbl"><div class="tbl-empty">No registrations yet.</div></div>';return;}
@@ -246,7 +255,7 @@ function renderR(){
     return '<div style="padding:14px 20px;border-bottom:1px solid #f0f5f2;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;">'+
       av(x.email,String(x.type).toLowerCase()==='developer'?(x.company||x.name):x.name,40,String(x.type).toLowerCase()==='developer')+'<div style="flex:1;min-width:200px;"><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.company?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.company)+'</span>':'')+'</div>'+
       '<div style="font-size:13px;margin-top:3px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+'</div>'+
-      '<div style="font-size:12px;color:#6b7280;margin-top:3px;">'+esc(x.detail)+'</div></div>'+
+      '<div style="font-size:12px;color:#6b7280;margin-top:3px;">'+esc(x.detail)+'</div>'+nextStep(x)+'</div>'+
       '<div style="text-align:right;"><span style="background:'+(String(x.type).toLowerCase()==='investor'?'#e0f2fe;color:#075985':'#dcfce7;color:#166534')+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;">'+esc(x.type)+'</span><div style="font-size:11px;color:#9ca3af;margin-top:6px;">'+esc(x.registered)+'</div></div></div>';}).join('')+'</div>';
 }
 function renderA(){

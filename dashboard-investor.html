@@ -213,6 +213,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
         <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
       </div>
 
+      <div id="liBox"></div>
       <div id="statusBox"></div>
 
       <!-- Opportunities (approved only) -->
@@ -366,6 +367,7 @@ var KYC_STEPS=[
 var ACC_STEPS=[
   {title:'Investment preferences',desc:'We use these to show you the opportunities that fit. You can change them at any time.',qs:PREF_QS},
   {title:'Declarations',desc:'Please read and confirm.',qs:[
+    {k:'linkedin',t:'text',q:'Your LinkedIn profile',req:1,ph:'linkedin.com/in/yourname'},
     {k:'declare_pro',t:'check',q:'I am a professional or institutional investor, or a high-net-worth individual.',req:1},
     {k:'declare_conf',t:'check',q:'I will keep the details of any opportunity shared with me confidential.',req:1},
     {k:'declare_true',t:'check',q:'I confirm the information provided is true.',req:1},
@@ -415,6 +417,32 @@ function loadStatus(){
 }
 
 
+
+/* ───────────── LinkedIn (required) ───────────── */
+function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
+function liRow(){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
+function liBoxRender(msg,edit){
+  var b=document.getElementById('liBox');if(!b)return;
+  if(U.linkedin&&!edit){b.innerHTML='';return;}
+  b.innerHTML='<div class="card" style="border-left:4px solid #0a66c2;padding:18px 22px;margin-bottom:20px;"><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;"><i class="fa-brands fa-linkedin" style="color:#0a66c2;"></i> '+(edit?'Update':'Add')+' your LinkedIn profile</div>'+
+    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.6;">We ask every member for a LinkedIn profile. It is seen only by the Renewables Vault team.</div>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><input id="liIn" class="field" type="url" placeholder="linkedin.com/in/yourname" style="flex:1;min-width:200px;max-width:420px;margin:0;" onkeydown="if(event.key===\'Enter\')saveLinkedin()"><button class="btn-green" id="liBtn" onclick="saveLinkedin()">Save</button></div>'+
+    '<div class="err" id="liErr"'+(msg?' style="display:block;"':'')+'>'+esc(msg||'')+'</div></div>';
+}
+function liErr(m){var e=document.getElementById('liErr');e.textContent=m;e.style.display='block';var b=document.getElementById('liBtn');b.disabled=false;b.textContent='Save';}
+function saveLinkedin(){
+  var url=RV.linkedin(document.getElementById('liIn').value),b=document.getElementById('liBtn');
+  if(!url)return liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
+  if(!RV.api()||!U.password)return liErr('Please log out and log in again, then add your LinkedIn.');
+  b.disabled=true;b.textContent='Saving...';
+  RV.key(U.email,U.password).then(function(k){return RV.post({action:'profile_update',email:U.email,key:k,linkedin:url});}).then(function(r){
+    if(r&&r.ok){U.linkedin=r.linkedin||url;saveU();liBoxRender();renderMain();}
+    else if(r&&/unknown action/i.test(r.error||''))liErr('This is being switched on. Please try again in a few minutes.');
+    else if(r&&r.error==='bad_linkedin')liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
+    else liErr('Could not save. Please log out, log in again and retry.');
+  }).catch(function(){liErr('Connection problem. Please try again.');});
+}
+
 /* ───────────── Photo or logo (optional) ───────────── */
 var PHOTO='',PBUSY=false;
 function pKey(){return 'rv_photo_'+U.email.toLowerCase();}
@@ -422,7 +450,7 @@ function photoInit(){
   PHOTO=lsGet(pKey(),'')||'';renderPhoto();
   if(!RV.api()||!U.password)return;
   RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
-    .then(function(r){if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
+    .then(function(r){if(r&&r.ok&&r.linkedin&&!U.linkedin){U.linkedin=r.linkedin;saveU();renderMain();if(ST&&ST.status==='Approved'&&ST.activated&&LIST){renderChips();renderList();}}if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
 }
 function renderPhoto(msg,isErr){
   var nm=(U.firstName+' '+U.lastName),sq=false;
@@ -486,7 +514,8 @@ function renderMain(){
   document.getElementById('statusBox').innerHTML=h;
   document.getElementById('oppBox').style.display=(s==='Approved'&&ST.activated)?'block':'none';
   var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Mobile or WhatsApp',U.phone||'Not provided'],['Organisation',U.org||'Investing personally'],['Investor type',U.investorType||'Not provided'],['Access status',s==='Not started'?'Not requested yet':s],['KYC status',ST.kycStatus||'Requested when you express interest']];
-  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('');
+  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
+  liBoxRender();
   var done=[1,s!=='Not started',s==='Approved'&&!!ST.activated,s==='Approved'&&!!ST.kycStatus&&LIST&&LIST.interested&&LIST.interested.length>0,0];
   var j=[['Create your account','Done'],['Request access','About 2 minutes: preferences and declarations'],['Approval and access code','Our team reviews within 2 business days'],['Express interest and short KYC','About 5 minutes, only when you find an opportunity you like'],['NDA, due diligence and investment','Full details shared under NDA']];
   var nx=done.findIndex(function(x){return !x;});
@@ -568,7 +597,7 @@ function sendInt(id){
 /* ───────────── KYC & preferences form ───────────── */
 function startAccess(){
   MODE='access';PENDING=null;var p=ST.prefs||{},pf=ST.profile||{};
-  DRAFT={step:0,ans:{p_types:p.types||[],p_countries:p.countries||[],p_ticket:p.ticket,p_tenor:p.tenor,p_currency:p.currency,acc_notes:pf.acc_notes||''}};
+  DRAFT={step:0,ans:{p_types:p.types||[],p_countries:p.countries||[],p_ticket:p.ticket,p_tenor:p.tenor,p_currency:p.currency,acc_notes:pf.acc_notes||'',linkedin:U.linkedin||''}};
   S=0;renderStep();show('vForm');
 }
 function startKyc(){
@@ -629,10 +658,11 @@ function collect(){
 }
 var asT=null;function autosave(){clearTimeout(asT);asT=setTimeout(function(){if(!DRAFT||MODE!=='kyc')return;collect();DRAFT.step=S;lsSet(kD(),DRAFT);},300);}
 function validate(){
-  collect();var bad=[];
+  collect();var bad=[],liBad=false;
   visibleQs(steps()[S]).forEach(function(q){var v=DRAFT.ans[q.k],row=document.getElementById('row_'+q.k);row.classList.remove('bad');
-    if(q.req&&(v===undefined||v===''||v===false||(Array.isArray(v)&&!v.length))){bad.push(q);row.classList.add('bad');}});
-  if(bad.length){var e=document.getElementById('fErr');e.textContent=bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.';e.style.display='block';
+    if(q.req&&(v===undefined||v===''||v===false||(Array.isArray(v)&&!v.length))){bad.push(q);row.classList.add('bad');}
+    else if(q.k==='linkedin'&&!RV.linkedin(v)){bad.push(q);row.classList.add('bad');liBad=true;}});
+  if(bad.length){var e=document.getElementById('fErr');e.textContent=(liBad&&bad.length===1)?'Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.':bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.';e.style.display='block';
     document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   return true;
 }
@@ -657,8 +687,9 @@ function submitForm(){
     items.push({sec:'Investment preferences',q:'Term',a:pr.tenor});
     items.push({sec:'Investment preferences',q:'Currency',a:pr.currency});
     if(prof.acc_notes)items.push({sec:'Declarations',q:'Notes',a:prof.acc_notes});
-    api({action:'access_request',profile:prof,prefs:pr,items:items}).then(function(r){
-      if(r&&r.ok){DRAFT=null;
+    var liu=RV.linkedin(a.linkedin);if(liu)items.push({sec:'Profile',q:'LinkedIn',a:liu});
+    api({action:'access_request',profile:prof,prefs:pr,items:items,linkedin:liu}).then(function(r){
+      if(r&&r.ok){DRAFT=null;if(liu){U.linkedin=liu;saveU();}
         if(r.status==='Approved'){document.getElementById('doneTitle').textContent='Request updated';document.getElementById('doneTxt').textContent='Thank you. Your preferences have been updated.';}
         else{document.getElementById('doneTitle').textContent='Access request sent';document.getElementById('doneTxt').textContent='Thank you. Our team will review your request and contact you within 2 business days. Once approved, your personal access code will be emailed to '+U.email+'.';}
         show('vDone');}

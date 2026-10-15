@@ -192,6 +192,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
         <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
       </div>
 
+      <div id="liBox"></div>
       <div id="draftBanner" class="card" style="display:none;border-left:4px solid #f59e0b;margin-bottom:20px;padding:18px 22px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
           <div><div style="font-size:15px;font-weight:700;color:#1A472A;">You have an unfinished asset profile</div>
@@ -411,6 +412,32 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 
 
+
+/* ───────────── LinkedIn (required) ───────────── */
+function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
+function liRow(){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
+function liBoxRender(msg,edit){
+  var b=document.getElementById('liBox');if(!b)return;
+  if(U.linkedin&&!edit){b.innerHTML='';return;}
+  b.innerHTML='<div class="card" style="border-left:4px solid #0a66c2;padding:18px 22px;margin-bottom:20px;"><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;"><i class="fa-brands fa-linkedin" style="color:#0a66c2;"></i> '+(edit?'Update':'Add')+' your LinkedIn profile</div>'+
+    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.6;">We ask every member for a LinkedIn profile or your company page. It is seen only by the Renewables Vault team.</div>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><input id="liIn" class="field" type="url" placeholder="linkedin.com/in/yourname" style="flex:1;min-width:200px;max-width:420px;margin:0;" onkeydown="if(event.key===\'Enter\')saveLinkedin()"><button class="btn-green" id="liBtn" onclick="saveLinkedin()">Save</button></div>'+
+    '<div class="err" id="liErr"'+(msg?' style="display:block;"':'')+'>'+esc(msg||'')+'</div></div>';
+}
+function liErr(m){var e=document.getElementById('liErr');e.textContent=m;e.style.display='block';var b=document.getElementById('liBtn');b.disabled=false;b.textContent='Save';}
+function saveLinkedin(){
+  var url=RV.linkedin(document.getElementById('liIn').value),b=document.getElementById('liBtn');
+  if(!url)return liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
+  if(!RV.api()||!U.password)return liErr('Please log out and log in again, then add your LinkedIn.');
+  b.disabled=true;b.textContent='Saving...';
+  RV.key(U.email,U.password).then(function(k){return RV.post({action:'profile_update',email:U.email,key:k,linkedin:url});}).then(function(r){
+    if(r&&r.ok){U.linkedin=r.linkedin||url;saveU();liBoxRender();goMain();}
+    else if(r&&/unknown action/i.test(r.error||''))liErr('This is being switched on. Please try again in a few minutes.');
+    else if(r&&r.error==='bad_linkedin')liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
+    else liErr('Could not save. Please log out, log in again and retry.');
+  }).catch(function(){liErr('Connection problem. Please try again.');});
+}
+
 /* ───────────── Photo or logo (optional) ───────────── */
 var PHOTO='',PBUSY=false;
 function pKey(){return 'rv_photo_'+U.email.toLowerCase();}
@@ -418,7 +445,7 @@ function photoInit(){
   PHOTO=lsGet(pKey(),'')||'';renderPhoto();
   if(!RV.api()||!U.password)return;
   RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
-    .then(function(r){if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
+    .then(function(r){if(r&&r.ok&&r.linkedin&&!U.linkedin){U.linkedin=r.linkedin;saveU();goMain();}if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
 }
 function renderPhoto(msg,isErr){
   var nm=(U.company||(U.firstName+' '+U.lastName)),sq=true;
@@ -457,7 +484,8 @@ function goMain(){
   document.getElementById('assetsBox').style.display=assets.length?'block':'none';
   renderAssets(assets);
   var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone or WhatsApp',U.phone||'Not provided'],['Company',U.company||'Not provided'],['Main asset type',U.energy||'Not provided'],['Registered',U.registered||'Not provided']];
-  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('');
+  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
+  liBoxRender();
   var j=[['Create your profile','Done',1],['Register your asset','A short asset profile for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
   var nextIdx=j.findIndex(function(x){return!x[2];});
   document.getElementById('journey').innerHTML=j.map(function(s,i){var last=i===j.length-1,done=s[2],nx=i===nextIdx;

@@ -80,6 +80,14 @@ var RV = {
     };
     inp.click();
   },
+  /* LinkedIn profile or company page: returns a clean https link, or '' if it is not a LinkedIn link */
+  linkedin: function (s) {
+    s = String(s || '').trim().replace(/\s+/g, '');
+    if (!s) return '';
+    if (!/^https?:\/\//i.test(s)) s = 'https://' + s;
+    s = s.replace(/^http:/i, 'https:').split(/[?#]/)[0];
+    return /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/(in|company|pub|profile|school)\/[^\/\s]+/i.test(s) ? s : '';
+  },
   avatar: function (img, name, size, square) {
     var ini = String(name || '?').trim().split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
     var st = 'width:' + size + 'px;height:' + size + 'px;border-radius:' + (square ? '12px' : '50%') + ';flex-shrink:0;';

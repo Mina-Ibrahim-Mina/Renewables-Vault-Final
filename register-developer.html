@@ -235,6 +235,7 @@ function genRC(e){
     <div style="grid-column:1/-1;"><label class="lbl">Email Address *</label><input class="field" id="d_email" type="email" placeholder="you@company.com" autocomplete="email"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Mobile or WhatsApp *</label><input class="field" id="d_phone" type="tel" placeholder="+20 10 1234 5678" autocomplete="tel"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Password *</label><input class="field" id="d_pass" type="password" placeholder="Create a password (min 6 characters)" autocomplete="new-password"></div>
+    <div style="grid-column:1/-1;"><label class="lbl">LinkedIn Profile *</label><input class="field" id="d_li" type="url" placeholder="linkedin.com/in/yourname or your company page" autocomplete="url"></div>
     <div style="grid-column:1/-1;"><label class="lbl">Company Name *</label><input class="field" id="d_company" type="text" placeholder="Your company" autocomplete="organization"></div>
     <div><label class="lbl">Main Asset Type *</label>
       <select class="field" id="d_energy">
@@ -273,7 +274,9 @@ function subDev() {
   var consent=g('d_consent').checked,err=g('d_err'),btn=g('d_btn');
   var fail=function(m,html){err.style.display='block';if(html)err.innerHTML=m;else err.textContent=m;btn.disabled=false;btn.textContent='Create Developer Account';};
   err.style.display='none';
-  if(!first||!last||!email||!phone||!pass||!company||!energy){return fail('Please fill in all required fields.');}
+  var li=RV.linkedin(g('d_li').value);
+  if(!first||!last||!email||!phone||!pass||!company||!energy||!g('d_li').value.trim()){return fail('Please fill in all required fields.');}
+  if(!li){return fail('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
   if(phone.replace(/\D/g,'').length<8){return fail('Please enter a valid mobile or WhatsApp number, including the country code.');}
   if(pass.length<6){return fail('Password must be at least 6 characters.');}
@@ -281,13 +284,13 @@ function subDev() {
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
   if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}
   btn.disabled=true;btn.textContent='Creating account...';
-  RV.serverRegister({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true},pass,function(res){
+  RV.serverRegister({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,linkedin:li},pass,function(res){
     if(res==='restored'){window.location.href='dashboard-developer.html';return;}
     if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
-    var user={firstName:first,lastName:last,email:email,phone:phone,password:pass,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
+    var user={firstName:first,lastName:last,email:email,phone:phone,linkedin:li,password:pass,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
     users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
     var calls=[
-      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration: '+first+' '+last+' | '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile or WhatsApp: '+phone+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})})
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration: '+first+' '+last+' | '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile or WhatsApp: '+phone+'\nLinkedIn: '+li+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})})
     ];
     var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-developer.html';}};
     Promise.allSettled(calls).then(go);setTimeout(go,8000);

@@ -184,11 +184,11 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   <div id="vMain" class="view" style="padding:48px;">
     <div style="max-width:1000px;margin:0 auto;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:16px;">
-        <div>
+        <div style="display:flex;gap:16px;align-items:center;"><div id="dAvatar"></div><div>
           <div class="eyebrow-g">DEVELOPER DASHBOARD</div>
           <h1 id="dName" style="font-size:26px;font-weight:700;color:#1A472A;margin:0;"></h1>
           <p id="dSub" style="font-size:14px;color:#6b7280;margin:6px 0 0;"></p>
-        </div>
+        </div></div>
         <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
       </div>
 
@@ -219,6 +219,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
         <div class="card lt">
           <div class="eyebrow-g" style="margin-bottom:16px;">YOUR PROFILE</div>
+          <div id="photoBox" style="display:flex;gap:16px;align-items:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #f0f5f2;flex-wrap:wrap;"></div>
           <div id="profFields" style="display:flex;flex-direction:column;gap:12px;"></div>
         </div>
         <div class="card">
@@ -309,6 +310,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 </footer>
 
 <script src="rv-config.js"></script>
+<script src="rv-auth.js"></script>
 <script>
 var W3F='615b6c70-27cb-4e3d-a889-b332649aeef0';
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
@@ -405,7 +407,41 @@ window.addEventListener('DOMContentLoaded',function(){
   document.getElementById('loadState').style.display='none';
   goMain();
   syncAssets();
+  photoInit();
 });
+
+
+/* ───────────── Photo or logo (optional) ───────────── */
+var PHOTO='',PBUSY=false;
+function pKey(){return 'rv_photo_'+U.email.toLowerCase();}
+function photoInit(){
+  PHOTO=lsGet(pKey(),'')||'';renderPhoto();
+  if(!RV.api()||!U.password)return;
+  RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
+    .then(function(r){if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
+}
+function renderPhoto(msg,isErr){
+  var nm=(U.company||(U.firstName+' '+U.lastName)),sq=true;
+  var h=document.getElementById('dAvatar');if(h)h.innerHTML=RV.avatar(PHOTO,nm,56,sq);
+  var b=document.getElementById('photoBox');if(!b)return;
+  b.innerHTML=RV.avatar(PHOTO,nm,72,sq)+'<div style="flex:1;min-width:160px;"><div style="display:flex;gap:8px;flex-wrap:wrap;">'+
+    '<button class="btn-out" style="font-size:12px;padding:7px 14px;" onclick="changePhoto()"'+(PBUSY?' disabled':'')+'><i class="fa-solid fa-camera"></i> '+(PBUSY?'Saving...':(PHOTO?'Change logo':'Add company logo'))+'</button>'+
+    (PHOTO&&!PBUSY?'<button onclick="removePhoto()" style="background:none;border:none;color:#6b7280;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Remove</button>':'')+'</div>'+
+    '<div style="font-size:11px;color:'+(isErr?'#dc2626':'#9ca3af')+';margin-top:6px;line-height:1.5;">'+(msg||'Optional. Shown only to you and the Renewables Vault team, never to investors.')+'</div></div>';
+}
+function changePhoto(){if(PBUSY)return;RV.pickPhoto('contain',function(img,err){if(!img){renderPhoto(err,true);return;}savePhoto(img);});}
+function removePhoto(){if(confirm('Remove this logo?'))savePhoto('');}
+function savePhoto(img){
+  if(!RV.api()||!U.password){renderPhoto('Please log in again to change your logo.',true);return;}
+  PBUSY=true;renderPhoto();
+  RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_set',email:U.email,key:k,image:img});}).then(function(r){
+    PBUSY=false;
+    if(r&&r.ok){PHOTO=img;lsSet(pKey(),img);renderPhoto(img?'Saved.':'Removed.');}
+    else if(r&&/unknown action/i.test(r.error||''))renderPhoto('This feature is being switched on. Please try again in a few minutes.',true);
+    else if(r&&r.error==='bad_image')renderPhoto('Please choose a different image (JPG or PNG).',true);
+    else renderPhoto('Could not save. Please log out, log in again and retry.',true);
+  }).catch(function(){PBUSY=false;renderPhoto('Connection problem. Please try again.',true);});
+}
 
 /* ───────────── Main view ───────────── */
 function goMain(){

@@ -48,5 +48,42 @@ var RV = {
       else cb('offline');
     }).catch(function () { cb('offline'); });
   },
-  home: function (u) { return u.type === 'investor' ? 'dashboard-investor.html' : 'dashboard-developer.html'; }
+  home: function (u) { return u.type === 'investor' ? 'dashboard-investor.html' : 'dashboard-developer.html'; },
+  /* Optional profile photo or company logo. mode 'cover' crops a photo to a square, 'contain' fits a logo on white. cb(dataUrl) or cb(null, message) */
+  pickPhoto: function (mode, cb) {
+    var inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none';
+    document.body.appendChild(inp);
+    inp.onchange = function () {
+      var f = inp.files && inp.files[0]; document.body.removeChild(inp);
+      if (!f) return;
+      if (!/^image\//.test(f.type || 'image/')) return cb(null, 'Please choose an image file (JPG or PNG).');
+      if (f.size > 15 * 1024 * 1024) return cb(null, 'This image is too large. Please choose one under 15 MB.');
+      var rd = new FileReader();
+      rd.onerror = function () { cb(null, 'Could not read this image. Please try a JPG or PNG.'); };
+      rd.onload = function () {
+        var img = new Image();
+        img.onerror = function () { cb(null, 'Could not read this image. Please try a JPG or PNG.'); };
+        img.onload = function () {
+          var S = 240, c = document.createElement('canvas'); c.width = S; c.height = S;
+          var x = c.getContext('2d'), w = img.naturalWidth, h = img.naturalHeight;
+          x.fillStyle = '#ffffff'; x.fillRect(0, 0, S, S);
+          if (mode === 'contain') { var k = Math.min((S - 24) / w, (S - 24) / h); x.drawImage(img, (S - w * k) / 2, (S - h * k) / 2, w * k, h * k); }
+          else { var m = Math.min(w, h); x.drawImage(img, (w - m) / 2, (h - m) / 2, m, m, 0, 0, S, S); }
+          var q = 0.85, out = c.toDataURL('image/jpeg', q);
+          while (out.length > 40000 && q > 0.4) { q -= 0.15; out = c.toDataURL('image/jpeg', q); }
+          cb(out);
+        };
+        img.src = rd.result;
+      };
+      rd.readAsDataURL(f);
+    };
+    inp.click();
+  },
+  avatar: function (img, name, size, square) {
+    var ini = String(name || '?').trim().split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
+    var st = 'width:' + size + 'px;height:' + size + 'px;border-radius:' + (square ? '12px' : '50%') + ';flex-shrink:0;';
+    if (img && /^data:image\//.test(img)) return '<img src="' + img + '" alt="" style="' + st + 'object-fit:cover;border:1px solid #d1e8d8;background:#fff;">';
+    return '<div style="' + st + 'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + ini.replace(/[<>&"]/g, '') + '</div>';
+  }
 };

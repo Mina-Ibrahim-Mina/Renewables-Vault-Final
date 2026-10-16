@@ -298,8 +298,8 @@ function doLogin(){
   if(user){RVAuth.set(user);window.location.href=RV.home(user);return;}
   if(!RV.api()){return fail('Incorrect email or password. Use "Forgot password?" to reset.');}
   btn.disabled=true;btn.textContent='Checking...';
-  RV.key(email,pass).then(function(k){return RV.post({action:'login',email:email,key:k});}).then(function(r){
-    if(r&&r.ok){var u=RV.restore(r.profile,r.assets,pass);window.location.href=RV.home(u);return;}
+  var KK='';RV.key(email,pass).then(function(k){KK=k;return RV.post({action:'login',email:email,key:k});}).then(function(r){
+    if(r&&r.ok){var u=RV.restore(r.profile,r.assets,KK);window.location.href=RV.home(u);return;}
     var e=r&&r.error;
     if(e==='wrong_password')fail('Incorrect password. Use "Forgot password?" to reset it.');
     else if(e==='not_found')fail('No account found with this email. Please register first.');

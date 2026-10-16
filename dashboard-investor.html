@@ -367,7 +367,7 @@ var KYC_STEPS=[
 var ACC_STEPS=[
   {title:'Investment preferences',desc:'We use these to show you the opportunities that fit. You can change them at any time.',qs:PREF_QS},
   {title:'Declarations',desc:'Please read and confirm.',qs:[
-    {k:'linkedin',t:'text',q:'Your LinkedIn profile',req:1,ph:'linkedin.com/in/yourname'},
+    {k:'linkedin',t:'text',q:'Your LinkedIn profile (optional, it helps us approve your access faster)',req:0,ph:'linkedin.com/in/yourname'},
     {k:'declare_pro',t:'check',q:'I am a professional or institutional investor, or a high-net-worth individual.',req:1},
     {k:'declare_conf',t:'check',q:'I will keep the details of any opportunity shared with me confidential.',req:1},
     {k:'declare_true',t:'check',q:'I confirm the information provided is true.',req:1},
@@ -389,19 +389,20 @@ window.addEventListener('DOMContentLoaded',function(){
     var iv=setInterval(function(){n--;var c=document.getElementById('cnt');if(c)c.textContent=n;if(n<=0){clearInterval(iv);location.href='login.html';}},1000);return;}
   if(U.type!=='investor'){location.href='dashboard-developer.html';return;}
   if(!RV.api()){stateMsg('Temporarily unavailable','Our investor service is being updated. Please try again shortly or contact us.','<a href="contact.html" class="btn-green" style="text-decoration:none;">Contact us</a>');return;}
-  if(!U.password){stateMsg('Please log in again','For your security, please log out and log in again to continue.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
+  if(!(U.k||U.password)){stateMsg('Please log in again','For your security, please log out and log in again to continue.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
   try{localStorage.removeItem('rv_kyc_'+U.email.toLowerCase());}catch(e){}
-  RV.key(U.email,U.password).then(function(k){KEY=k;loadStatus();});
+  RV.userKey(U).then(function(k){KEY=k;loadStatus();});
 });
 var LINKED=false,PINIT=0;
 /* Accounts created before the server kept investor records are linked once, automatically */
 function linkAccount(){
   stateMsg('Setting up your account...','This only happens once.','');
-  RV.serverRegister({action:'register',type:'investor',firstName:U.firstName,lastName:U.lastName,email:U.email,phone:U.phone||'',org:U.org||'',investorType:U.investorType||'',consent:true,link:true},U.password,function(res){
+  RV.userKey(U).then(function(lk){
+  RV.serverRegister({action:'register',type:'investor',firstName:U.firstName,lastName:U.lastName,email:U.email,phone:U.phone||'',org:U.org||'',investorType:U.investorType||'',consent:true,link:true},null,function(res){
     if(res==='new'||res==='restored'){U=RVAuth.get()||U;loadStatus();return;}
     if(res==='exists'){stateMsg('Please log in again','The password for this account was changed on another device. Please log out and log in with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#6b7280;">Forgot your password?</a></div>');return;}
     stateMsg('Connection problem','We could not reach our server. Please check your internet connection and try again.','<button class="btn-green" onclick="loadStatus()">Try again</button>');
-  });
+  },lk);});
 }
 function api(body){body.email=U.email;body.key=KEY;return RV.post(body);}
 
@@ -420,12 +421,12 @@ function loadStatus(){
 
 /* ───────────── LinkedIn (required) ───────────── */
 function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
-function liRow(){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
+function liRow(){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#9ca3af;font-weight:500;">Optional, not added</span> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#2C7C3B;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Add</button>')+'</div></div>';}
 function liBoxRender(msg,edit){
   var b=document.getElementById('liBox');if(!b)return;
-  if(U.linkedin&&!edit){b.innerHTML='';return;}
+  if(!edit){b.innerHTML='';return;}
   b.innerHTML='<div class="card" style="border-left:4px solid #0a66c2;padding:18px 22px;margin-bottom:20px;"><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;"><i class="fa-brands fa-linkedin" style="color:#0a66c2;"></i> '+(edit?'Update':'Add')+' your LinkedIn profile</div>'+
-    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.6;">We ask every member for a LinkedIn profile. It is seen only by the Renewables Vault team.</div>'+
+    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.6;">Optional. A LinkedIn profile helps us approve your access faster. It is seen only by the Renewables Vault team.</div>'+
     '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><input id="liIn" class="field" type="url" placeholder="linkedin.com/in/yourname" style="flex:1;min-width:200px;max-width:420px;margin:0;" onkeydown="if(event.key===\'Enter\')saveLinkedin()"><button class="btn-green" id="liBtn" onclick="saveLinkedin()">Save</button></div>'+
     '<div class="err" id="liErr"'+(msg?' style="display:block;"':'')+'>'+esc(msg||'')+'</div></div>';
 }
@@ -433,9 +434,9 @@ function liErr(m){var e=document.getElementById('liErr');e.textContent=m;e.style
 function saveLinkedin(){
   var url=RV.linkedin(document.getElementById('liIn').value),b=document.getElementById('liBtn');
   if(!url)return liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
-  if(!RV.api()||!U.password)return liErr('Please log out and log in again, then add your LinkedIn.');
+  if(!RV.api()||!(U.k||U.password))return liErr('Please log out and log in again, then add your LinkedIn.');
   b.disabled=true;b.textContent='Saving...';
-  RV.key(U.email,U.password).then(function(k){return RV.post({action:'profile_update',email:U.email,key:k,linkedin:url});}).then(function(r){
+  RV.userKey(U).then(function(k){return RV.post({action:'profile_update',email:U.email,key:k,linkedin:url});}).then(function(r){
     if(r&&r.ok){U.linkedin=r.linkedin||url;saveU();liBoxRender();renderMain();}
     else if(r&&/unknown action/i.test(r.error||''))liErr('This is being switched on. Please try again in a few minutes.');
     else if(r&&r.error==='bad_linkedin')liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
@@ -448,8 +449,8 @@ var PHOTO='',PBUSY=false;
 function pKey(){return 'rv_photo_'+U.email.toLowerCase();}
 function photoInit(){
   PHOTO=lsGet(pKey(),'')||'';renderPhoto();
-  if(!RV.api()||!U.password)return;
-  RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
+  if(!RV.api()||!(U.k||U.password))return;
+  RV.userKey(U).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
     .then(function(r){if(r&&r.ok&&r.linkedin&&!U.linkedin){U.linkedin=r.linkedin;saveU();renderMain();if(ST&&ST.status==='Approved'&&ST.activated&&LIST){renderChips();renderList();}}if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
 }
 function renderPhoto(msg,isErr){
@@ -464,9 +465,9 @@ function renderPhoto(msg,isErr){
 function changePhoto(){if(PBUSY)return;RV.pickPhoto('cover',function(img,err){if(!img){renderPhoto(err,true);return;}savePhoto(img);});}
 function removePhoto(){if(confirm('Remove this photo?'))savePhoto('');}
 function savePhoto(img){
-  if(!RV.api()||!U.password){renderPhoto('Please log in again to change your photo.',true);return;}
+  if(!RV.api()||!(U.k||U.password)){renderPhoto('Please log in again to change your photo.',true);return;}
   PBUSY=true;renderPhoto();
-  RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_set',email:U.email,key:k,image:img});}).then(function(r){
+  RV.userKey(U).then(function(k){return RV.post({action:'photo_set',email:U.email,key:k,image:img});}).then(function(r){
     PBUSY=false;
     if(r&&r.ok){PHOTO=img;lsSet(pKey(),img);renderPhoto(img?'Saved.':'Removed.');}
     else if(r&&/unknown action/i.test(r.error||''))renderPhoto('This feature is being switched on. Please try again in a few minutes.',true);
@@ -570,11 +571,12 @@ function renderList(){
   if(!L.length){document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:30px;"><i class="fa-regular fa-folder-open" style="color:#9ca3af;font-size:28px;margin-bottom:10px;display:block;"></i><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+(inC.length?'No opportunities match these asset types yet':'No opportunities published in '+esc(CTRY)+' yet')+'</div><div style="font-size:13px;color:#6b7280;">We will email you as soon as a matching opportunity is published.</div></div>';return;}
   document.getElementById('oppList').innerHTML=L.map(function(x){
     var done=(LIST.interested||[]).indexOf(x.id)>=0,lines=String(x.summary||'').split('\n').filter(Boolean);
-    var facts=[['Capital sought',x.capital],['Term',x.tenor],['Currency',x.currency]].filter(function(f){return f[1];});
+    var facts=[['Indicative return',x.ret],['Capital sought',x.capital],['Term',x.tenor],['Currency',x.currency]].filter(function(f){return f[1];});
     return '<div class="card opp" id="o_'+esc(x.id)+'">'+
       '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;"><div style="display:flex;gap:12px;align-items:center;"><div class="aicon"><i class="fa-solid '+(TYPES[x.type]?TYPES[x.type].icon:'fa-bolt')+'"></i></div><div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:13px;color:#6b7280;">'+esc(x.typeLabel)+' · '+esc((x.region?x.region+', ':'')+x.country)+'</div></div></div><span style="font-size:11px;color:#9ca3af;">Ref '+esc(x.id)+' · Published '+esc(x.published)+'</span></div>'+
       (facts.length?'<div class="facts">'+facts.map(function(f){return '<div class="fact"><div class="fact-l">'+f[0]+'</div><div class="fact-v">'+esc(f[1])+'</div></div>';}).join('')+'</div>':'')+
       (lines.length?'<ul class="olines">'+lines.map(function(l){return '<li>'+esc(l)+'</li>';}).join('')+'</ul>':'')+
+      (x.example?'<details style="margin:0 0 14px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">See an example</summary><div style="font-size:13px;color:#374151;line-height:1.7;background:#f8faf8;border-radius:8px;padding:12px 14px;margin-top:8px;white-space:pre-line;">'+esc(x.example)+'</div></details>':'')+
       (done?'<div class="int-done"><i class="fa-solid fa-circle-check"></i> Interest registered. Our team will contact you with the next steps.</div>':
        '<div id="ib_'+esc(x.id)+'"><button class="btn-green" style="width:100%;justify-content:center;padding:13px;" onclick="openInt(\''+esc(x.id)+'\')">Express interest <i class="fa-solid fa-arrow-right"></i></button></div>')+
       '</div>';}).join('')+
@@ -661,7 +663,7 @@ function validate(){
   collect();var bad=[],liBad=false;
   visibleQs(steps()[S]).forEach(function(q){var v=DRAFT.ans[q.k],row=document.getElementById('row_'+q.k);row.classList.remove('bad');
     if(q.req&&(v===undefined||v===''||v===false||(Array.isArray(v)&&!v.length))){bad.push(q);row.classList.add('bad');}
-    else if(q.k==='linkedin'&&!RV.linkedin(v)){bad.push(q);row.classList.add('bad');liBad=true;}});
+    else if(q.k==='linkedin'&&v&&!RV.linkedin(v)){bad.push(q);row.classList.add('bad');liBad=true;}});
   if(bad.length){var e=document.getElementById('fErr');e.textContent=(liBad&&bad.length===1)?'Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.':bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.';e.style.display='block';
     document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   return true;

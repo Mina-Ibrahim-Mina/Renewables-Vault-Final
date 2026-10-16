@@ -11,14 +11,14 @@ var RV = {
     return fetch(RV.api(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
       .then(function (r) { return r.json(); });
   },
-  /* Save an account returned by the server on this browser and log in */
-  restore: function (profile, assets, pass) {
+  /* Save an account returned by the server on this browser and log in. Only the one-way key is kept, never the password. */
+  restore: function (profile, assets, key) {
     var email = String(profile.email).toLowerCase(), users = [];
     try { users = JSON.parse(localStorage.getItem('rv_users')) || []; } catch (e) {}
     var old = users.filter(function (u) { return String(u.email).toLowerCase() === email; })[0];
     users = users.filter(function (u) { return String(u.email).toLowerCase() !== email; });
     var u = {}; for (var k in profile) u[k] = profile[k];
-    u.password = pass; u.status = 'pending'; u.consent = true;
+    u.k = key; delete u.password; u.status = 'pending'; u.consent = true;
     u.approved = !!(old && old.approved);
     users.push(u);
     localStorage.setItem('rv_users', JSON.stringify(users));
@@ -39,14 +39,30 @@ var RV = {
       .replace(/\u066C/g, ',').replace(/\u066B/g, '.');
   },
   /* Register on the server first. cb(result): 'new' | 'restored' (same email+password existed) | 'exists' | 'offline' */
-  serverRegister: function (body, pass, cb) {
+  serverRegister: function (body, pass, cb, knownKey) {
     if (!RV.api()) return cb('offline');
-    RV.key(body.email, pass).then(function (k) { body.key = k; return RV.post(body); }).then(function (r) {
-      if (r && r.ok && r.existing) { RV.restore(r.profile, r.assets, pass); cb('restored'); }
-      else if (r && r.ok) cb('new');
+    (knownKey ? Promise.resolve(knownKey) : RV.key(body.email, pass)).then(function (k) { body.key = k; return RV.post(body); }).then(function (r) {
+      if (r && r.ok && r.existing) { RV.restore(r.profile, r.assets, body.key); cb('restored', body.key); }
+      else if (r && r.ok) cb('new', body.key);
       else if (r && r.error === 'exists') cb('exists');
       else cb('offline');
     }).catch(function () { cb('offline'); });
+  },
+  /* The key for a logged in user. Older sessions that still hold the password are upgraded once: the password is replaced by the key. */
+  userKey: function (u) {
+    if (u && /^[a-f0-9]{64}$/.test(u.k || '')) return Promise.resolve(u.k);
+    if (!u || !u.password) return Promise.resolve('');
+    return RV.key(u.email, u.password).then(function (k) {
+      u.k = k; delete u.password;
+      try {
+        var cur = JSON.parse(localStorage.getItem('rv_user') || 'null');
+        if (cur && String(cur.email).toLowerCase() === String(u.email).toLowerCase()) { cur.k = k; delete cur.password; localStorage.setItem('rv_user', JSON.stringify(cur)); }
+        var us = JSON.parse(localStorage.getItem('rv_users') || '[]');
+        us.forEach(function (x) { if (String(x.email).toLowerCase() === String(u.email).toLowerCase()) { x.k = k; delete x.password; } });
+        localStorage.setItem('rv_users', JSON.stringify(us));
+      } catch (e) {}
+      return k;
+    });
   },
   home: function (u) { return u.type === 'investor' ? 'dashboard-investor.html' : 'dashboard-developer.html'; },
   /* Optional profile photo or company logo. mode 'cover' crops a photo to a square, 'contain' fits a logo on white. cb(dataUrl) or cb(null, message) */

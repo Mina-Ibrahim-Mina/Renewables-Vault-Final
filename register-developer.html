@@ -264,6 +264,7 @@ function genRC(e){
     <div style="grid-column:1/-1;"><button class="btn-lime full" id="d_btn" onclick="subDev()">Create Developer Account</button></div>
   </div>
   <p style="text-align:center;font-size:13px;color:#9ca3af;margin-top:16px;">Already registered? <a href="login.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Log in &#8594;</a></p>
+<div style="max-width:640px;margin:22px auto 0;background:#f8faf8;border:1px solid #d1e8d8;border-radius:12px;padding:18px 22px;"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#2C7C3B;margin-bottom:10px;"><i class="fa-solid fa-lock"></i> YOUR DATA AND SECURITY</div><ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.7;"><li>Your password is never sent to us or stored, on our servers or in your browser. Only a one way code is used to recognise you.</li><li>The whole website uses an encrypted (https) connection.</li><li>Your asset details are shared with investors only as an anonymised summary, and only if you agree. Your company name and contacts are never shown.</li><li>You can ask us to delete your data at any time by writing to contact@renewablesvault.com.</li></ul><div style="font-size:12px;color:#9ca3af;margin-top:8px;">More in our <a href="legal.html#privacy" style="color:#2C7C3B;">Privacy Policy</a>.</div></div>
 </div>
 </section>
 <script>
@@ -284,10 +285,10 @@ function subDev() {
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
   if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}
   btn.disabled=true;btn.textContent='Creating account...';
-  RV.serverRegister({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,linkedin:li},pass,function(res){
+  RV.serverRegister({action:'register',type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,linkedin:li},pass,function(res,k){
     if(res==='restored'){window.location.href='dashboard-developer.html';return;}
     if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
-    var user={firstName:first,lastName:last,email:email,phone:phone,linkedin:li,password:pass,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
+    var user={firstName:first,lastName:last,email:email,phone:phone,linkedin:li,k:k,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
     users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
     var calls=[
       fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Developer Registration: '+first+' '+last+' | '+company,name:first+' '+last,email:email,message:'NEW DEVELOPER REGISTRATION\n============================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile or WhatsApp: '+phone+'\nLinkedIn: '+li+'\nCompany: '+company+'\nMain asset type: '+energy+'\nCountry: '+country+'\nPrivacy consent: Yes\nDate: '+new Date().toLocaleDateString('en-GB')+'\n============================\nThe developer will register asset details from their dashboard.'})})

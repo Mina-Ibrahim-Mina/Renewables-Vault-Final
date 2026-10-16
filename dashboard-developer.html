@@ -428,9 +428,9 @@ function liErr(m){var e=document.getElementById('liErr');e.textContent=m;e.style
 function saveLinkedin(){
   var url=RV.linkedin(document.getElementById('liIn').value),b=document.getElementById('liBtn');
   if(!url)return liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
-  if(!RV.api()||!U.password)return liErr('Please log out and log in again, then add your LinkedIn.');
+  if(!RV.api()||!(U.k||U.password))return liErr('Please log out and log in again, then add your LinkedIn.');
   b.disabled=true;b.textContent='Saving...';
-  RV.key(U.email,U.password).then(function(k){return RV.post({action:'profile_update',email:U.email,key:k,linkedin:url});}).then(function(r){
+  RV.userKey(U).then(function(k){return RV.post({action:'profile_update',email:U.email,key:k,linkedin:url});}).then(function(r){
     if(r&&r.ok){U.linkedin=r.linkedin||url;saveU();liBoxRender();goMain();}
     else if(r&&/unknown action/i.test(r.error||''))liErr('This is being switched on. Please try again in a few minutes.');
     else if(r&&r.error==='bad_linkedin')liErr('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');
@@ -443,8 +443,8 @@ var PHOTO='',PBUSY=false;
 function pKey(){return 'rv_photo_'+U.email.toLowerCase();}
 function photoInit(){
   PHOTO=lsGet(pKey(),'')||'';renderPhoto();
-  if(!RV.api()||!U.password)return;
-  RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
+  if(!RV.api()||!(U.k||U.password))return;
+  RV.userKey(U).then(function(k){return RV.post({action:'photo_get',email:U.email,key:k});})
     .then(function(r){if(r&&r.ok&&r.linkedin&&!U.linkedin){U.linkedin=r.linkedin;saveU();goMain();}if(r&&r.ok&&(r.image||'')!==PHOTO){PHOTO=r.image||'';lsSet(pKey(),PHOTO);renderPhoto();}}).catch(function(){});
 }
 function renderPhoto(msg,isErr){
@@ -459,9 +459,9 @@ function renderPhoto(msg,isErr){
 function changePhoto(){if(PBUSY)return;RV.pickPhoto('contain',function(img,err){if(!img){renderPhoto(err,true);return;}savePhoto(img);});}
 function removePhoto(){if(confirm('Remove this logo?'))savePhoto('');}
 function savePhoto(img){
-  if(!RV.api()||!U.password){renderPhoto('Please log in again to change your logo.',true);return;}
+  if(!RV.api()||!(U.k||U.password)){renderPhoto('Please log in again to change your logo.',true);return;}
   PBUSY=true;renderPhoto();
-  RV.key(U.email,U.password).then(function(k){return RV.post({action:'photo_set',email:U.email,key:k,image:img});}).then(function(r){
+  RV.userKey(U).then(function(k){return RV.post({action:'photo_set',email:U.email,key:k,image:img});}).then(function(r){
     PBUSY=false;
     if(r&&r.ok){PHOTO=img;lsSet(pKey(),img);renderPhoto(img?'Saved.':'Removed.');}
     else if(r&&/unknown action/i.test(r.error||''))renderPhoto('This feature is being switched on. Please try again in a few minutes.',true);

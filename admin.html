@@ -235,6 +235,7 @@ function useData(r){
     var f=document.getElementById('aFilter'),cur=f.value;f.innerHTML='<option value="">All statuses</option>'+r.statuses.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
     renderA();renderR();
 }
+function waNum(p){var d=String(p||'').replace(/\D/g,'');if(/^00/.test(d))d=d.slice(2);if(/^01\d{9}$/.test(d))d='20'+d.slice(1);return d;}
 function av(email,name,size,square){var img=(ADATA&&ADATA.photos||{})[String(email||'').toLowerCase()]||'';
   var ini=String(name||'?').trim().split(/\s+/).map(function(w){return w.charAt(0);}).join('').slice(0,2).toUpperCase();
   var st='width:'+size+'px;height:'+size+'px;border-radius:'+(square?'10px':'50%')+';flex-shrink:0;';
@@ -254,7 +255,7 @@ function nextStep(x){
 function renderR(){
   if(!ADATA)return;var f=document.getElementById('rFilter').value,rows=(ADATA.registrations||[]).filter(function(x){return !f||String(x.type).toLowerCase()===f;});
   if(!rows.length){document.getElementById('rList').innerHTML='<div class="tbl"><div class="tbl-empty">No registrations yet.</div></div>';return;}
-  document.getElementById('rList').innerHTML='<div class="tbl">'+rows.map(function(x){var wa=String(x.phone||'').replace(/\D/g,'');
+  document.getElementById('rList').innerHTML='<div class="tbl">'+rows.map(function(x){var wa=waNum(x.phone);
     return '<div style="padding:14px 20px;border-bottom:1px solid #f0f5f2;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;">'+
       av(x.email,String(x.type).toLowerCase()==='developer'?(x.company||x.name):x.name,40,String(x.type).toLowerCase()==='developer')+'<div style="flex:1;min-width:200px;"><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.company?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.company)+'</span>':'')+'</div>'+
       '<div style="font-size:13px;margin-top:3px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,String(x.type).toLowerCase()==='investor')+'</div>'+
@@ -266,7 +267,7 @@ function renderA(){
   if(!rows.length){document.getElementById('aList').innerHTML='<div class="tbl"><div class="tbl-empty">No asset profiles yet.</div></div>';return;}
   var tc={A:'#16a34a',B:'#2C7C3B',C:'#d97706',D:'#dc2626'};
   document.getElementById('aList').innerHTML=rows.map(function(a,i){
-    var wa=String(a.phone||'').replace(/\D/g,'');
+    var wa=waNum(a.phone);
     return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
       '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">'+
         '<div style="display:flex;gap:14px;min-width:240px;flex:1;">'+av(a.email,a.company||a.developer,52,true)+'<div style="flex:1;min-width:180px;"><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
@@ -326,7 +327,7 @@ function renderK(){
   if(!ADATA)return;var f=document.getElementById('kFilter').value,rows=ADATA.investors.filter(function(x){return!f||(f.indexOf('k:')===0?x.kycStatus===f.slice(2):x.status===f.slice(2));});
   if(!rows.length){document.getElementById('kList').innerHTML='<div class="tbl"><div class="tbl-empty">'+(f?'No investors with this status.':'No investor access requests yet.')+'</div></div>';return;}
   document.getElementById('kList').innerHTML=rows.map(function(x,i){
-    var c=KC[x.status]||KC.Submitted,wa=String(x.phone||'').replace(/\D/g,'');
+    var c=KC[x.status]||KC.Submitted,wa=waNum(x.phone);
     return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
       '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;"><div style="display:flex;gap:14px;flex:1;min-width:240px;">'+av(x.email,x.name,52,false)+'<div style="flex:1;min-width:180px;">'+
       '<div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.org)+'</span>':'')+'</div>'+

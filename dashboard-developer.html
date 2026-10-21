@@ -124,6 +124,27 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .tcard-b{font-size:11px;font-weight:700;color:#166534;background:#dcfce7;border-radius:20px;padding:3px 10px;align-self:flex-start;margin-top:4px;}
 .qrow{margin-bottom:22px;border-radius:8px;transition:background .2s;}
 .qrow.bad{background:#fef2f2;box-shadow:0 0 0 8px #fef2f2;}
+.doc-head{font-size:12px;font-weight:700;letter-spacing:.1em;color:#2C7C3B;text-transform:uppercase;margin:30px 0 14px;padding-top:20px;border-top:1px solid #e5efe8;}
+.docrow{border:1px dashed #c8ddd0;border-radius:10px;padding:14px 16px;background:#fbfdfb;}
+.docrow.bad{border-color:#fca5a5;box-shadow:none;}
+.docrow .qlab{margin-bottom:4px;}
+.dopt{color:#9ca3af;font-weight:400;font-size:12px;}
+.dhint{font-size:12.5px;color:#6b7280;margin-bottom:10px;line-height:1.5;}
+.dfile{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid #d1e8d8;border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:13px;}
+.dname{display:flex;align-items:center;gap:8px;min-width:0;color:#1c2b1f;font-weight:600;}
+.dname span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dsz{color:#9ca3af;font-weight:400;font-size:12px;white-space:nowrap;}
+.dx{background:none;border:none;color:#b91c1c;font-size:12px;font-weight:600;cursor:pointer;padding:4px;flex-shrink:0;}
+.dpick{display:inline-flex;align-items:center;gap:8px;border:1px solid #2C7C3B;color:#2C7C3B;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;}
+.dpick:hover{background:#f0f7f2;}
+.dpick input{display:none;}
+.dpick.dis{opacity:.5;pointer-events:none;}
+.dbusy{font-size:13px;color:#2C7C3B;margin-bottom:8px;}
+.derr{font-size:12.5px;color:#b91c1c;margin-top:8px;line-height:1.5;}
+.dnote{font-size:12px;color:#9ca3af;margin-top:4px;line-height:1.5;}
+.prep{background:#f0f7f2;border:1px solid #d1e8d8;border-radius:12px;padding:16px 20px;margin:0 0 24px;font-size:13.5px;color:#374151;line-height:1.6;}
+.prep b{color:#1A472A;}
+.prep ul{margin:6px 0 0;padding-left:18px;}
 .qlab{font-size:14px;font-weight:600;color:#1c2b1f;display:block;margin-bottom:10px;line-height:1.4;}
 .pills{display:flex;flex-wrap:wrap;gap:8px;}
 .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #c8ddd0;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;color:#1c2b1f;background:#fff;transition:all .12s;line-height:1.35;}
@@ -207,7 +228,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <div id="emptyCta" style="display:none;background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;">
         <div class="eyebrow">NEXT STEP</div>
         <h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Register your first asset</h2>
-        <p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">Tell us about the asset you would like to finance. It is a short asset profile of about 5 minutes, and you can save and continue later. Our team reviews every profile and contacts you within 5 business days.</p>
+        <p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">Tell us about the asset you would like to finance. It takes about 10 minutes, with a few documents to upload, and you can save and continue later. Our team reviews every profile and contacts you within 5 business days.</p>
         <button class="btn-lime" onclick="newAsset()"><i class="fa-solid fa-plus"></i> Register an Asset</button>
       </div>
 
@@ -244,7 +265,10 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <button onclick="goMain()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</button>
       <div class="eyebrow-g">REGISTER AN ASSET</div>
       <h1 style="font-size:24px;font-weight:700;color:#1A472A;margin:0 0 8px;">What type of asset is it?</h1>
-      <p style="font-size:14px;color:#6b7280;margin:0 0 26px;">We currently finance operating assets in Egypt in these three sectors.</p>
+      <p style="font-size:14px;color:#6b7280;margin:0 0 18px;">We currently finance operating assets in Egypt in these three sectors.</p>
+      <div class="prep"><b><i class="fa-solid fa-paperclip"></i> Before you start, have these documents ready to upload</b> (PDF, Word, Excel or clear photos, up to 10 MB each):
+        <ul><li>Your main signed contract with the buyer or client</li><li>Proof of the buyer&#8217;s payments for the last 12 months</li><li>Commercial register extract and tax card</li><li>Operating licence and permits</li><li>Latest audited financial statements, if you have them</li></ul>
+        <div style="margin-top:8px;">You can save and continue later at any time.</div></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="typeCards"></div>
     </div>
   </div>
@@ -362,6 +386,25 @@ var CONTRACT={
   circular:O([['fsa','Long-term offtake contract for recycled material'],['ota','Gate-fee or waste-service contract'],['other','Spot sales, no long-term contract']]),
   solar:O([['ppa','PPA with the client (per-kWh tariff)'],['ota','Lease or rental agreement'],['other','Other, no long-term contract']])
 };
+/* Documents: which uploads each step asks for, based on the answers. Must match requiredDocs_ in the server script. */
+var DOC_EXT=/\.(pdf|jpe?g|png|webp|heic|docx?|xlsx?|pptx?|csv)$/i,DOC_ACCEPT='.pdf,.jpg,.jpeg,.png,.webp,.heic,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv',DOC_MAX=10*1024*1024,DOC_PER_SLOT=5;
+function contractLabel(t){return t==='solar'?'Signed PPA or lease agreement':t==='circular'?'Signed offtake or waste service contract':'Signed supply or offtake contract';}
+function docSlots(type,a,step){a=a||{};var L=[];
+  if(step===0)L.push({k:'d_photos',l:'Photos of the asset or a short company presentation',h:'Optional, but it helps our team understand the asset.',req:0});
+  if(step===1){
+    if(a.q11&&a.q11!=='other')L.push({k:'d_contract',l:contractLabel(type),h:'The contract you described above, all pages including the signature page.',req:1});
+    if(a.q15&&a.q15!=='first_year')L.push({k:'d_payments',l:'Proof of the buyer\u2019s payments for the last 12 months',h:'Invoices with the matching bank statements, or a statement of account from the buyer.',req:1});
+  }
+  if(step===2){
+    L.push({k:'d_cr',l:'Commercial register extract and tax card',h:'A recent copy of both. You can upload them as separate files.',req:1});
+    if(a.q33==='3y'||a.q33==='1y')L.push({k:'d_fs',l:'Latest audited financial statements',h:'The most recent year, including the auditor\u2019s report.',req:1});
+    if(a.q52==='in_process')L.push({k:'d_lic',l:'Proof of your licence application',h:'The application receipt or the authority\u2019s acknowledgement.',req:1});
+    else if(a.q52==='licensed'||a.q52==='provisional')L.push({k:'d_lic',l:'Operating licence and permits for the asset',h:'Upload each licence or permit as a file.',req:1});
+    if(a.q43==='restrict')L.push({k:'d_loan',l:'Existing loan agreement or a letter from the lender',h:'Required because a lender has security over the revenue.',req:1});
+    else if(a.q43==='no_restrict')L.push({k:'d_loan',l:'Existing loan agreement or a letter from the lender',h:'Optional.',req:0});
+  }
+  if(step===3)L.push({k:'d_val',l:'Valuation report or recent asset valuation',h:'Optional.',req:0});
+  return L;}
 function steps(type){return [
   {title:'The asset',desc:'Basic information about the asset you would like to finance.',qs:[
     {k:'a_name',t:'text',q:'Asset name',ph:'e.g. 10th of Ramadan Biodiesel Plant',req:1},
@@ -528,15 +571,15 @@ function post(payload){return fetch(API,{method:'POST',headers:{'Content-Type':'
 /* ───────────── Type picker & drafts ───────────── */
 function newAsset(){
   if(DRAFT&&DRAFT.type&&!confirm('You have an unfinished asset profile. Start a new one and discard it?'))return;
-  lsSet(kD(),null);DRAFT=null;
+  dropDraftDocs(lsGet(kD(),null));lsSet(kD(),null);DRAFT=null;
   var pre=typeKey(U.energy);
   document.getElementById('typeCards').innerHTML=Object.keys(TYPES).map(function(k){var t=TYPES[k];
     return '<button class="tcard'+(k===pre?' pre':'')+'" onclick="startForm(\''+k+'\')"><i class="fa-solid '+t.icon+'"></i><div class="tcard-t">'+t.label+'</div><div class="tcard-d">'+t.desc+'</div>'+(k===pre?'<div class="tcard-b">Your main asset type</div>':'')+'</button>';}).join('');
   show('vType');
 }
-function startForm(type){DRAFT={type:type,step:0,ans:{}};lsSet(kD(),DRAFT);S=0;renderStep();show('vForm');}
-function resumeDraft(){DRAFT=lsGet(kD(),null);if(!DRAFT)return goMain();S=DRAFT.step||0;renderStep();show('vForm');}
-function discardDraft(){if(confirm('Discard this unfinished asset profile?')){lsSet(kD(),null);DRAFT=null;goMain();}}
+function startForm(type){DRAFT={type:type,step:0,ans:{},docs:{},id:newId()};UPL={};DERR={};lsSet(kD(),DRAFT);S=0;renderStep();show('vForm');}
+function resumeDraft(){DRAFT=lsGet(kD(),null);if(!DRAFT)return goMain();UPL={};DERR={};S=DRAFT.step||0;renderStep();show('vForm');}
+function discardDraft(){if(confirm('Discard this unfinished asset profile?')){dropDraftDocs(lsGet(kD(),null));lsSet(kD(),null);DRAFT=null;goMain();}}
 function saveAndExit(){collect();DRAFT.step=S;lsSet(kD(),DRAFT);goMain();}
 
 /* ───────────── Form rendering ───────────── */
@@ -555,13 +598,70 @@ function renderStep(){
     if(q.t==='check')return '<div class="qrow" id="row_'+q.k+'"><label class="chk"><input type="checkbox" id="'+q.k+'"'+(a[q.k]?' checked':'')+' onchange="clr(this);autosave()"> <span>'+esc(q.q)+'</span></label></div>';
     return '<div class="qrow" id="row_'+q.k+'">'+lab+'<div class="pills">'+q.o.map(function(o){var on=a[q.k]===o.v;
       return '<label class="pill'+(on?' sel':'')+'"><input type="radio" name="'+q.k+'" value="'+o.v+'"'+(on?' checked':'')+' onchange="pick(this)"><span>'+esc(o.t)+'</span></label>';}).join('')+'</div></div>';
-  }).join('');
+  }).join('')+'<div id="docBox"></div>';
+  renderDocs();
   document.getElementById('bPrev').style.visibility=S===0?'hidden':'visible';
   var last=S===st.length-1,b=document.getElementById('bNext');
   b.innerHTML=last?'<i class="fa-solid fa-paper-plane"></i> Submit asset profile':'Next <i class="fa-solid fa-arrow-right"></i>';
   b.className=last?'btn-lime':'btn-green';b.disabled=false;
 }
-function pick(el){el.closest('.pills').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.closest('.pill').classList.add('sel');el.closest('.qrow').classList.remove('bad');autosave();}
+function pick(el){el.closest('.pills').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.closest('.pill').classList.add('sel');el.closest('.qrow').classList.remove('bad');collect();renderDocs();autosave();}
+
+/* ───────────── Document uploads ───────────── */
+var UPL={},DERR={};
+function fmtSize(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
+function renderDocs(){
+  var b=document.getElementById('docBox');if(!b||!DRAFT)return;
+  var L=docSlots(DRAFT.type,DRAFT.ans,S);DRAFT.docs=DRAFT.docs||{};
+  if(!L.length){b.innerHTML='';return;}
+  b.innerHTML='<div class="doc-head"><i class="fa-solid fa-paperclip"></i> Documents for this step</div>'+L.map(function(d){
+    var f=DRAFT.docs[d.k]||[],busy=UPL[d.k],bad=document.getElementById('row_'+d.k)&&document.getElementById('row_'+d.k).classList.contains('bad')&&!f.length;
+    return '<div class="qrow docrow'+(bad?' bad':'')+'" id="row_'+d.k+'"><label class="qlab">'+esc(d.l)+(d.req?' <span style="color:#dc2626">*</span>':' <span class="dopt">(optional)</span>')+'</label>'+
+      (d.h?'<div class="dhint">'+esc(d.h)+'</div>':'')+
+      f.map(function(x){return '<div class="dfile"><span class="dname"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i><span class="t">'+esc(x.name)+'</span><span class="dsz">'+fmtSize(x.size)+'</span></span>'+
+        '<button type="button" class="dx" onclick="removeDoc(\''+d.k+'\',\''+esc(x.id)+'\')">Remove</button></div>';}).join('')+
+      (busy?'<div class="dbusy"><i class="fa-solid fa-spinner fa-spin"></i> Uploading '+esc(busy)+'...</div>':'')+
+      (f.length<DOC_PER_SLOT?'<label class="dpick'+(busy?' dis':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="pickDocs(\''+d.k+'\',this)"'+(busy?' disabled':'')+'><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>':'')+
+      (DERR[d.k]?'<div class="derr">'+esc(DERR[d.k])+'</div>':'')+'</div>';
+  }).join('')+'<div class="dnote">PDF, Word, Excel or clear photos, up to 10 MB each. Your documents are stored privately and seen only by the Renewables Vault team.</div>';
+}
+function upErr(e){return e==='too_big'?'This file is larger than 10 MB. Please upload a smaller copy.':
+  e==='bad_type'?'This file type is not accepted. Please use PDF, Word, Excel or an image.':
+  e==='auth'?'Your session has expired. Please log out, log in again and continue.':
+  'The upload did not go through. Please check your connection and try again. If it keeps failing, email us at contact@renewablesvault.com.';}
+function pickDocs(k,inp){
+  var files=Array.prototype.slice.call(inp.files||[]);inp.value='';if(!files.length)return;
+  if(!DRAFT.id)DRAFT.id=newId();DRAFT.docs=DRAFT.docs||{};DERR[k]='';
+  var room=DOC_PER_SLOT-(DRAFT.docs[k]||[]).length;if(files.length>room){files=files.slice(0,room);DERR[k]='You can upload up to '+DOC_PER_SLOT+' files here.';}
+  var next=function(){
+    var f=files.shift();if(!f){UPL[k]='';renderDocs();return;}
+    if(!DOC_EXT.test(f.name)){DERR[k]=f.name+': '+upErr('bad_type');return next();}
+    if(f.size>DOC_MAX){DERR[k]=f.name+': '+upErr('too_big');return next();}
+    UPL[k]=f.name;renderDocs();
+    var rd=new FileReader();
+    rd.onload=function(){
+      var data=String(rd.result||'').split(',')[1]||'';
+      RV.userKey(U).then(function(key){return post({action:'upload_doc',email:U.email,key:key,assetId:DRAFT.id,slot:k,name:f.name,data:data});})
+        .then(function(r){
+          if(r&&r.ok&&r.file){(DRAFT.docs[k]=DRAFT.docs[k]||[]).push(r.file);lsSet(kD(),DRAFT);var row=document.getElementById('row_'+k);if(row)row.classList.remove('bad');
+            var e=document.getElementById('fErr');if(e&&/document/.test(e.textContent)&&!docSlots(DRAFT.type,DRAFT.ans,S).some(function(d){return d.req&&!((DRAFT.docs||{})[d.k]||[]).length;}))e.style.display='none';}
+          else DERR[k]=f.name+': '+upErr(r&&r.error);
+        }).catch(function(){DERR[k]=f.name+': '+upErr('');}).then(next);
+    };
+    rd.onerror=function(){DERR[k]=f.name+': '+upErr('');next();};
+    rd.readAsDataURL(f);
+  };
+  next();
+}
+function removeDoc(k,id){
+  DRAFT.docs[k]=(DRAFT.docs[k]||[]).filter(function(x){return x.id!==id;});lsSet(kD(),DRAFT);DERR[k]='';renderDocs();
+  RV.userKey(U).then(function(key){return post({action:'delete_doc',email:U.email,key:key,fileId:id});}).catch(function(){});
+}
+function dropDraftDocs(d){
+  if(!d||!d.docs||!API)return;var ids=[];Object.keys(d.docs).forEach(function(k){(d.docs[k]||[]).forEach(function(x){ids.push(x.id);});});
+  if(ids.length)RV.userKey(U).then(function(key){ids.forEach(function(id){post({action:'delete_doc',email:U.email,key:key,fileId:id}).catch(function(){});});});
+}
+function allDocs(){var out=[];if(DRAFT&&DRAFT.docs)Object.keys(DRAFT.docs).forEach(function(k){(DRAFT.docs[k]||[]).forEach(function(x){out.push({slot:k,id:x.id,name:x.name});});});return out;}
 function collect(){
   if(!DRAFT)return;var s=steps(DRAFT.type)[S];
   s.qs.forEach(function(q){
@@ -583,6 +683,11 @@ function validate(){
   }
   if(bad.length){err(bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.');
     document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
+  if(Object.keys(UPL).some(function(k){return UPL[k];})){err('Please wait until your files finish uploading.');return false;}
+  var miss=docSlots(DRAFT.type,DRAFT.ans,S).filter(function(d){return d.req&&!((DRAFT.docs||{})[d.k]||[]).length;});
+  miss.forEach(function(d){var row=document.getElementById('row_'+d.k);if(row)row.classList.add('bad');});
+  if(miss.length){err(miss.length===1?'Please upload the highlighted document to continue.':'Please upload the '+miss.length+' highlighted documents to continue.');
+    document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   return true;
 }
 function err(m){var e=document.getElementById('fErr');e.textContent=m;e.style.display='block';}
@@ -599,9 +704,9 @@ function submitAsset(){
   st.forEach(function(s){s.qs.forEach(function(q){if(q.t==='check')return;var v=a[q.k];
     if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];items.push({sec:s.title,q:q.q,a:o?o.t:''});answers[q.k]=v;}
     else{items.push({sec:s.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
-  var rec={id:newId(),type:type,name:a.a_name,location:a.a_loc,submitted:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'Submitted',note:'',synced:false};
+  var rec={id:DRAFT.id||newId(),type:type,name:a.a_name,location:a.a_loc,submitted:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'Submitted',note:'',synced:false};
   var payload={action:'submit_asset',dev:{firstName:U.firstName,lastName:U.lastName,email:U.email,phone:toAscii(U.phone||''),company:U.company||''},
-    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,answers:answers,items:items}};
+    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,answers:answers,items:items,docs:allDocs()}};
   var finish=function(synced){
     rec.synced=synced;if(!synced)rec.payload=payload;
     var L=lsGet(kA(),[]);L.push(rec);lsSet(kA(),L);lsSet(kD(),null);DRAFT=null;
@@ -616,7 +721,10 @@ function submitAsset(){
       body:JSON.stringify({access_key:W3F,subject:'Asset Profile: '+rec.name+' | '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
   };
   if(API){
-    post(payload).then(function(r){if(r&&r.ok)finish(true);else{w3f().finally(function(){finish(false);});}})
+    post(payload).then(function(r){if(r&&r.ok)finish(true);
+      else if(r&&r.error==='missing_docs'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
+        err('Some required documents are missing: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked and upload them.');}
+      else{w3f().finally(function(){finish(false);});}})
       .catch(function(){w3f().finally(function(){finish(false);});});
   }else{
     w3f().finally(function(){finish(false);});

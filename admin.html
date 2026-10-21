@@ -279,6 +279,7 @@ function renderA(){
         '<div style="font-size:12px;color:#6b7280;">ACR '+esc(a.acr||'not set')+'</div></div>'+
       '</div>'+
       (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
+      docsHtml(a.docs)+
       '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(a.answers)+'</pre></details>'+
       listingEditor(a,i)+
       '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
@@ -391,6 +392,11 @@ function saveA(id,i){
 
 <script>
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},3000);}
+function docsHtml(d){d=d||[];var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
+  if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;"><i class="fa-solid fa-paperclip"></i> No documents uploaded (submitted before uploads were required).</div>';
+  return '<div style="margin-top:12px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:10px 14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#2C7C3B;margin-bottom:6px;"><span><i class="fa-solid fa-paperclip"></i> DOCUMENTS ('+fl.length+')</span>'+
+    (fo?'<a href="'+esc(fo.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">Open folder in Drive</a>':'')+'</div>'+
+    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#6b7280;">'+esc(x.label)+':</span> <a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>';}
 </script>
 </body>
 </html>

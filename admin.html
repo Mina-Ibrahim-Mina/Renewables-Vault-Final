@@ -455,7 +455,7 @@ function nxRender(){
       var slots=docSlots(NX.type,NX.ans,si);
       if(slots.length){h+='<div style="font-size:12px;font-weight:700;color:#2C7C3B;margin:6px 0 10px;"><i class="fa-solid fa-paperclip"></i> Documents (optional for the admin)</div>';
         slots.forEach(function(d){var f=NX.docs[d.k]||[],busy=NUPL[d.k];
-          h+='<div class="nx-doc"><div style="font-size:13px;font-weight:600;color:#1c2b1f;">'+esc(d.l)+'<span class="nx-req">'+({mand:'MANDATORY FOR DEVELOPERS',expl:'UPLOAD OR EXPLAIN',opt:'OPTIONAL'}[d.tier]||'')+'</span>'+'</div>'+
+          h+='<div class="nx-doc"><div style="font-size:13px;font-weight:600;color:#1c2b1f;">'+esc(d.l)+'<span class="nx-req">'+({mand:'REQUIRED, NOW OR WITHIN 30 DAYS',expl:'UPLOAD OR EXPLAIN',opt:'OPTIONAL'}[d.tier]||'')+'</span>'+'</div>'+
             f.map(function(x){return '<div class="nx-file"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i> '+esc(x.name)+'</div>';}).join('')+
             (busy?'<div class="nx-file" style="color:#2C7C3B;">Uploading '+esc(busy)+'...</div>':'')+
             '<label class="nx-up'+(busy?' dis':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="nxPick(\''+d.k+'\',this)"><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>'+

@@ -287,7 +287,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <p style="font-size:14px;color:#6b7280;margin:0 0 18px;">We currently finance operating assets in Egypt in these three sectors.</p>
       <div class="prep"><b><i class="fa-solid fa-paperclip"></i> Before you start, have these documents ready to upload</b> (PDF, Word, Excel or clear photos, up to 10 MB each):
         <ul><li>Commercial register extract</li><li>Signed contract with your buyer</li><li>12 to 24 months of bank statements showing the buyer&#8217;s payments</li><li>Commissioning certificate</li></ul>
-        <div style="margin-top:8px;">If you have them, also: the buyer&#8217;s financial statements, a production report, your insurance certificate, your company&#8217;s financial statements, management CVs and tax clearance, a legal opinion or title document, and a valuation report. If one is not ready, you can promise it within 30 days or tell us why it is not available.</div>
+        <div style="margin-top:8px;">If you have them, also: the buyer&#8217;s financial statements, a production report, your insurance certificate, your company&#8217;s financial statements, management CVs and tax clearance, a legal opinion or title document, and a valuation report. If a document is not ready yet, you can send it within 30 days from your dashboard.</div>
         <div style="margin-top:8px;">The profile has 7 short steps and takes about 20 minutes. You can save and continue later at any time.</div></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="typeCards"></div>
     </div>
@@ -629,11 +629,11 @@ function pick(el){el.closest('.pills').querySelectorAll('.pill').forEach(functio
 
 /* ───────────── Document uploads ───────────── */
 var UPL={},DERR={};
-var TIER_TXT={mand:'MANDATORY',expl:'UPLOAD OR EXPLAIN',opt:'OPTIONAL'};
+var TIER_TXT={mand:'REQUIRED: NOW OR WITHIN 30 DAYS',expl:'UPLOAD OR EXPLAIN',opt:'OPTIONAL'};
 function fmtSize(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';}
 function dmode(k){DRAFT.modes=DRAFT.modes||{};return DRAFT.modes[k]||{mode:'upload'};}
 function docOk(d){var f=(DRAFT.docs||{})[d.k]||[],m=dmode(d.k);
-  return f.length>0||d.tier==='opt'||(d.tier==='expl'&&(m.mode==='later'||(m.mode==='na'&&!!m.reason)));}
+  return f.length>0||d.tier==='opt'||m.mode==='later'||(d.tier==='expl'&&m.mode==='na'&&!!m.reason);}
 function renderDocs(){
   if(!DRAFT)return;DRAFT.docs=DRAFT.docs||{};
   var L=docSlots(DRAFT.type,DRAFT.ans,S),on={};
@@ -644,9 +644,13 @@ function renderDocs(){
       f.map(function(x){return '<div class="dfile"><span class="dname"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i><span class="t">'+esc(x.name)+'</span><span class="dsz">'+fmtSize(x.size)+'</span></span>'+
         '<button type="button" class="dx" onclick="removeDoc(\''+d.k+'\',\''+esc(x.id)+'\')">Remove</button></div>';}).join('')+
       (busy?'<div class="dbusy"><i class="fa-solid fa-spinner fa-spin"></i> Uploading '+esc(busy)+'...</div>':'');
-    var dim=d.tier==='expl'&&!f.length&&m.mode!=='upload';
+    var dim=d.tier!=='opt'&&!f.length&&m.mode!=='upload';
     if(f.length<DOC_PER_SLOT)h+='<label class="dpick'+(busy?' dis':'')+(dim?' dim':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="pickDocs(\''+d.k+'\',this)"'+(busy?' disabled':'')+'><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>';
-    if(d.tier==='mand'&&!f.length)h+='<div class="dnote2">This document is needed to submit the asset profile.</div>';
+    if(d.tier==='mand'&&!f.length){
+      h+='<div class="dalt"><div class="dalt-l">This document is required. You can upload it now, or send it within 30 days.</div><div class="dalt-p">'+
+        [['upload','I\u2019ll upload it now'],['later','Send within 30 days']].map(function(o){return '<button type="button" class="dalt-b'+(m.mode===o[0]?' on':'')+'" onclick="setDocMode(\''+d.k+'\',\''+o[0]+'\')">'+o[1]+'</button>';}).join('')+'</div>'+
+        (m.mode==='later'?'<div class="dnote2">Please send it within 30 days from your dashboard. Our review of the asset depends on it.</div>':'')+'</div>';
+    }
     if(d.tier==='expl'&&!f.length){
       h+='<div class="dalt"><div class="dalt-l">Don’t have this document right now?</div><div class="dalt-p">'+
         [['upload','I’ll upload it'],['later','Provide within 30 days'],['na','Not available']].map(function(o){return '<button type="button" class="dalt-b'+(m.mode===o[0]?' on':'')+'" onclick="setDocMode(\''+d.k+'\',\''+o[0]+'\')">'+o[1]+'</button>';}).join('')+'</div>';

@@ -11,6 +11,9 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
@@ -45,7 +48,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;}
 .step-next{background:#dbeafe;color:#1d4ed8;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.step-grey{background:#f3f4f6;color:#9ca3af;width:30px;height:30px;border-radius:50%;
+.step-grey{background:#f3f4f6;color:#646c78;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
 
 /* BUTTONS */
@@ -70,7 +73,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   color:#2C7C3B;display:block;margin-bottom:6px;}
 .err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
-  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
+  font-size:13px;color:#b91c1c;display:none;margin-top:10px;}
 
 /* PROGRESS BAR */
 .prog-wrap{display:flex;gap:6px;margin-bottom:32px;}
@@ -107,7 +110,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 }
 
 /* DASHBOARD v11 */
-.backlink{font-size:13px;color:#6b7280;background:none;border:none;cursor:pointer;padding:0;margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
+.backlink{font-size:13px;color:#566070;background:none;border:none;cursor:pointer;padding:0;margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
 .backlink:hover{color:#1A472A;}
 .arow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid #f0f5f2;flex-wrap:wrap;}
 .arow:last-child{border-bottom:none;padding-bottom:0;}
@@ -120,7 +123,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .tcard.pre{border:2px solid #4ADE80;}
 .tcard i{color:#2C7C3B;font-size:26px;}
 .tcard-t{font-size:15px;font-weight:700;color:#1A472A;line-height:1.35;}
-.tcard-d{font-size:13px;color:#6b7280;line-height:1.5;}
+.tcard-d{font-size:13px;color:#566070;line-height:1.5;}
 .tcard-b{font-size:11px;font-weight:700;color:#166534;background:#dcfce7;border-radius:20px;padding:3px 10px;align-self:flex-start;margin-top:4px;}
 .qrow{margin-bottom:22px;border-radius:8px;transition:background .2s;}
 .qrow.bad{background:#fef2f2;box-shadow:0 0 0 8px #fef2f2;}
@@ -128,26 +131,26 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .docrow{border:1px dashed #c8ddd0;border-radius:10px;padding:14px 16px;background:#fbfdfb;}
 .docrow.bad{border-color:#fca5a5;box-shadow:none;}
 .docrow .qlab{margin-bottom:4px;}
-.dopt{color:#9ca3af;font-weight:400;font-size:12px;}
-.qhint{font-size:12.5px;color:#6b7280;margin:-4px 0 10px;line-height:1.5;}
+.dopt{color:#646c78;font-weight:400;font-size:12px;}
+.qhint{font-size:12.5px;color:#566070;margin:-4px 0 10px;line-height:1.5;}
 .dtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;color:#2C7C3B;}
 .dlab{font-size:14px;font-weight:600;color:#1c2b1f;}
 .dtier{font-size:10px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:2px 7px;margin-left:auto;}
-.t-mand{background:#fee2e2;color:#991b1b;}.t-expl{background:#fef3c7;color:#92400e;}.t-opt{background:#f3f4f6;color:#6b7280;}
+.t-mand{background:#fee2e2;color:#991b1b;}.t-expl{background:#fef3c7;color:#92400e;}.t-opt{background:#f3f4f6;color:#566070;}
 .docrow{margin-top:-8px;}
 .dpick.dim{opacity:.5;}
 .dnote2{font-size:12px;color:#92400e;margin-top:8px;line-height:1.5;}
 .dalt{margin-top:12px;padding-top:10px;border-top:1px dashed #d1e8d8;}
-.dalt-l{font-size:12.5px;color:#6b7280;margin-bottom:8px;}
+.dalt-l{font-size:12.5px;color:#566070;margin-bottom:8px;}
 .dalt-p{display:flex;gap:8px;flex-wrap:wrap;}
 .dalt-b{font-size:12.5px;padding:7px 12px;border-radius:16px;border:1px solid #c8ddd0;background:#fff;cursor:pointer;font-family:inherit;color:#1c2b1f;}
 .dalt-b.on{background:#1A472A;border-color:#1A472A;color:#4ADE80;font-weight:600;}
 .dsel{margin-top:8px;font-size:13px;padding:9px 12px;}
-.dhint{font-size:12.5px;color:#6b7280;margin-bottom:10px;line-height:1.5;}
+.dhint{font-size:12.5px;color:#566070;margin-bottom:10px;line-height:1.5;}
 .dfile{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid #d1e8d8;border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:13px;}
 .dname{display:flex;align-items:center;gap:8px;min-width:0;color:#1c2b1f;font-weight:600;}
 .dname span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.dsz{color:#9ca3af;font-weight:400;font-size:12px;white-space:nowrap;}
+.dsz{color:#646c78;font-weight:400;font-size:12px;white-space:nowrap;}
 .dx{background:none;border:none;color:#b91c1c;font-size:12px;font-weight:600;cursor:pointer;padding:4px;flex-shrink:0;}
 .dpick{display:inline-flex;align-items:center;gap:8px;border:1px solid #2C7C3B;color:#2C7C3B;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;}
 .dpick:hover{background:#f0f7f2;}
@@ -155,7 +158,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .dpick.dis{opacity:.5;pointer-events:none;}
 .dbusy{font-size:13px;color:#2C7C3B;margin-bottom:8px;}
 .derr{font-size:12.5px;color:#b91c1c;margin-top:8px;line-height:1.5;}
-.dnote{font-size:12px;color:#9ca3af;margin-top:4px;line-height:1.5;}
+.dnote{font-size:12px;color:#646c78;margin-top:4px;line-height:1.5;}
 .adoc{font-size:12.5px;margin-top:8px;line-height:1.5;border-radius:6px;padding:7px 10px;}
 .adoc.warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
 .adoc.okd{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
@@ -191,8 +194,10 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 @media(max-width:480px){#navAuth>span{display:none !important;}}
 </style>
 <style>.rv-vid{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0f1f14 url('video-poster.jpg') center/cover no-repeat;cursor:pointer;box-shadow:0 10px 30px rgba(15,31,20,.18);}.rv-vid .rv-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,31,20,.05) 40%,rgba(15,31,20,.75));}.rv-vid .rv-play{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;background:#4ADE80;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.35);transition:transform .15s;}.rv-vid:hover .rv-play{transform:translate(-50%,-50%) scale(1.06);}.rv-vid .rv-play svg{width:30px;height:30px;margin-left:5px;}.rv-vid .rv-lab{position:absolute;left:20px;right:20px;bottom:16px;color:#fff;font-size:15px;font-weight:600;text-align:left;line-height:1.35;}.rv-vid .rv-lab span{color:#bccabb;font-weight:400;}@media(max-width:600px){.rv-vid .rv-play{width:54px;height:54px;top:42%;}.rv-vid .rv-play svg{width:22px;height:22px;margin-left:4px;}.rv-vid .rv-lab{font-size:12.5px;left:12px;right:12px;bottom:10px;}.rv-vid .rv-lab span{display:none;}}</style>
+<style>.skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;background:#4ADE80;color:#0f1f14;padding:10px 16px;border-radius:6px;font-weight:700;text-decoration:none;}.skip-link:focus{left:12px;}</style>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <nav class="nav-wrap">
   <div class="nav-inner">
@@ -206,6 +211,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
     <div style="display:flex;align-items:center;gap:10px;" id="navAuth"></div>
   </div>
 </nav>
+<main id="main">
 
 <div style="padding-top:68px;min-height:100vh;">
 
@@ -214,11 +220,11 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
     <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
       <i class="fa-solid fa-user" style="color:#2C7C3B;font-size:28px;"></i>
     </div>
-    <h2 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Please log in</h2>
-    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.6;">Your session was not found on this browser.</p>
-    <p style="font-size:13px;color:#9ca3af;margin:0 0 20px;">Redirecting to login in <strong id="cnt">5</strong> seconds...</p>
+    <h1 style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Please log in</h1>
+    <p style="font-size:14px;color:#566070;margin:0 0 8px;line-height:1.6;">Your session was not found on this browser.</p>
+    <p style="font-size:13px;color:#646c78;margin:0 0 20px;">Redirecting to login in <strong id="cnt">5</strong> seconds...</p>
     <a href="login.html" class="btn-green" style="text-decoration:none;">Go to Login</a>
-    <div style="margin-top:12px;"><span style="font-size:13px;color:#6b7280;">You can log in from any phone or computer.</span></div>
+    <div style="margin-top:12px;"><span style="font-size:13px;color:#566070;">You can log in from any phone or computer.</span></div>
   </div>
 
   <!-- ============ VIEW: MAIN ============ -->
@@ -228,17 +234,17 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
         <div style="display:flex;gap:16px;align-items:center;"><div id="dAvatar"></div><div>
           <div class="eyebrow-g">DEVELOPER DASHBOARD</div>
           <h1 id="dName" style="font-size:26px;font-weight:700;color:#1A472A;margin:0;"></h1>
-          <p id="dSub" style="font-size:14px;color:#6b7280;margin:6px 0 0;"></p>
+          <p id="dSub" style="font-size:14px;color:#566070;margin:6px 0 0;"></p>
         </div></div>
         <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
       </div>
 
       <div id="liBox"></div>
-      <details id="vidDet" class="card" style="padding:20px 24px;margin-bottom:24px;"><summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><span class="eyebrow-g" style="margin:0;display:block;">INTRODUCTION VIDEO</span><span style="font-size:13px;color:#6b7280;">How Renewables Vault works, in about a minute. Tap to show or hide.</span></span><i class="fa-solid fa-chevron-down" style="color:#2C7C3B;"></i></summary><div style="margin-top:16px;max-width:600px;"><div class="rv-vid" role="button" tabindex="0" aria-label="Play the Renewables Vault introduction video" onclick="rvPlay(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();rvPlay(this);}"><div class="rv-shade"></div><div class="rv-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" fill="#0f1f14"/></svg></div><div class="rv-lab">How Renewables Vault works <span>(about 1 minute, with captions)</span></div></div></div></details>
+      <details id="vidDet" class="card" style="padding:20px 24px;margin-bottom:24px;"><summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><span class="eyebrow-g" style="margin:0;display:block;">INTRODUCTION VIDEO</span><span style="font-size:13px;color:#566070;">How Renewables Vault works, in about a minute. Tap to show or hide.</span></span><i class="fa-solid fa-chevron-down" style="color:#2C7C3B;"></i></summary><div style="margin-top:16px;max-width:600px;"><div class="rv-vid" role="button" tabindex="0" aria-label="Play the Renewables Vault introduction video" onclick="rvPlay(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();rvPlay(this);}"><div class="rv-shade"></div><div class="rv-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" fill="#0f1f14"/></svg></div><div class="rv-lab">How Renewables Vault works <span>(about 1 minute, with captions)</span></div></div></div></details>
       <div id="draftBanner" class="card" style="display:none;border-left:4px solid #f59e0b;margin-bottom:20px;padding:18px 22px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
           <div><div style="font-size:15px;font-weight:700;color:#1A472A;">You have an unfinished asset profile</div>
-          <div id="draftTxt" style="font-size:13px;color:#6b7280;margin-top:3px;"></div></div>
+          <div id="draftTxt" style="font-size:13px;color:#566070;margin-top:3px;"></div></div>
           <div style="display:flex;gap:10px;"><button class="btn-green" onclick="resumeDraft()">Continue</button>
           <button class="btn-out" onclick="discardDraft()">Discard</button></div>
         </div>
@@ -272,7 +278,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       </div>
 
       <div class="card" style="text-align:center;padding:20px;">
-        <p style="font-size:14px;color:#6b7280;margin:0 0 8px;">Questions about the process?</p>
+        <p style="font-size:14px;color:#566070;margin:0 0 8px;">Questions about the process?</p>
         <a href="contact.html" style="color:#2C7C3B;font-size:14px;font-weight:700;text-decoration:none;">Contact Renewables Vault &#8594;</a>
       </div>
     </div>
@@ -284,7 +290,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <button onclick="goMain()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</button>
       <div class="eyebrow-g">REGISTER AN ASSET</div>
       <h1 style="font-size:24px;font-weight:700;color:#1A472A;margin:0 0 8px;">What type of asset is it?</h1>
-      <p style="font-size:14px;color:#6b7280;margin:0 0 18px;">We currently finance operating assets in Egypt in these three sectors.</p>
+      <p style="font-size:14px;color:#566070;margin:0 0 18px;">We currently finance operating assets in Egypt in these three sectors.</p>
       <div class="prep"><b><i class="fa-solid fa-paperclip"></i> Before you start, have these documents ready to upload</b> (PDF, Word, Excel or clear photos, up to 10 MB each):
         <ul><li>Commercial register extract</li><li>Signed contract with your buyer</li><li>12 to 24 months of bank statements showing the buyer&#8217;s payments</li><li>Commissioning certificate</li></ul>
         <div style="margin-top:8px;">If you have them, also: the buyer&#8217;s financial statements, a production report, your insurance certificate, your company&#8217;s financial statements, management CVs and tax clearance, a legal opinion or title document, and a valuation report. If a document is not ready yet, you can send it within 30 days from your dashboard.</div>
@@ -299,14 +305,14 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <button onclick="saveAndExit()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Save &amp; return to dashboard</button>
       <div class="eyebrow-g">ASSET PROFILE</div>
       <h1 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 4px;" id="fTitle"></h1>
-      <p style="font-size:13px;color:#6b7280;margin:0 0 22px;">All information is treated as strictly confidential. Your answers are saved as you go.</p>
+      <p style="font-size:13px;color:#566070;margin:0 0 22px;">All information is treated as strictly confidential. Your answers are saved as you go.</p>
       <div class="prog-wrap" id="prog"></div>
       <div class="card" style="padding:28px 28px 22px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;flex-wrap:wrap;">
           <h2 id="sTitle" style="font-size:19px;font-weight:700;color:#1A472A;margin:0;"></h2>
-          <span id="sCount" style="font-size:12px;color:#9ca3af;font-weight:600;"></span>
+          <span id="sCount" style="font-size:12px;color:#646c78;font-weight:600;"></span>
         </div>
-        <p id="sDesc" style="font-size:13px;color:#6b7280;margin:0 0 22px;"></p>
+        <p id="sDesc" style="font-size:13px;color:#566070;margin:0 0 22px;"></p>
         <div id="qBox"></div>
         <div class="err" id="fErr"></div>
         <div style="display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap;">
@@ -324,7 +330,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <button onclick="docsDone()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</button>
       <div class="eyebrow-g">DOCUMENTS</div>
       <h1 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 4px;" id="ldTitle"></h1>
-      <p id="ldSub" style="font-size:13px;color:#6b7280;margin:0 0 22px;"></p>
+      <p id="ldSub" style="font-size:13px;color:#566070;margin:0 0 22px;"></p>
       <div class="card"><div id="ldBox"></div>
         <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button class="btn-green" id="ldDone" onclick="docsDone()">Done</button></div>
       </div>
@@ -350,12 +356,13 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
           <button class="btn-out" onclick="newAsset()"><i class="fa-solid fa-plus"></i> Register another asset</button>
         </div>
       </div>
-      <p style="font-size:12px;color:#9ca3af;line-height:1.7;text-align:center;margin:0;">Submitting an asset profile is not a commitment or offer of financing. Any transaction is subject to Renewables Vault's independent due diligence and formal approval.</p>
+      <p style="font-size:12px;color:#646c78;line-height:1.7;text-align:center;margin:0;">Submitting an asset profile is not a commitment or offer of financing. Any transaction is subject to Renewables Vault's independent due diligence and formal approval.</p>
     </div>
   </div>
 
 </div>
 
+</main>
 <footer class="footer">
   <div class="footer-inner">
     <div>
@@ -414,12 +421,12 @@ window.addEventListener('DOMContentLoaded',function(){
 
 /* ───────────── LinkedIn (required) ───────────── */
 function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
-function liRow(){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
+function liRow(){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#646c78;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
 function liBoxRender(msg,edit){
   var b=document.getElementById('liBox');if(!b)return;
   if(U.linkedin&&!edit){b.innerHTML='';return;}
   b.innerHTML='<div class="card" style="border-left:4px solid #0a66c2;padding:18px 22px;margin-bottom:20px;"><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;"><i class="fa-brands fa-linkedin" style="color:#0a66c2;"></i> '+(edit?'Update':'Add')+' your LinkedIn profile</div>'+
-    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.6;">We ask every member for a LinkedIn profile or your company page. It is seen only by the Renewables Vault team.</div>'+
+    '<div style="font-size:13px;color:#566070;margin-bottom:12px;line-height:1.6;">We ask every member for a LinkedIn profile or your company page. It is seen only by the Renewables Vault team.</div>'+
     '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><input id="liIn" class="field" type="url" placeholder="linkedin.com/in/yourname" style="flex:1;min-width:200px;max-width:420px;margin:0;" onkeydown="if(event.key===\'Enter\')saveLinkedin()"><button class="btn-green" id="liBtn" onclick="saveLinkedin()">Save</button></div>'+
     '<div class="err" id="liErr"'+(msg?' style="display:block;"':'')+'>'+esc(msg||'')+'</div></div>';
 }
@@ -452,8 +459,8 @@ function renderPhoto(msg,isErr){
   var b=document.getElementById('photoBox');if(!b)return;
   b.innerHTML=RV.avatar(PHOTO,nm,72,sq)+'<div style="flex:1;min-width:160px;"><div style="display:flex;gap:8px;flex-wrap:wrap;">'+
     '<button class="btn-out" style="font-size:12px;padding:7px 14px;" onclick="changePhoto()"'+(PBUSY?' disabled':'')+'><i class="fa-solid fa-camera"></i> '+(PBUSY?'Saving...':(PHOTO?'Change logo':'Add company logo'))+'</button>'+
-    (PHOTO&&!PBUSY?'<button onclick="removePhoto()" style="background:none;border:none;color:#6b7280;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Remove</button>':'')+'</div>'+
-    '<div style="font-size:11px;color:'+(isErr?'#dc2626':'#9ca3af')+';margin-top:6px;line-height:1.5;">'+(msg||'Optional. Shown only to you and the Renewables Vault team, never to investors.')+'</div></div>';
+    (PHOTO&&!PBUSY?'<button onclick="removePhoto()" style="background:none;border:none;color:#566070;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Remove</button>':'')+'</div>'+
+    '<div style="font-size:11px;color:'+(isErr?'#dc2626':'#646c78')+';margin-top:6px;line-height:1.5;">'+(msg||'Optional. Shown only to you and the Renewables Vault team, never to investors.')+'</div></div>';
 }
 function changePhoto(){if(PBUSY)return;RV.pickPhoto('contain',function(img,err){if(!img){renderPhoto(err,true);return;}savePhoto(img);});}
 function removePhoto(){if(confirm('Remove this logo?'))savePhoto('');}
@@ -484,15 +491,15 @@ function goMain(){
   document.getElementById('assetsBox').style.display=assets.length?'block':'none';
   renderAssets(assets);
   var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone or WhatsApp',U.phone||'Not provided'],['Company',U.company||'Not provided'],['Main asset type',U.energy||'Not provided'],['Registered',U.registered||'Not provided']];
-  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
+  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
   liBoxRender();
   var j=[['Create your profile','Done',1],['Register your asset','An asset profile of 7 steps for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
   var nextIdx=j.findIndex(function(x){return!x[2];});
   document.getElementById('journey').innerHTML=j.map(function(s,i){var last=i===j.length-1,done=s[2],nx=i===nextIdx;
     return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(done?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';">'+
       '<div class="'+(done?'step-done':nx?'step-next':'step-grey')+'" style="position:absolute;left:-16px;top:0;">'+(done?'<i class="fa-solid fa-check"></i>':(i+1))+'</div>'+
-      '<div style="font-size:14px;font-weight:700;color:'+(done||nx?'#1A472A':'#9ca3af')+';">'+s[0]+'</div>'+
-      '<div style="font-size:12px;color:'+(done||nx?'#6b7280':'#9ca3af')+';margin-top:2px;">'+s[1]+'</div></div>';}).join('');
+      '<div style="font-size:14px;font-weight:700;color:'+(done||nx?'#1A472A':'#646c78')+';">'+s[0]+'</div>'+
+      '<div style="font-size:12px;color:'+(done||nx?'#566070':'#646c78')+';margin-top:2px;">'+s[1]+'</div></div>';}).join('');
 }
 var CHIP={'Submitted':['#e0f2fe','#075985'],'Under review':['#fef3c7','#92400e'],'More information needed':['#ffedd5','#9a3412'],'Discovery call':['#dcfce7','#166534'],'Term sheet':['#d1fae5','#065f46'],'Not eligible at this time':['#f3f4f6','#4b5563']};
 function renderAssets(assets){
@@ -501,8 +508,8 @@ function renderAssets(assets){
     return '<div class="arow"><div style="display:flex;gap:14px;align-items:flex-start;flex:1;min-width:220px;">'+
       '<div class="aicon"><i class="fa-solid '+TYPES[a.type].icon+'"></i></div><div>'+
       '<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
-      '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(TYPES[a.type].label)+' · '+esc(a.location)+'</div>'+
-      '<div style="font-size:11px;color:#9ca3af;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
+      '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc(TYPES[a.type].label)+' · '+esc(a.location)+'</div>'+
+      '<div style="font-size:11px;color:#646c78;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
       (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+docLine(a)+
       '</div></div><span class="chip" style="background:'+c[0]+';color:'+c[1]+';">'+esc(a.status||'Submitted')+'</span></div>';
   }).join('');
@@ -674,6 +681,7 @@ function clearDocErr(){var e=document.getElementById('fErr');if(e&&/document/.te
 function upErr(e){return e==='too_big'?'This file is larger than 10 MB. Please upload a smaller copy.':
   e==='bad_type'?'This file type is not accepted. Please use PDF, Word, Excel or an image.':
   e==='auth'?'Your session has expired. Please log out, log in again and continue.':
+  e==='too_many'?'This asset already has the maximum of 60 files. Please combine documents into one PDF, or email us at contact@renewablesvault.com.':
   'The upload did not go through. Please check your connection and try again. If it keeps failing, email us at contact@renewablesvault.com.';}
 function pickDocs(k,inp){
   var files=Array.prototype.slice.call(inp.files||[]);inp.value='';if(!files.length)return;

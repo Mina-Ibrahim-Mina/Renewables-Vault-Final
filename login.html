@@ -5,17 +5,20 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<title>Login | Renewables Vault</title>
+<title>Log In to Your Account | Renewables Vault</title>
 <link rel="canonical" href="https://renewablesvault.com/login.html">
 <link rel="icon" type="image/png" href="favicon.png?v=2">
 <link rel="apple-touch-icon" href="favicon.png?v=2">
 <meta name="theme-color" content="#0f1f14">
-<meta name="description" content="Log in to your Renewables Vault account.">
+<meta name="description" content="Log in to your Renewables Vault account to follow your assets, opportunities and requests from any phone or computer.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Renewables Vault">
-<meta property="og:title" content="Login | Renewables Vault">
-<meta property="og:description" content="Log in to your Renewables Vault account.">
+<meta property="og:title" content="Log In to Your Account | Renewables Vault">
+<meta property="og:description" content="Log in to your Renewables Vault account to follow your assets, opportunities and requests from any phone or computer.">
 <meta property="og:url" content="https://renewablesvault.com/login.html">
 <meta property="og:image" content="https://renewablesvault.com/og-image.png?v=2">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
@@ -121,20 +124,20 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
 .sdg{background:#fff;border-radius:10px;padding:24px;border-left:3px solid #2C7C3B;}
 .sdg-n{font-size:26px;font-weight:700;color:#1A472A;}
 .sdg-t{font-size:14px;font-weight:600;color:#1c2b1f;margin:4px 0 8px;}
-.sdg-d{font-size:13px;color:#6b7280;line-height:1.5;}
+.sdg-d{font-size:13px;color:#566070;line-height:1.5;}
 /* ADMIN */
 .tbl-row{border-bottom:1px solid #f0f5f2;padding:16px 20px;}
 .tbl-row:hover{background:#f8faf8;}
 .tbl-row:last-child{border-bottom:none;}
 .stat{background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;text-align:center;}
 .stat-n{font-size:32px;font-weight:700;color:#1A472A;line-height:1;}
-.stat-l{font-size:11px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
+.stat-l{font-size:11px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
 /* STEP */
 .step-done{background:#dcfce7;color:#166534;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;}
 .step-next{background:#dbeafe;color:#1d4ed8;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.step-grey{background:#f3f4f6;color:#9ca3af;width:30px;height:30px;border-radius:50%;
+.step-grey{background:#f3f4f6;color:#646c78;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
 @media(max-width:768px){
   .nav-links{display:none;}
@@ -171,8 +174,10 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 @media(max-width:400px){.nav-inner img{height:34px !important;}}
 @media(max-width:480px){#navAuth>span{display:none !important;}}
 </style>
+<style>.skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;background:#4ADE80;color:#0f1f14;padding:10px 16px;border-radius:6px;font-weight:700;text-decoration:none;}.skip-link:focus{left:12px;}</style>
 </head>
 <body style="background:#0f1f14;">
+<a href="#main" class="skip-link">Skip to content</a>
 <nav class="nav-wrap">
   <div class="nav-inner">
     <a href="index.html" style="flex-shrink:0;">
@@ -182,6 +187,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
     <div class="nav-auth" id="navAuth"></div>
   </div>
 </nav>
+<main id="main">
 <script>
 var RVAuth={
   get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
@@ -224,35 +230,35 @@ function genRC(e){
     <div style="text-align:center;margin-bottom:36px;">
       <span class="eyebrow-g" style="display:block;margin-bottom:10px;">Welcome Back</span>
       <h1 style="font-size:28px;font-weight:700;color:#1A472A;margin:0 0 8px;">Log In</h1>
-      <p style="font-size:15px;color:#6b7280;margin:0;">Access your Renewables Vault account.</p>
+      <p style="font-size:15px;color:#566070;margin:0;">Access your Renewables Vault account.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px;">
-      <div><label class="lbl">Email Address</label><input class="field" id="l_email" type="email" placeholder="you@company.com"></div>
-      <div><label class="lbl">Password</label><input class="field" id="l_pass" type="password" placeholder="Your password"></div>
+      <div><label class="lbl" for="l_email">Email Address</label><input class="field" id="l_email" type="email" placeholder="you@company.com"></div>
+      <div><label class="lbl" for="l_pass">Password</label><input class="field" id="l_pass" type="password" placeholder="Your password"></div>
       <div class="err" id="l_err"></div>
       <button class="btn-lime full" id="loginBtn">Log In</button>
     </div>
     <div style="text-align:center;margin-top:16px;display:flex;justify-content:center;gap:20px;">
       <a href="#" id="forgotLink" style="font-size:13px;color:#2C7C3B;font-weight:600;text-decoration:none;">Forgot password?</a>
       <span style="color:#d1e8d8;font-size:13px;">|</span>
-      <a href="register.html" style="font-size:13px;color:#6b7280;text-decoration:none;">New user? Register &#8594;</a>
+      <a href="register.html" style="font-size:13px;color:#566070;text-decoration:none;">New user? Register &#8594;</a>
     </div>
   </div>
   <div id="v2" class="view">
-    <a href="#" id="backLink" style="font-size:13px;color:#6b7280;text-decoration:none;display:flex;align-items:center;gap:6px;margin-bottom:28px;">
+    <a href="#" id="backLink" style="font-size:13px;color:#566070;text-decoration:none;display:flex;align-items:center;gap:6px;margin-bottom:28px;">
       <i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> Back to login
     </a>
     <div style="text-align:center;margin-bottom:24px;">
       <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Reset Your Password</h2>
-      <p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">
+      <p style="font-size:14px;color:#566070;margin:0;line-height:1.6;">
         Enter your email and the recovery code sent to you.
         Don't have one? <a href="forgot-password.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Get it here &#8594;</a>
       </p>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;">
-      <div><label class="lbl">Email Address</label><input class="field" id="r_email" type="email" placeholder="your@email.com"></div>
+      <div><label class="lbl" for="r_email">Email Address</label><input class="field" id="r_email" type="email" placeholder="your@email.com"></div>
       <div>
-        <label class="lbl">Recovery Code</label>
+        <label class="lbl" for="r_code">Recovery Code</label>
         <input class="field" id="r_code" type="text" placeholder="e.g. RC-AB12CD" style="letter-spacing:.1em;font-weight:700;text-transform:uppercase;">
       </div>
       <div class="err" id="r_err"></div>
@@ -265,11 +271,11 @@ function genRC(e){
         <i class="fa-solid fa-circle-check" style="color:#16a34a;font-size:24px;"></i>
       </div>
       <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Identity Verified</h2>
-      <p style="font-size:14px;color:#6b7280;margin:0;">Set your new password below.</p>
+      <p style="font-size:14px;color:#566070;margin:0;">Set your new password below.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;">
-      <div><label class="lbl">New Password</label><input class="field" id="np1" type="password" placeholder="At least 6 characters"></div>
-      <div><label class="lbl">Confirm New Password</label><input class="field" id="np2" type="password" placeholder="Repeat new password"></div>
+      <div><label class="lbl" for="np1">New Password</label><input class="field" id="np1" type="password" placeholder="At least 6 characters"></div>
+      <div><label class="lbl" for="np2">Confirm New Password</label><input class="field" id="np2" type="password" placeholder="Repeat new password"></div>
       <div class="err" id="np_err"></div>
       <button class="btn-lime full" id="saveBtn">Save &amp; Log In</button>
     </div>
@@ -331,6 +337,7 @@ function savePass(){
   else{err.style.display='block';err.textContent='Account not found in this browser. Please register again. Your profile is saved on our side.';}
 }
 </script></div>
+</main>
 <footer class="footer">
   <div class="footer-inner">
     <div>
@@ -342,8 +349,8 @@ function savePass(){
       <a href="impact.html">Impact</a><a href="insights.html">Insights</a>
       <a href="contact.html">Contact</a><a href="legal.html">Legal &amp; Disclaimer</a>
       <div style="margin-top:10px;">
-        <a href="legal.html#privacy" style="font-size:11px;color:#4d5e4f;">Privacy Policy</a>
-        <a href="legal.html" style="font-size:11px;color:#4d5e4f;">Regulatory Disclosure</a>
+        <a href="legal.html#privacy" style="font-size:11px;color:#8a9a8c;">Privacy Policy</a>
+        <a href="legal.html" style="font-size:11px;color:#8a9a8c;">Regulatory Disclosure</a>
       </div>
     </div>
   </div>

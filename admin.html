@@ -9,6 +9,9 @@
 <meta name="theme-color" content="#0f1f14">
 <meta name="robots" content="noindex,nofollow">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
@@ -60,18 +63,18 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
 .stat{background:#fff;border-radius:10px;border:1px solid #d1e8d8;padding:20px;text-align:center;}
 .stat-n{font-size:32px;font-weight:700;color:#1A472A;line-height:1;}
-.stat-l{font-size:11px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
+.stat-l{font-size:11px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;}
 @media(max-width:700px){.stats{grid-template-columns:1fr 1fr;gap:10px;}.stat{padding:14px 8px;}.stat-n{font-size:26px;}.stat-l{font-size:10px;letter-spacing:.03em;}}
 .tabs{display:inline-flex;background:#fff;border:1px solid #d1e8d8;border-radius:10px;padding:5px;margin-bottom:24px;}
-.tab{padding:10px 24px;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;color:#6b7280;font-family:'Inter',sans-serif;}
+.tab{padding:10px 24px;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;color:#566070;font-family:'Inter',sans-serif;}
 .tab.on{background:#1A472A;color:#fff;}
 .tbl{background:#fff;border-radius:12px;border:1px solid #d1e8d8;overflow:hidden;}
-.tbl-empty{padding:60px;text-align:center;color:#9ca3af;font-size:14px;}
+.tbl-empty{padding:60px;text-align:center;color:#646c78;font-size:14px;}
 .row{border-bottom:1px solid #f0f5f2;padding:18px 20px;}
 .row:hover{background:#f8faf8;}
 .row:last-child{border-bottom:none;}
 .rg{display:grid;gap:16px;align-items:start;}
-.fl{font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.fl{font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
 .fv{font-size:13px;color:#374151;line-height:1.5;}
 .fv.b{font-weight:600;color:#1c2b1f;}
 .ba{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;}
@@ -98,7 +101,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 .mbtn{width:100%;padding:12px;border:none;border-radius:6px;font-size:14px;font-weight:700;
   cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px;}
 .mbp{background:#1A472A;color:#fff;}
-.mbs{background:#fff;color:#6b7280;border:1px solid #d1e8d8;}
+.mbs{background:#fff;color:#566070;border:1px solid #d1e8d8;}
 #toast{position:fixed;bottom:24px;right:24px;background:#1A472A;color:#fff;
   padding:14px 20px;border-radius:8px;font-size:14px;font-weight:600;
   display:none;z-index:300;border-left:4px solid #4ADE80;box-shadow:0 4px 20px rgba(0,0,0,.2);}
@@ -121,7 +124,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 </head>
 <body>
 
-<div id="loginScreen">
+<div id="loginScreen" role="main">
   <div class="lcard">
     <div style="text-align:center;margin-bottom:28px;">
       <img src="logo.png?v=2" alt="Renewables Vault" style="height:44px;width:auto;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
@@ -163,16 +166,16 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     <div id="vd" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
         <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Registrations</h2>
-        <select id="rFilter" onchange="renderR()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">Developers and investors</option><option value="developer">Developers only</option><option value="investor">Investors only</option></select>
+        <select id="rFilter" aria-label="Filter registrations" onchange="renderR()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">Developers and investors</option><option value="developer">Developers only</option><option value="investor">Investors only</option></select>
       </div>
       <div id="rList"></div>
-      <p style="font-size:12px;color:#9ca3af;margin:10px 0 0;">People who registered before 9 October 2026 are in your older Google Sheet.</p>
+      <p style="font-size:12px;color:#646c78;margin:10px 0 0;">People who registered before 9 October 2026 are in your older Google Sheet.</p>
     </div>
     <div id="va">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Asset Assessments <span style="font-size:12px;color:#9ca3af;font-weight:600;">(RARE™, internal only)</span></h2>
+        <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Asset Assessments <span style="font-size:12px;color:#646c78;font-weight:600;">(RARE™, internal only)</span></h2>
         <div id="aTools" style="display:none;gap:8px;align-items:center;">
-          <select id="aFilter" onchange="renderA()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;">
+          <select id="aFilter" aria-label="Filter by status" onchange="renderA()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;">
             <option value="">All statuses</option></select>
           <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
         </div>
@@ -183,7 +186,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
         <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Investors: access and KYC</h2>
         <div style="display:flex;gap:8px;align-items:center;">
-          <select id="kFilter" onchange="renderK()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">All statuses</option></select>
+          <select id="kFilter" aria-label="Filter investors" onchange="renderK()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;"><option value="">All statuses</option></select>
           <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
         </div>
       </div>
@@ -191,7 +194,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
     </div>
     <div id="vx" style="display:none;">
       <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 6px;">Add an asset for a developer</h2>
-      <p style="font-size:13px;color:#6b7280;margin:0 0 18px;">Use this when you have the asset details yourself, for example from a meeting. It is scored with RARE&#8482; like any other asset and appears in Asset Assessments. Documents are optional here; missing ones are shown on the asset card. If the developer registers later with the same email, they will see this asset on their dashboard.</p>
+      <p style="font-size:13px;color:#566070;margin:0 0 18px;">Use this when you have the asset details yourself, for example from a meeting. It is scored with RARE&#8482; like any other asset and appears in Asset Assessments. Documents are optional here; missing ones are shown on the asset card. If the developer registers later with the same email, they will see this asset on their dashboard.</p>
       <div id="nxBox"></div>
     </div>
     <div id="vn" style="display:none;">
@@ -223,7 +226,7 @@ function doLogin(){
   e.style.display='none';if(!pw)return;
   if(!AAPI){e.textContent='The server is not connected. Check rv-config.js.';e.style.display='block';return;}
   b.disabled=true;b.textContent='Checking...';
-  fetch(AAPI+'?action=admin_list&password='+encodeURIComponent(pw)).then(function(r){return r.json();}).then(function(r){
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_list',password:pw})}).then(function(r){return r.json();}).then(function(r){
     b.disabled=false;b.textContent='Login';
     if(!r.ok){e.textContent=r.error==='Incorrect password'?'Incorrect password.':(r.error||'Could not log in.');e.style.display='block';return;}
     sessionStorage.setItem('rva_ap',pw);enterPanel();useData(r);
@@ -249,7 +252,7 @@ function aMsg(m){document.getElementById('aMsg').textContent=m;}
 function loadA(){
   if(!AAPI){aMsg('The assessments service is not connected yet. Add its URL to rv-config.js (see the setup guide).');return;}
   var pw=sessionStorage.getItem('rva_ap')||'';aMsg('Loading...');
-  fetch(AAPI+'?action=admin_list&password='+encodeURIComponent(pw)).then(function(r){return r.json();}).then(function(r){
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_list',password:pw})}).then(function(r){return r.json();}).then(function(r){
     if(!r.ok){doLogout();var e=document.getElementById('loginErr');e.textContent=r.error==='Incorrect password'?'Please log in again.':(r.error||'Could not load.');e.style.display='block';return;}
     useData(r);
   }).catch(function(){aMsg('Could not reach the assessments service. Click Refresh to try again.');});
@@ -275,7 +278,7 @@ function av(email,name,size,square){var img=(ADATA&&ADATA.photos||{})[String(ema
   return img?'<img src="'+img+'" alt="" style="'+st+'object-fit:cover;border:1px solid #d1e8d8;background:#fff;">':'<div style="'+st+'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:'+Math.round(size*0.38)+'px;">'+esc(ini)+'</div>';}
 function liLink(email,opt){var m={};(ADATA&&ADATA.registrations||[]).forEach(function(r){if(r.linkedin)m[String(r.email).toLowerCase()]=r.linkedin;});
   var u=m[String(email||'').toLowerCase()];
-  return u?' · <a href="'+esc(u)+'" target="_blank" rel="noopener" style="color:#0a66c2;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>':(opt?' · <span style="color:#9ca3af;">No LinkedIn</span>':' · <span style="color:#dc2626;">No LinkedIn yet</span>');}
+  return u?' · <a href="'+esc(u)+'" target="_blank" rel="noopener" style="color:#0a66c2;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>':(opt?' · <span style="color:#646c78;">No LinkedIn</span>':' · <span style="color:#dc2626;">No LinkedIn yet</span>');}
 function nextStep(x){
   var em=String(x.email||'').toLowerCase(),dev=String(x.type).toLowerCase()==='developer',done;
   if(dev)done=(ADATA.assessments||[]).some(function(a){return String(a.email).toLowerCase()===em;});
@@ -283,17 +286,17 @@ function nextStep(x){
   var rem=((ADATA.reminders||{})[em]||[]).filter(function(r){return r.kind===(dev?'asset':'access');})[0];
   var chip=done?'<span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;">'+(dev?'Asset submitted':'Access requested')+'</span>'
     :'<span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;">'+(dev?'No asset yet':'Access not requested yet')+'</span>';
-  return '<div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'+chip+(rem?'<span style="font-size:11px;color:#6b7280;">Automatic reminder sent '+esc(rem.times)+(Number(rem.times)===1?' time':' times')+', last '+esc(rem.last)+'</span>':(done?'':'<span style="font-size:11px;color:#9ca3af;">Automatic reminders after 1 and 4 days</span>'))+'</div>';
+  return '<div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'+chip+(rem?'<span style="font-size:11px;color:#566070;">Automatic reminder sent '+esc(rem.times)+(Number(rem.times)===1?' time':' times')+', last '+esc(rem.last)+'</span>':(done?'':'<span style="font-size:11px;color:#646c78;">Automatic reminders after 1 and 4 days</span>'))+'</div>';
 }
 function renderR(){
   if(!ADATA)return;var f=document.getElementById('rFilter').value,rows=(ADATA.registrations||[]).filter(function(x){return !f||String(x.type).toLowerCase()===f;});
   if(!rows.length){document.getElementById('rList').innerHTML='<div class="tbl"><div class="tbl-empty">No registrations yet.</div></div>';return;}
   document.getElementById('rList').innerHTML='<div class="tbl">'+rows.map(function(x){var wa=waNum(x.phone);
     return '<div style="padding:14px 20px;border-bottom:1px solid #f0f5f2;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;">'+
-      av(x.email,String(x.type).toLowerCase()==='developer'?(x.company||x.name):x.name,40,String(x.type).toLowerCase()==='developer')+'<div style="flex:1;min-width:200px;"><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.company?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.company)+'</span>':'')+'</div>'+
+      av(x.email,String(x.type).toLowerCase()==='developer'?(x.company||x.name):x.name,40,String(x.type).toLowerCase()==='developer')+'<div style="flex:1;min-width:200px;"><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.company?' <span style="font-weight:500;color:#566070;">· '+esc(x.company)+'</span>':'')+'</div>'+
       '<div style="font-size:13px;margin-top:3px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,String(x.type).toLowerCase()==='investor')+'</div>'+
-      '<div style="font-size:12px;color:#6b7280;margin-top:3px;">'+esc(x.detail)+'</div>'+nextStep(x)+'</div>'+
-      '<div style="text-align:right;"><span style="background:'+(String(x.type).toLowerCase()==='investor'?'#e0f2fe;color:#075985':'#dcfce7;color:#166534')+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;">'+esc(x.type)+'</span><div style="font-size:11px;color:#9ca3af;margin-top:6px;">'+esc(x.registered)+'</div></div></div>';}).join('')+'</div>';
+      '<div style="font-size:12px;color:#566070;margin-top:3px;">'+esc(x.detail)+'</div>'+nextStep(x)+'</div>'+
+      '<div style="text-align:right;"><span style="background:'+(String(x.type).toLowerCase()==='investor'?'#e0f2fe;color:#075985':'#dcfce7;color:#166534')+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;">'+esc(x.type)+'</span><div style="font-size:11px;color:#646c78;margin-top:6px;">'+esc(x.registered)+'</div></div></div>';}).join('')+'</div>';
 }
 function renderA(){
   var f=document.getElementById('aFilter').value,rows=ADATA.assessments.filter(function(a){return!f||a.status===f;});
@@ -304,12 +307,12 @@ function renderA(){
     return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
       '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">'+
         '<div style="display:flex;gap:14px;min-width:240px;flex:1;">'+av(a.email,a.company||a.developer,52,true)+'<div style="flex:1;min-width:180px;"><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
-        '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(a.type)+' · '+esc(a.location)+' · Ref '+esc(a.id)+' · '+esc(a.submitted)+'</div>'+
+        '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc(a.type)+' · '+esc(a.location)+' · Ref '+esc(a.id)+' · '+esc(a.submitted)+'</div>'+
         '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>'+esc(a.developer)+'</b> · '+esc(a.company)+'<br><a href="mailto:'+esc(a.email)+'" style="color:#2C7C3B;">'+esc(a.email)+'</a>'+
         (wa?' · <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener" style="color:#2C7C3B;">WhatsApp '+esc(a.phone)+'</a>':'')+liLink(a.email)+'</div></div></div>'+
-        '<div style="text-align:right;min-width:150px;"><div style="font-size:30px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';line-height:1;">'+esc(a.score)+'<span style="font-size:13px;color:#9ca3af;">/100</span></div>'+
+        '<div style="text-align:right;min-width:150px;"><div style="font-size:30px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';line-height:1;">'+esc(a.score)+'<span style="font-size:13px;color:#646c78;">/100</span></div>'+
         '<div style="font-size:13px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';">Tier '+esc(a.tier)+'</div>'+
-        '<div style="font-size:12px;color:#6b7280;">ACR '+esc(a.acr||'not set')+'</div></div>'+
+        '<div style="font-size:12px;color:#566070;">ACR '+esc(a.acr||'not set')+'</div></div>'+
       '</div>'+
       (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
       jacobCard(a.detail)+
@@ -321,15 +324,15 @@ function renderA(){
         '<input id="nt_'+i+'" value="'+esc(a.note)+'" placeholder="Note shown to the developer (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
         '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="nf_'+i+'" checked> Email developer</label>'+
         '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveA(\''+esc(a.id)+'\','+i+')">Save</button>'+
-        '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(a.updated)+'</span>'+
+        '<span style="font-size:11px;color:#646c78;">Updated '+esc(a.updated)+'</span>'+
       '</div></div>';
   }).join('');
 }
 function listingEditor(a,i){
   var L=a.listing||{},F='width:100%;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box;';
   var chip=a.published?'<span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;">Published '+esc(a.publishedOn)+'</span>':'<span style="background:#f3f4f6;color:#4b5563;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;">Not published</span>';
-  if(!a.share)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;">Investor listing: not available. This asset was submitted before developers were asked to consent to sharing.</div>';
-  var lab=function(t){return '<div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7280;margin:10px 0 4px;">'+t+'</div>';};
+  if(!a.share)return '<div style="margin-top:12px;font-size:12px;color:#646c78;">Investor listing: not available. This asset was submitted before developers were asked to consent to sharing.</div>';
+  var lab=function(t){return '<div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#566070;margin:10px 0 4px;">'+t+'</div>';};
   return '<details style="margin-top:12px;"'+(a.published?' open':'')+'><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">Investor listing'+chip+'</summary>'+
     '<div style="background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:14px 16px;margin-top:8px;">'+
     '<div style="font-size:12px;color:#92400e;background:#fef3c7;border-radius:6px;padding:8px 10px;">Investors see only what is in these fields. Make sure nothing here identifies the developer (no company name, exact address or buyer name).</div>'+
@@ -365,8 +368,8 @@ function renderK(){
     var c=KC[x.status]||KC.Submitted,wa=waNum(x.phone);
     return '<div class="tbl" style="padding:20px 22px;margin-bottom:14px;">'+
       '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;"><div style="display:flex;gap:14px;flex:1;min-width:240px;">'+av(x.email,x.name,52,false)+'<div style="flex:1;min-width:180px;">'+
-      '<div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.org)+'</span>':'')+'</div>'+
-      '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(x.category)+' · '+esc(x.type)+' · Access requested '+esc(x.submitted)+'</div>'+
+      '<div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' <span style="font-weight:500;color:#566070;">· '+esc(x.org)+'</span>':'')+'</div>'+
+      '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc(x.category)+' · '+esc(x.type)+' · Access requested '+esc(x.submitted)+'</div>'+
       '<div style="font-size:13px;margin-top:8px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,true)+'</div>'+
       '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>Wants:</b> '+esc(x.prefs.types.map(function(t){return TL[t]||t;}).join(', '))+' · <b>Countries:</b> '+esc(x.prefs.countries.join(', '))+(x.prefs.ticket?' · <b>Ticket:</b> '+esc(x.prefs.ticket):'')+'</div></div></div>'+
       '<span style="background:'+c[0]+';color:'+c[1]+';font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;height:fit-content;white-space:nowrap;">'+esc(x.status)+'</span></div>'+
@@ -377,15 +380,15 @@ function renderK(){
       '<input id="kn_'+i+'" value="'+esc(x.note)+'" placeholder="Note shown to the investor (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
       '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;" title="Approving always emails the access code. Tick to also email other updates, or to resend the code."><input type="checkbox" id="ke_'+i+'"'+(x.status==='Approved'?'':' checked')+'> '+(x.status==='Approved'?'Resend access code':'Email investor')+'</label>'+
       '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveK(\''+esc(x.email)+'\','+i+')">Save</button>'+
-      '<span style="font-size:11px;color:#9ca3af;">Updated '+esc(x.updated)+'</span></div>'+kycBlock(x,i)+'</div>';
+      '<span style="font-size:11px;color:#646c78;">Updated '+esc(x.updated)+'</span></div>'+kycBlock(x,i)+'</div>';
   }).join('');
 }
 var YC={'Submitted':['#e0f2fe','#075985'],'Verified':['#dcfce7','#166534'],'More information needed':['#ffedd5','#9a3412'],'Rejected':['#fee2e2','#991b1b']};
 function kycChip(s,bare){var c=YC[s]||['#f3f4f6','#4b5563'];return '<span style="background:'+c[0]+';color:'+c[1]+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;">'+esc(bare?s:(s?'KYC '+s:'KYC not submitted'))+'</span>';}
 function kycBlock(x,i){
-  if(!x.kycStatus)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;"><b style="color:#6b7280;">Full KYC:</b> not submitted yet. The investor is asked for it when they express interest in an opportunity.</div>';
+  if(!x.kycStatus)return '<div style="margin-top:12px;font-size:12px;color:#646c78;"><b style="color:#566070;">Full KYC:</b> not submitted yet. The investor is asked for it when they express interest in an opportunity.</div>';
   return '<div style="margin-top:14px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:12px 14px;">'+
-    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;"><b style="font-size:12px;color:#1A472A;">Full KYC</b>'+kycChip(x.kycStatus,1)+'<span style="font-size:12px;color:#6b7280;">Submitted '+esc(x.kycSubmitted)+'</span></div>'+
+    '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;"><b style="font-size:12px;color:#1A472A;">Full KYC</b>'+kycChip(x.kycStatus,1)+'<span style="font-size:12px;color:#566070;">Submitted '+esc(x.kycSubmitted)+'</span></div>'+
     '<details style="margin-top:8px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View KYC answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#fff;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(x.kycDetails)+'</pre></details>'+
     '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">'+
     '<select id="ys_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+(ADATA.kycStatuses||[]).map(function(s){return '<option'+(s===x.kycStatus?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>'+
@@ -410,9 +413,9 @@ function renderN(){
   if(!rows.length){document.getElementById('nList').innerHTML='<div class="tbl"><div class="tbl-empty">No investor interest yet.</div></div>';return;}
   document.getElementById('nList').innerHTML=rows.map(function(x){
     return '<div class="tbl" style="padding:18px 22px;margin-bottom:12px;"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">'+
-      '<div style="display:flex;gap:12px;flex:1;min-width:220px;">'+av(x.email,x.name,40,false)+'<div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">INVESTOR</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' · '+esc(x.org):'')+'</div><a href="mailto:'+esc(x.email)+'" style="font-size:13px;color:#2C7C3B;">'+esc(x.email)+'</a><span style="font-size:13px;">'+liLink(x.email,true)+'</span><div style="margin-top:6px;">'+kycChip(x.kycStatus)+'</div></div></div>'+
-      '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#9ca3af;">OPPORTUNITY</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:12px;color:#6b7280;">Ref '+esc(x.id)+' · Developer: '+esc(x.developer)+' · '+esc(x.company)+' · <a href="mailto:'+esc(x.devEmail)+'" style="color:#2C7C3B;">'+esc(x.devEmail)+'</a></div></div>'+
-      '<div style="font-size:12px;color:#9ca3af;">'+esc(x.date)+'</div></div>'+
+      '<div style="display:flex;gap:12px;flex:1;min-width:220px;">'+av(x.email,x.name,40,false)+'<div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#646c78;">INVESTOR</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' · '+esc(x.org):'')+'</div><a href="mailto:'+esc(x.email)+'" style="font-size:13px;color:#2C7C3B;">'+esc(x.email)+'</a><span style="font-size:13px;">'+liLink(x.email,true)+'</span><div style="margin-top:6px;">'+kycChip(x.kycStatus)+'</div></div></div>'+
+      '<div style="flex:1;min-width:220px;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:#646c78;">OPPORTUNITY</div><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:12px;color:#566070;">Ref '+esc(x.id)+' · Developer: '+esc(x.developer)+' · '+esc(x.company)+' · <a href="mailto:'+esc(x.devEmail)+'" style="color:#2C7C3B;">'+esc(x.devEmail)+'</a></div></div>'+
+      '<div style="font-size:12px;color:#646c78;">'+esc(x.date)+'</div></div>'+
       (x.message?'<div style="margin-top:10px;font-size:13px;color:#374151;background:#f8faf8;border-left:3px solid #4ADE80;padding:8px 12px;border-radius:4px;">'+esc(x.message)+'</div>':'')+'</div>';
   }).join('');
 }
@@ -435,9 +438,9 @@ function nxDevs(){return ((ADATA&&ADATA.registrations)||[]).filter(function(r){r
 function nxDevEmail(){if(NX.dev==='new')return String(NX.nd.email||'').trim().toLowerCase();return String(NX.dev||'').toLowerCase();}
 function nxRender(){
   var b=document.getElementById('nxBox');if(!b)return;var h='',devs=nxDevs(),seen={};
-  h+='<div class="nx-card"><div class="nx-h">1. Developer</div><div class="nx-row" id="nxr_dev"><label class="nx-lab">Choose the developer</label><select class="nx-in" id="nx_dev" onchange="nxSet(\'dev\',this.value)"'+(NX.locked?' disabled':'')+'><option value="">Select</option>'+
+  h+='<div class="nx-card"><div class="nx-h">1. Developer</div><div class="nx-row" id="nxr_dev"><label class="nx-lab">Choose the developer</label><select class="nx-in" id="nx_dev" aria-label="Choose the developer" onchange="nxSet(\'dev\',this.value)"'+(NX.locked?' disabled':'')+'><option value="">Select</option>'+
     devs.filter(function(r){var e=String(r.email).toLowerCase();if(seen[e])return false;seen[e]=1;return true;}).map(function(r){var e=String(r.email).toLowerCase();return '<option value="'+esc(e)+'"'+(NX.dev===e?' selected':'')+'>'+esc(r.name)+' · '+esc(r.company||'')+' · '+esc(e)+'</option>';}).join('')+
-    '<option value="new"'+(NX.dev==='new'?' selected':'')+'>New developer (not registered yet)</option></select>'+(NX.locked?'<div style="font-size:12px;color:#6b7280;margin-top:6px;">Documents are already attached to this developer. To change the developer, click Start again below.</div>':'')+'</div>';
+    '<option value="new"'+(NX.dev==='new'?' selected':'')+'>New developer (not registered yet)</option></select>'+(NX.locked?'<div style="font-size:12px;color:#566070;margin-top:6px;">Documents are already attached to this developer. To change the developer, click Start again below.</div>':'')+'</div>';
   if(NX.dev==='new'){var f=function(k,l,ph){return '<div class="nx-row" id="nxr_nd_'+k+'"><label class="nx-lab">'+l+'</label><input class="nx-in" id="nd_'+k+'" value="'+esc(NX.nd[k]||'')+'" placeholder="'+esc(ph)+'" oninput="NX.nd[\''+k+'\']=this.value"'+(NX.locked&&k==='email'?' disabled':'')+'></div>';};
     h+='<div class="nx-grid">'+f('firstName','First name *','')+f('lastName','Last name','')+f('company','Company *','')+f('email','Email *','name@company.com')+f('phone','Mobile or WhatsApp','+20 10 1234 5678')+f('linkedin','LinkedIn (optional)','linkedin.com/in/name')+'</div>';}
   h+='</div>';
@@ -463,7 +466,7 @@ function nxRender(){
             (NX.derr[d.k]?'<div class="nx-err">'+esc(NX.derr[d.k])+'</div>':'')+'</div>';});}
       h+='</div>';});
     h+='<div class="nx-card"><label style="display:flex;gap:8px;font-size:13px;align-items:center;"><input type="checkbox" id="nx_notify"'+(NX.notify?' checked':'')+' onchange="NX.notify=this.checked"> Email the developer a confirmation that we registered this asset for them</label>'+
-      '<div id="nxErr" class="nx-err" style="margin-top:12px;"></div><div style="display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap;"><button class="nx-btn" id="nxBtn" onclick="nxSubmit()">Add asset</button><button class="tbtn" style="background:#fff;color:#6b7280;border-color:#d1d5db;" onclick="if(confirm(\'Clear this form and start again?\'))nxStart()">Start again</button></div></div>';
+      '<div id="nxErr" class="nx-err" style="margin-top:12px;"></div><div style="display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap;"><button class="nx-btn" id="nxBtn" onclick="nxSubmit()">Add asset</button><button class="tbtn" style="background:#fff;color:#566070;border-color:#d1d5db;" onclick="if(confirm(\'Clear this form and start again?\'))nxStart()">Start again</button></div></div>';
   }
   b.innerHTML=h;
 }
@@ -480,7 +483,7 @@ function nxPick(k,inp){
     if(f.size>DOC_MAX){NX.derr[k]=f.name+': larger than 10 MB.';return next();}
     NUPL[k]=f.name;nxRender();var rd=new FileReader();
     rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:dev,assetId:NX.id,slot:k,name:f.name,data:String(rd.result||'').split(',')[1]||''})
-      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+((r&&r.error)||'upload failed');})
+      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+(r&&r.error==='too_many'?'this asset already has 60 files.':((r&&r.error)||'upload failed'));})
       .catch(function(){NX.derr[k]=f.name+': upload failed, please try again.';}).then(next);};
     rd.readAsDataURL(f);};
   next();
@@ -513,9 +516,9 @@ function nxSubmit(){
 }
 /* Admin adds a document to an asset that is already submitted */
 function adminDocAdd(a){var i=esc(a.id);
-  return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;"><select id="xs_'+i+'" style="padding:6px 8px;border:1px solid #d1e8d8;border-radius:6px;font-size:12.5px;">'+
+  return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;"><select id="xs_'+i+'" aria-label="Document type" style="padding:6px 8px;border:1px solid #d1e8d8;border-radius:6px;font-size:12.5px;">'+
     Object.keys(DOC_NAMES).map(function(k){return '<option value="'+k+'">'+esc(DOC_NAMES[k])+'</option>';}).join('')+'</select>'+
-    '<label class="nx-up" style="margin-top:0;" id="xl_'+i+'"><input type="file" accept="'+DOC_ACCEPT+'" onchange="adminAddDoc(\''+i+'\',\''+esc(a.email)+'\',this)"><i class="fa-solid fa-upload"></i> Add a document</label><span id="xm_'+i+'" style="font-size:12px;color:#6b7280;"></span></div>';}
+    '<label class="nx-up" style="margin-top:0;" id="xl_'+i+'"><input type="file" accept="'+DOC_ACCEPT+'" onchange="adminAddDoc(\''+i+'\',\''+esc(a.email)+'\',this)"><i class="fa-solid fa-upload"></i> Add a document</label><span id="xm_'+i+'" style="font-size:12px;color:#566070;"></span></div>';}
 function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if(!f)return;var m=document.getElementById('xm_'+id),slot=document.getElementById('xs_'+id).value;
   if(!DOC_EXT.test(f.name)){m.textContent='This file type is not accepted.';return;}if(f.size>DOC_MAX){m.textContent='Larger than 10 MB.';return;}
   m.textContent='Uploading '+f.name+'...';var rd=new FileReader();
@@ -525,22 +528,22 @@ function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if
 
 /* Jacob RARE™ breakdown on the asset card (internal only) */
 function jacobCard(d){if(!d||!d.pillars)return '';
-  var st={uploaded:['Uploaded','#166534'],later:['Within 30 days','#92400e'],na:['Not available','#991b1b'],missing:['Not provided','#6b7280']};
+  var st={uploaded:['Uploaded','#166534'],later:['Within 30 days','#92400e'],na:['Not available','#991b1b'],missing:['Not provided','#566070']};
   var up=(d.evidence||[]).filter(function(x){return x.status==='uploaded';}).length;
   return '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">Jacob RARE&#8482; breakdown: '+esc(d.label)+' · Rate floor '+esc(d.rate)+'</summary>'+
-    '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0;">'+Object.keys(d.max).map(function(p){return '<div style="background:#f8faf8;border:1px solid #e5efe8;border-radius:6px;padding:6px 4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#2C7C3B;">'+p+'</div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+d.pillars[p]+'</div><div style="font-size:10px;color:#9ca3af;">/'+d.max[p]+'</div></div>';}).join('')+'</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0;">'+Object.keys(d.max).map(function(p){return '<div style="background:#f8faf8;border:1px solid #e5efe8;border-radius:6px;padding:6px 4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#2C7C3B;">'+p+'</div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+d.pillars[p]+'</div><div style="font-size:10px;color:#646c78;">/'+d.max[p]+'</div></div>';}).join('')+'</div>'+
     '<div style="font-size:12.5px;color:#374151;margin-bottom:8px;">Decision: <b>'+esc(d.decision)+'</b> · Coverage '+(d.ratio?d.ratio+'x':'not set')+'</div>'+
     ((d.flags||[]).length?'<div style="font-size:12px;color:#92400e;background:#fffbeb;border-radius:6px;padding:6px 10px;margin-bottom:8px;">'+d.flags.map(esc).join('<br>')+'</div>':'')+
     '<div style="font-size:12px;font-weight:700;color:#2C7C3B;margin:4px 0;">EVIDENCE ('+up+'/'+(d.evidence||[]).length+' uploaded)</div>'+
-    (d.evidence||[]).map(function(x){var c=st[x.status]||st.missing;return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:3px 0;border-bottom:1px solid #f0f5f2;"><span>'+esc(x.label)+' <span style="color:#9ca3af;font-size:11px;">'+(x.tier==='mand'?'mandatory':x.tier==='opt'?'optional':'upload or explain')+'</span>'+(x.status==='na'?'<br><span style="color:#6b7280;font-size:11.5px;">'+esc(x.reason)+(x.note?': '+esc(x.note):'')+'</span>':'')+'</span><b style="color:'+c[1]+';white-space:nowrap;">'+c[0]+'</b></div>';}).join('')+
+    (d.evidence||[]).map(function(x){var c=st[x.status]||st.missing;return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:3px 0;border-bottom:1px solid #f0f5f2;"><span>'+esc(x.label)+' <span style="color:#646c78;font-size:11px;">'+(x.tier==='mand'?'mandatory':x.tier==='opt'?'optional':'upload or explain')+'</span>'+(x.status==='na'?'<br><span style="color:#566070;font-size:11.5px;">'+esc(x.reason)+(x.note?': '+esc(x.note):'')+'</span>':'')+'</span><b style="color:'+c[1]+';white-space:nowrap;">'+c[0]+'</b></div>';}).join('')+
     '</details>';}
 
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},3000);}
 function docsHtml(d,a){d=d||[];var add=a?adminDocAdd(a):'';var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
-  if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;"><i class="fa-solid fa-paperclip"></i> No documents uploaded yet.</div>'+add;
+  if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#646c78;"><i class="fa-solid fa-paperclip"></i> No documents uploaded yet.</div>'+add;
   return '<div style="margin-top:12px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:10px 14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#2C7C3B;margin-bottom:6px;"><span><i class="fa-solid fa-paperclip"></i> DOCUMENTS ('+fl.length+')</span>'+
     (fo?'<a href="'+esc(fo.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">Open folder in Drive</a>':'')+'</div>'+
-    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#6b7280;">'+esc(x.label)+':</span> <a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>'+add;}
+    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#566070;">'+esc(x.label)+':</span> <a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>'+add;}
 </script>
 </body>
 </html>

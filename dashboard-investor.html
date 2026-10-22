@@ -11,6 +11,9 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;}
@@ -45,7 +48,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
   display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:12px;}
 .step-next{background:#dbeafe;color:#1d4ed8;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.step-grey{background:#f3f4f6;color:#9ca3af;width:30px;height:30px;border-radius:50%;
+.step-grey{background:#f3f4f6;color:#646c78;width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
 
 /* BUTTONS */
@@ -70,7 +73,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   color:#2C7C3B;display:block;margin-bottom:6px;}
 .err{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:12px;
-  font-size:13px;color:#dc2626;display:none;margin-top:10px;}
+  font-size:13px;color:#b91c1c;display:none;margin-top:10px;}
 
 /* PROGRESS BAR */
 .prog-wrap{display:flex;gap:6px;margin-bottom:32px;}
@@ -107,7 +110,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 }
 
 /* DASHBOARD v11 */
-.backlink{font-size:13px;color:#6b7280;background:none;border:none;cursor:pointer;padding:0;margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
+.backlink{font-size:13px;color:#566070;background:none;border:none;cursor:pointer;padding:0;margin-bottom:22px;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
 .backlink:hover{color:#1A472A;}
 .arow{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid #f0f5f2;flex-wrap:wrap;}
 .arow:last-child{border-bottom:none;padding-bottom:0;}
@@ -120,7 +123,7 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .tcard.pre{border:2px solid #4ADE80;}
 .tcard i{color:#2C7C3B;font-size:26px;}
 .tcard-t{font-size:15px;font-weight:700;color:#1A472A;line-height:1.35;}
-.tcard-d{font-size:13px;color:#6b7280;line-height:1.5;}
+.tcard-d{font-size:13px;color:#566070;line-height:1.5;}
 .tcard-b{font-size:11px;font-weight:700;color:#166534;background:#dcfce7;border-radius:20px;padding:3px 10px;align-self:flex-start;margin-top:4px;}
 .qrow{margin-bottom:22px;border-radius:8px;transition:background .2s;}
 .qrow.bad{background:#fef2f2;box-shadow:0 0 0 8px #fef2f2;}
@@ -153,29 +156,31 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 /* INVESTOR DASHBOARD */
 .inv-tile{background:#162a1d;border:1px solid rgba(74,222,128,.12);border-radius:10px;padding:18px;position:relative;overflow:hidden;text-align:center;}
 .inv-lock{position:absolute;inset:0;background:rgba(15,31,20,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;border-radius:10px;}
-.flabel{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;}
+.flabel{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#646c78;margin-bottom:8px;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;}
 .chipf{border:1px solid #c8ddd0;background:#fff;color:#374151;border-radius:20px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s;}
 .chipf.on{background:#1A472A;border-color:#1A472A;color:#fff;font-weight:600;}
 .opp{margin-bottom:16px;}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
 .fact{background:#f0f5f2;border-radius:8px;padding:12px 14px;}
-.fact-l{font-size:10px;color:#6b7280;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.fact-l{font-size:10px;color:#566070;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
 .fact-v{font-size:14px;font-weight:700;color:#1A472A;}
 .olines{margin:0 0 16px;padding-left:18px;font-size:13px;color:#374151;line-height:1.8;}
 @media(max-width:600px){.facts{grid-template-columns:1fr !important;}}
 .ctabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #e5efe8;padding-bottom:12px;}
 .ctab{border:1px solid #c8ddd0;background:#fff;color:#1c2b1f;border-radius:8px;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;}
 .ctab.on{background:#1A472A;border-color:#1A472A;color:#fff;}
-.ctab.soon{color:#6b7280;background:#f8faf8;}
+.ctab.soon{color:#566070;background:#f8faf8;}
 .ctab.soon.on{background:#374151;border-color:#374151;color:#fff;}
 .cnum{background:#4ADE80;color:#0f1f14;border-radius:10px;font-size:11px;padding:1px 7px;font-weight:700;}
 .csoon{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.75;}
 .int-done{background:#dcfce7;color:#166534;border-radius:8px;padding:12px 14px;font-size:14px;font-weight:600;}
 </style>
 <style>.rv-vid{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0f1f14 url('video-poster.jpg') center/cover no-repeat;cursor:pointer;box-shadow:0 10px 30px rgba(15,31,20,.18);}.rv-vid .rv-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,31,20,.05) 40%,rgba(15,31,20,.75));}.rv-vid .rv-play{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;background:#4ADE80;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.35);transition:transform .15s;}.rv-vid:hover .rv-play{transform:translate(-50%,-50%) scale(1.06);}.rv-vid .rv-play svg{width:30px;height:30px;margin-left:5px;}.rv-vid .rv-lab{position:absolute;left:20px;right:20px;bottom:16px;color:#fff;font-size:15px;font-weight:600;text-align:left;line-height:1.35;}.rv-vid .rv-lab span{color:#bccabb;font-weight:400;}@media(max-width:600px){.rv-vid .rv-play{width:54px;height:54px;top:42%;}.rv-vid .rv-play svg{width:22px;height:22px;margin-left:4px;}.rv-vid .rv-lab{font-size:12.5px;left:12px;right:12px;bottom:10px;}.rv-vid .rv-lab span{display:none;}}</style>
+<style>.skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;background:#4ADE80;color:#0f1f14;padding:10px 16px;border-radius:6px;font-weight:700;text-decoration:none;}.skip-link:focus{left:12px;}</style>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <nav class="nav-wrap">
   <div class="nav-inner">
@@ -189,6 +194,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
     <div style="display:flex;align-items:center;gap:10px;" id="navAuth"></div>
   </div>
 </nav>
+<main id="main">
 
 <div style="padding-top:68px;min-height:100vh;">
 
@@ -197,8 +203,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
     <div style="width:64px;height:64px;border-radius:50%;background:#fff;border:1px solid #d1e8d8;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
       <i class="fa-solid fa-user" style="color:#2C7C3B;font-size:28px;"></i>
     </div>
-    <h2 id="lsTitle" style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Loading your dashboard...</h2>
-    <p id="lsText" style="font-size:14px;color:#6b7280;margin:0 0 20px;line-height:1.6;"></p>
+    <h1 id="lsTitle" style="font-size:20px;font-weight:700;color:#1A472A;margin:0 0 12px;">Loading your dashboard...</h1>
+    <p id="lsText" style="font-size:14px;color:#566070;margin:0 0 20px;line-height:1.6;"></p>
     <div id="lsBtns"></div>
   </div>
 
@@ -209,13 +215,13 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
         <div style="display:flex;gap:16px;align-items:center;"><div id="dAvatar"></div><div>
           <div class="eyebrow-g">INVESTOR DASHBOARD</div>
           <h1 id="dName" style="font-size:26px;font-weight:700;color:#1A472A;margin:0;"></h1>
-          <p id="dSub" style="font-size:14px;color:#6b7280;margin:6px 0 0;"></p>
+          <p id="dSub" style="font-size:14px;color:#566070;margin:6px 0 0;"></p>
         </div></div>
         <button onclick="RVAuth.out()" class="btn-out" style="font-size:13px;padding:8px 18px;">Logout</button>
       </div>
 
       <div id="liBox"></div>
-      <details id="vidDet" class="card" style="padding:20px 24px;margin-bottom:24px;"><summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><span class="eyebrow-g" style="margin:0;display:block;">INTRODUCTION VIDEO</span><span style="font-size:13px;color:#6b7280;">How Renewables Vault works, in about a minute. Tap to show or hide.</span></span><i class="fa-solid fa-chevron-down" style="color:#2C7C3B;"></i></summary><div style="margin-top:16px;max-width:600px;"><div class="rv-vid" role="button" tabindex="0" aria-label="Play the Renewables Vault introduction video" onclick="rvPlay(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();rvPlay(this);}"><div class="rv-shade"></div><div class="rv-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" fill="#0f1f14"/></svg></div><div class="rv-lab">How Renewables Vault works <span>(about 1 minute, with captions)</span></div></div></div></details>
+      <details id="vidDet" class="card" style="padding:20px 24px;margin-bottom:24px;"><summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><span class="eyebrow-g" style="margin:0;display:block;">INTRODUCTION VIDEO</span><span style="font-size:13px;color:#566070;">How Renewables Vault works, in about a minute. Tap to show or hide.</span></span><i class="fa-solid fa-chevron-down" style="color:#2C7C3B;"></i></summary><div style="margin-top:16px;max-width:600px;"><div class="rv-vid" role="button" tabindex="0" aria-label="Play the Renewables Vault introduction video" onclick="rvPlay(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();rvPlay(this);}"><div class="rv-shade"></div><div class="rv-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" fill="#0f1f14"/></svg></div><div class="rv-lab">How Renewables Vault works <span>(about 1 minute, with captions)</span></div></div></div></details>
       <div id="statusBox"></div>
 
       <!-- Opportunities (approved only) -->
@@ -223,7 +229,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
         <div class="card" style="padding:22px 24px;margin-bottom:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
             <div><div class="eyebrow-g" style="margin:0;">OPPORTUNITIES</div>
-              <div id="oppCount" style="font-size:13px;color:#6b7280;margin-top:4px;"></div></div>
+              <div id="oppCount" style="font-size:13px;color:#566070;margin-top:4px;"></div></div>
             <button class="btn-out" onclick="editPrefs()" style="font-size:13px;padding:8px 16px;"><i class="fa-solid fa-sliders"></i> Edit my preferences</button>
           </div>
           <div class="ctabs" id="fCountries"></div>
@@ -236,9 +242,9 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <!-- Opportunity structure: shown to every registered investor -->
       <div id="structBox" style="display:none;margin-bottom:24px;">
         <details id="structDet" class="card" style="padding:20px 24px;">
-          <summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><span class="eyebrow-g" style="margin:0;display:block;">WHAT AN OPPORTUNITY LOOKS LIKE</span><span style="font-size:13px;color:#6b7280;">Clear structure, real assets. Tap to show or hide.</span></span><i class="fa-solid fa-chevron-down" style="color:#2C7C3B;"></i></summary>
+          <summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><span class="eyebrow-g" style="margin:0;display:block;">WHAT AN OPPORTUNITY LOOKS LIKE</span><span style="font-size:13px;color:#566070;">Clear structure, real assets. Tap to show or hide.</span></span><i class="fa-solid fa-chevron-down" style="color:#2C7C3B;"></i></summary>
           <div style="margin-top:16px;"><div style="border:1px solid #d1e8d8;border-radius:12px;overflow:hidden;"><div style="display:grid;grid-template-columns:200px 1fr;border-top:none;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Underlying asset</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">An operating clean energy asset in Egypt: biofuel, solar C&amp;I or circular economy</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Instrument</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">Revenue Purchase Agreement: a defined portion of the asset&#8217;s future contracted revenue</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Term</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">1 to 5 years, fixed for each opportunity</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Currency</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">US dollars, or Egyptian pounds indexed to the US dollar</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Security</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">Assignment of the contracted revenue into a controlled collection account, plus a pledge over the asset where applicable</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Underwriting</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">Every opportunity assessed through RARE&#8482;, our proprietary risk methodology</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Indicative return</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">Shown to approved investors for each opportunity, with a worked example</div></div><div style="display:grid;grid-template-columns:200px 1fr;border-top:1px solid #e5efe8;"><div style="background:#f8faf8;padding:14px 18px;font-size:13px;font-weight:700;color:#1A472A;">Reporting</div><div style="padding:14px 18px;font-size:14px;color:#374151;line-height:1.6;">Regular updates on the asset&#8217;s performance and payments</div></div></div></div>
-          <p style="font-size:12px;color:#9ca3af;margin:12px 0 0;">Indicative information only. Every investment is subject to due diligence, documentation and formal approval.</p>
+          <p style="font-size:12px;color:#646c78;margin:12px 0 0;">Indicative information only. Every investment is subject to due diligence, documentation and formal approval.</p>
         </details>
       </div>
 
@@ -255,7 +261,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       </div>
 
       <div class="card" style="text-align:center;padding:20px;">
-        <p style="font-size:14px;color:#6b7280;margin:0 0 8px;">Questions about the process?</p>
+        <p style="font-size:14px;color:#566070;margin:0 0 8px;">Questions about the process?</p>
         <a href="contact.html" style="color:#2C7C3B;font-size:14px;font-weight:700;text-decoration:none;">Contact Renewables Vault &#8594;</a>
       </div>
     </div>
@@ -267,14 +273,14 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <button onclick="saveAndExit()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Save &amp; return to dashboard</button>
       <div class="eyebrow-g" id="fEyebrow">KYC</div>
       <h1 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 4px;" id="fTitle"></h1>
-      <p id="fIntro" style="font-size:13px;color:#6b7280;margin:0 0 22px;">All information is treated as strictly confidential and used only to verify your identity and match you with suitable opportunities.</p>
+      <p id="fIntro" style="font-size:13px;color:#566070;margin:0 0 22px;">All information is treated as strictly confidential and used only to verify your identity and match you with suitable opportunities.</p>
       <div class="prog-wrap" id="prog"></div>
       <div class="card" style="padding:28px 28px 22px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;flex-wrap:wrap;">
           <h2 id="sTitle" style="font-size:19px;font-weight:700;color:#1A472A;margin:0;"></h2>
-          <span id="sCount" style="font-size:12px;color:#9ca3af;font-weight:600;"></span>
+          <span id="sCount" style="font-size:12px;color:#646c78;font-weight:600;"></span>
         </div>
-        <p id="sDesc" style="font-size:13px;color:#6b7280;margin:0 0 22px;"></p>
+        <p id="sDesc" style="font-size:13px;color:#566070;margin:0 0 22px;"></p>
         <div id="qBox"></div>
         <div class="err" id="fErr"></div>
         <div style="display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap;">
@@ -301,6 +307,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 
 </div>
 
+</main>
 <footer class="footer">
   <div class="footer-inner">
     <div>
@@ -396,7 +403,7 @@ function stateMsg(title,text,btns){show(null);document.getElementById('lsTitle')
 
 window.addEventListener('DOMContentLoaded',function(){
   U=RVAuth.get();
-  if(!U){var n=5;stateMsg('Please log in','Your session was not found on this browser. You can log in from any phone or computer.','<a href="login.html" class="btn-green" style="text-decoration:none;">Go to Login</a><p style="font-size:13px;color:#9ca3af;margin-top:14px;">Redirecting in <b id="cnt">5</b> seconds...</p>');
+  if(!U){var n=5;stateMsg('Please log in','Your session was not found on this browser. You can log in from any phone or computer.','<a href="login.html" class="btn-green" style="text-decoration:none;">Go to Login</a><p style="font-size:13px;color:#646c78;margin-top:14px;">Redirecting in <b id="cnt">5</b> seconds...</p>');
     var iv=setInterval(function(){n--;var c=document.getElementById('cnt');if(c)c.textContent=n;if(n<=0){clearInterval(iv);location.href='login.html';}},1000);return;}
   if(U.type!=='investor'){location.href='dashboard-developer.html';return;}
   if(!RV.api()){stateMsg('Temporarily unavailable','Our investor service is being updated. Please try again shortly or contact us.','<a href="contact.html" class="btn-green" style="text-decoration:none;">Contact us</a>');return;}
@@ -411,7 +418,7 @@ function linkAccount(){
   RV.userKey(U).then(function(lk){
   RV.serverRegister({action:'register',type:'investor',firstName:U.firstName,lastName:U.lastName,email:U.email,phone:U.phone||'',org:U.org||'',investorType:U.investorType||'',consent:true,link:true},null,function(res){
     if(res==='new'||res==='restored'){U=RVAuth.get()||U;loadStatus();return;}
-    if(res==='exists'){stateMsg('Please log in again','The password for this account was changed on another device. Please log out and log in with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#6b7280;">Forgot your password?</a></div>');return;}
+    if(res==='exists'){stateMsg('Please log in again','The password for this account was changed on another device. Please log out and log in with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#566070;">Forgot your password?</a></div>');return;}
     stateMsg('Connection problem','We could not reach our server. Please check your internet connection and try again.','<button class="btn-green" onclick="loadStatus()">Try again</button>');
   },lk);});
 }
@@ -422,7 +429,7 @@ function loadStatus(){
   api({action:'investor_status'}).then(function(r){
     if(r&&!r.ok&&r.error==='auth'&&!LINKED){LINKED=true;linkAccount();return;}
     if(r&&!r.ok&&/unknown action/i.test(r.error||'')){stateMsg('Investor area being updated','We are finishing an update to the investor area. Please try again in a few minutes.','<button class="btn-green" onclick="loadStatus()">Try again</button>');return;}
-    if(!r||!r.ok){stateMsg('Please log in again','We could not confirm your account. Please log out and log in again with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#6b7280;">Forgot your password?</a></div>');return;}
+    if(!r||!r.ok){stateMsg('Please log in again','We could not confirm your account. Please log out and log in again with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#566070;">Forgot your password?</a></div>');return;}
     ST=r;renderMain();if(!PINIT){PINIT=1;photoInit();}
     if(r.status==='Approved'&&r.activated)loadListings();
   }).catch(function(){stateMsg('Connection problem','We could not reach our server. Please check your internet connection and try again.','<button class="btn-green" onclick="loadStatus()">Try again</button>');});
@@ -432,12 +439,12 @@ function loadStatus(){
 
 /* ───────────── LinkedIn (required) ───────────── */
 function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
-function liRow(){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#9ca3af;font-weight:500;">Optional, not added</span> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#2C7C3B;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Add</button>')+'</div></div>';}
+function liRow(){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#646c78;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#646c78;font-weight:500;">Optional, not added</span> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#2C7C3B;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Add</button>')+'</div></div>';}
 function liBoxRender(msg,edit){
   var b=document.getElementById('liBox');if(!b)return;
   if(!edit){b.innerHTML='';return;}
   b.innerHTML='<div class="card" style="border-left:4px solid #0a66c2;padding:18px 22px;margin-bottom:20px;"><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;"><i class="fa-brands fa-linkedin" style="color:#0a66c2;"></i> '+(edit?'Update':'Add')+' your LinkedIn profile</div>'+
-    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.6;">Optional. A LinkedIn profile helps us approve your access faster. It is seen only by the Renewables Vault team.</div>'+
+    '<div style="font-size:13px;color:#566070;margin-bottom:12px;line-height:1.6;">Optional. A LinkedIn profile helps us approve your access faster. It is seen only by the Renewables Vault team.</div>'+
     '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><input id="liIn" class="field" type="url" placeholder="linkedin.com/in/yourname" style="flex:1;min-width:200px;max-width:420px;margin:0;" onkeydown="if(event.key===\'Enter\')saveLinkedin()"><button class="btn-green" id="liBtn" onclick="saveLinkedin()">Save</button></div>'+
     '<div class="err" id="liErr"'+(msg?' style="display:block;"':'')+'>'+esc(msg||'')+'</div></div>';
 }
@@ -470,8 +477,8 @@ function renderPhoto(msg,isErr){
   var b=document.getElementById('photoBox');if(!b)return;
   b.innerHTML=RV.avatar(PHOTO,nm,72,sq)+'<div style="flex:1;min-width:160px;"><div style="display:flex;gap:8px;flex-wrap:wrap;">'+
     '<button class="btn-out" style="font-size:12px;padding:7px 14px;" onclick="changePhoto()"'+(PBUSY?' disabled':'')+'><i class="fa-solid fa-camera"></i> '+(PBUSY?'Saving...':(PHOTO?'Change photo':'Add a photo'))+'</button>'+
-    (PHOTO&&!PBUSY?'<button onclick="removePhoto()" style="background:none;border:none;color:#6b7280;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Remove</button>':'')+'</div>'+
-    '<div style="font-size:11px;color:'+(isErr?'#dc2626':'#9ca3af')+';margin-top:6px;line-height:1.5;">'+(msg||'Optional. Shown only to you and the Renewables Vault team.')+'</div></div>';
+    (PHOTO&&!PBUSY?'<button onclick="removePhoto()" style="background:none;border:none;color:#566070;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Remove</button>':'')+'</div>'+
+    '<div style="font-size:11px;color:'+(isErr?'#dc2626':'#646c78')+';margin-top:6px;line-height:1.5;">'+(msg||'Optional. Shown only to you and the Renewables Vault team.')+'</div></div>';
 }
 function changePhoto(){if(PBUSY)return;RV.pickPhoto('cover',function(img,err){if(!img){renderPhoto(err,true);return;}savePhoto(img);});}
 function removePhoto(){if(confirm('Remove this photo?'))savePhoto('');}
@@ -494,7 +501,7 @@ function renderMain(){
   document.getElementById('dName').textContent='Welcome, '+U.firstName+' '+U.lastName+'.';
   document.getElementById('dSub').textContent=[U.org,U.investorType].filter(Boolean).join(' · ');
   var s=ST.status,h='',draft=lsGet(kD(),null);
-  var banner=function(color,icon,title,text,btn){return '<div class="card" style="border-left:4px solid '+color+';padding:20px 24px;margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid '+icon+'" style="color:'+color+';font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:220px;"><div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+title+'</div><div style="font-size:14px;color:#6b7280;line-height:1.6;">'+text+'</div></div>'+(btn||'')+'</div>';};
+  var banner=function(color,icon,title,text,btn){return '<div class="card" style="border-left:4px solid '+color+';padding:20px 24px;margin-bottom:24px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid '+icon+'" style="color:'+color+';font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:220px;"><div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+title+'</div><div style="font-size:14px;color:#566070;line-height:1.6;">'+text+'</div></div>'+(btn||'')+'</div>';};
   if(s==='Not started'){
     h='<div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:34px 32px;margin-bottom:24px;color:#fff;"><div class="eyebrow">NEXT STEP</div><h2 style="font-size:22px;font-weight:700;margin:0 0 10px;">Request access to the opportunities</h2><p style="font-size:15px;color:#bccabb;line-height:1.7;margin:0 0 22px;max-width:620px;">About 2 minutes. Choose the asset types and countries you are interested in and confirm three short declarations. Once our team approves your request, you will receive a personal access code by email to view the anonymised opportunities.</p><button class="btn-lime" onclick="startAccess()">Request access <i class="fa-solid fa-arrow-right"></i></button></div>';
   }else if(s==='Submitted'||s==='Under review'){
@@ -504,21 +511,21 @@ function renderMain(){
     h=banner('#ea580c','fa-circle-info','We need a little more information',(ST.note?'<b>Note from our team:</b> '+esc(ST.note):'Please review and update your access request.'),'<button class="btn-green" onclick="startAccess()">Update my request</button>');
     h+=lockedTiles();
   }else if(s==='Not approved'){
-    h=banner('#6b7280','fa-circle-xmark','Access not approved at this time',(ST.note?esc(ST.note):'Thank you for your interest. Please contact us if you have any questions.'),'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
+    h=banner('#566070','fa-circle-xmark','Access not approved at this time',(ST.note?esc(ST.note):'Thank you for your interest. Please contact us if you have any questions.'),'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
   }else if(s==='Approved'&&!ST.activated){
     h='<div class="card" style="border-left:4px solid #16a34a;padding:24px;margin-bottom:24px;"><div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><i class="fa-solid fa-key" style="color:#16a34a;font-size:24px;margin-top:2px;"></i><div style="flex:1;min-width:240px;">'+
       '<div style="font-size:16px;font-weight:700;color:#1A472A;margin-bottom:4px;">Your access is approved. Enter your access code</div>'+
-      '<div style="font-size:14px;color:#6b7280;line-height:1.6;margin-bottom:14px;">We have emailed your personal access code to <b>'+esc(U.email)+'</b>. Enter it below to unlock the opportunities. You only need to do this once.</div>'+
+      '<div style="font-size:14px;color:#566070;line-height:1.6;margin-bottom:14px;">We have emailed your personal access code to <b>'+esc(U.email)+'</b>. Enter it below to unlock the opportunities. You only need to do this once.</div>'+
       '<div style="display:flex;gap:10px;flex-wrap:wrap;"><input id="accCode" class="field" maxlength="12" placeholder="e.g. K7MP-Q2XA" style="flex:1;min-width:180px;max-width:260px;font-family:monospace;font-size:17px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;" onkeydown="if(event.key===\'Enter\')activate()">'+
       '<button class="btn-green" id="accBtn" onclick="activate()">Unlock opportunities</button></div>'+
       '<div class="err" id="accErr"></div>'+
-      '<div style="font-size:12px;color:#9ca3af;margin-top:10px;">Did not receive it? Check your spam folder or <a href="contact.html" style="color:#2C7C3B;">contact us</a>.</div>'+
+      '<div style="font-size:12px;color:#646c78;margin-top:10px;">Did not receive it? Check your spam folder or <a href="contact.html" style="color:#2C7C3B;">contact us</a>.</div>'+
       (ST.note?'<div style="font-size:13px;color:#374151;margin-top:10px;"><b>Note from our team:</b> '+esc(ST.note)+'</div>':'')+'</div></div></div>';
     h+=lockedTiles();
   }else if(s==='Approved'){
     var k=ST.kycStatus,nt=ST.note?'<br><b>Note from our team:</b> '+esc(ST.note):'';
     if(k==='More information needed')h=banner('#ea580c','fa-circle-info','Your KYC needs a little more information',(ST.note?'<b>Note from our team:</b> '+esc(ST.note):'Please review and update your KYC.'),'<button class="btn-green" onclick="startKyc()">Update my KYC</button>');
-    else if(k==='Rejected')h=banner('#6b7280','fa-circle-xmark','We could not verify your KYC','You can still browse the opportunities. Please contact us if you have any questions.'+nt,'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
+    else if(k==='Rejected')h=banner('#566070','fa-circle-xmark','We could not verify your KYC','You can still browse the opportunities. Please contact us if you have any questions.'+nt,'<a href="contact.html" class="btn-out" style="font-size:13px;padding:8px 16px;text-decoration:none;">Contact us</a>');
     else if(k==='Verified')h=banner('#16a34a','fa-shield-halved','Access unlocked and KYC verified','Express interest in any opportunity and our team will share full details under NDA.'+nt);
     else if(k==='Submitted')h=banner('#16a34a','fa-shield-halved','Access unlocked','Your KYC has been received and our team is verifying it. You can keep browsing and expressing interest.'+nt,'<button class="btn-out" onclick="startKyc()" style="font-size:13px;padding:8px 16px;">Edit my KYC</button>');
     else h=banner('#16a34a','fa-shield-halved','Access unlocked','You can see published opportunities by country. When you express interest, we will ask you for a short KYC (about 5 minutes) before our team shares full details under NDA.'+nt,'<button class="btn-out" onclick="startKyc()" style="font-size:13px;padding:8px 16px;">Complete my KYC now</button>');
@@ -527,13 +534,13 @@ function renderMain(){
   document.getElementById('oppBox').style.display=(s==='Approved'&&ST.activated)?'block':'none';
   document.getElementById('structBox').style.display='block';var sd=document.getElementById('structDet');if(!sd.dataset.set){sd.open=!(s==='Approved'&&ST.activated);sd.dataset.set='1';}var vd=document.getElementById('vidDet');if(vd&&!vd.dataset.set){vd.open=!(s==='Approved'&&ST.activated);vd.dataset.set='1';}
   var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Mobile or WhatsApp',U.phone||'Not provided'],['Organisation',U.org||'Investing personally'],['Investor type',U.investorType||'Not provided'],['Access status',s==='Not started'?'Not requested yet':s],['KYC status',ST.kycStatus||'Requested when you express interest']];
-  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
+  document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
   liBoxRender();
   var done=[1,s!=='Not started',s==='Approved'&&!!ST.activated,s==='Approved'&&!!ST.kycStatus&&LIST&&LIST.interested&&LIST.interested.length>0,0];
   var j=[['Create your account','Done'],['Request access','About 2 minutes: preferences and declarations'],['Approval and access code','Our team reviews within 2 business days'],['Express interest and short KYC','About 5 minutes, only when you find an opportunity you like'],['NDA, due diligence and investment','Full details shared under NDA']];
   var nx=done.findIndex(function(x){return !x;});
   document.getElementById('journey').innerHTML=j.map(function(x,i){var last=i===j.length-1,d=!!done[i],n=i===nx;
-    return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(d?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';"><div class="'+(d?'step-done':n?'step-next':'step-grey')+'" style="position:absolute;left:-16px;top:0;">'+(d?'<i class="fa-solid fa-check"></i>':(i+1))+'</div><div style="font-size:14px;font-weight:700;color:'+(d||n?'#1A472A':'#9ca3af')+';">'+x[0]+'</div><div style="font-size:12px;color:'+(d||n?'#6b7280':'#9ca3af')+';margin-top:2px;">'+x[1]+'</div></div>';}).join('');
+    return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(d?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';"><div class="'+(d?'step-done':n?'step-next':'step-grey')+'" style="position:absolute;left:-16px;top:0;">'+(d?'<i class="fa-solid fa-check"></i>':(i+1))+'</div><div style="font-size:14px;font-weight:700;color:'+(d||n?'#1A472A':'#646c78')+';">'+x[0]+'</div><div style="font-size:12px;color:'+(d||n?'#566070':'#646c78')+';margin-top:2px;">'+x[1]+'</div></div>';}).join('');
 }
 function lockedTiles(){
   return '<div style="background:#0f1f14;border-radius:12px;padding:24px;margin-bottom:24px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div><div class="eyebrow" style="margin-bottom:4px;">OPPORTUNITIES</div><div style="font-size:13px;color:#869486;">'+(ST&&ST.status==='Approved'?'Unlocked once you enter your access code.':'Unlocked once your access request is approved.')+'</div></div><i class="fa-solid fa-lock" style="color:#4ADE80;font-size:18px;"></i></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">'+
@@ -556,13 +563,13 @@ function activate(){
 /* ───────────── Opportunities ───────────── */
 var OPEN=['Egypt'],FLAGS={'Egypt':'&#127466;&#127468;','KSA':'&#127480;&#127462;','Morocco':'&#127474;&#127462;','Kenya':'&#127472;&#127466;','South Africa':'&#127487;&#127462;'},CTRY='Egypt';
 function loadListings(){
-  document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;color:#6b7280;font-size:14px;">Loading opportunities...</div>';
+  document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;color:#566070;font-size:14px;">Loading opportunities...</div>';
   api({action:'listings'}).then(function(r){
-    if(!r||!r.ok){document.getElementById('oppList').innerHTML='<div class="card" style="color:#6b7280;font-size:14px;">Opportunities are not available right now. Please try again later.</div>';return;}
+    if(!r||!r.ok){document.getElementById('oppList').innerHTML='<div class="card" style="color:#566070;font-size:14px;">Opportunities are not available right now. Please try again later.</div>';return;}
     LIST=r;FILTER={types:(r.prefs.types||[]).slice(),countries:(r.prefs.countries||[]).slice()};
     if(!FILTER.types.length)FILTER.types=Object.keys(TYPES);if(!FILTER.countries.length)FILTER.countries=COUNTRIES.map(function(c){return c[0];});
     renderChips();renderList();renderMain();
-  }).catch(function(){document.getElementById('oppList').innerHTML='<div class="card" style="color:#6b7280;font-size:14px;">Could not load opportunities. Please check your connection.</div>';});
+  }).catch(function(){document.getElementById('oppList').innerHTML='<div class="card" style="color:#566070;font-size:14px;">Could not load opportunities. Please check your connection.</div>';});
 }
 function renderChips(){
   document.getElementById('fTypes').innerHTML=Object.keys(TYPES).map(function(k){return '<button class="chipf'+(FILTER.types.indexOf(k)>=0?' on':'')+'" onclick="toggleF(\'types\',\''+k+'\')">'+TYPES[k].label+'</button>';}).join('');
@@ -575,24 +582,24 @@ function renderList(){
   if(OPEN.indexOf(CTRY)<0){
     document.getElementById('oppCount').textContent=CTRY+': coming soon';
     var wants=(LIST.prefs.countries||[]).indexOf(CTRY)>=0;
-    document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:36px 24px;"><div style="font-size:30px;margin-bottom:10px;">'+FLAGS[CTRY]+'</div><div style="font-size:17px;font-weight:700;color:#1A472A;margin-bottom:6px;">Opportunities in '+esc(CTRY)+' are coming soon</div><div style="font-size:14px;color:#6b7280;line-height:1.6;max-width:460px;margin:0 auto;">We are building our pipeline in '+esc(CTRY)+'. '+(wants?'You chose '+esc(CTRY)+' in your preferences, so we will email you as soon as the first opportunity is published.':'Add '+esc(CTRY)+' to your preferences and we will email you as soon as the first opportunity is published.')+'</div>'+(wants?'':'<button class="btn-out" style="margin-top:16px;font-size:13px;padding:8px 16px;" onclick="editPrefs()">Edit my preferences</button>')+'</div>';
+    document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:36px 24px;"><div style="font-size:30px;margin-bottom:10px;">'+FLAGS[CTRY]+'</div><div style="font-size:17px;font-weight:700;color:#1A472A;margin-bottom:6px;">Opportunities in '+esc(CTRY)+' are coming soon</div><div style="font-size:14px;color:#566070;line-height:1.6;max-width:460px;margin:0 auto;">We are building our pipeline in '+esc(CTRY)+'. '+(wants?'You chose '+esc(CTRY)+' in your preferences, so we will email you as soon as the first opportunity is published.':'Add '+esc(CTRY)+' to your preferences and we will email you as soon as the first opportunity is published.')+'</div>'+(wants?'':'<button class="btn-out" style="margin-top:16px;font-size:13px;padding:8px 16px;" onclick="editPrefs()">Edit my preferences</button>')+'</div>';
     return;
   }
   var inC=(LIST.listings||[]).filter(function(x){return x.country===CTRY;}),L=inC.filter(function(x){return FILTER.types.indexOf(x.type)>=0;});
   document.getElementById('oppCount').textContent=CTRY+': showing '+L.length+' of '+inC.length+' published opportunit'+(inC.length===1?'y':'ies');
-  if(!L.length){document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:30px;"><i class="fa-regular fa-folder-open" style="color:#9ca3af;font-size:28px;margin-bottom:10px;display:block;"></i><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+(inC.length?'No opportunities match these asset types yet':'No opportunities published in '+esc(CTRY)+' yet')+'</div><div style="font-size:13px;color:#6b7280;">We will email you as soon as a matching opportunity is published.</div></div>';return;}
+  if(!L.length){document.getElementById('oppList').innerHTML='<div class="card" style="text-align:center;padding:30px;"><i class="fa-regular fa-folder-open" style="color:#646c78;font-size:28px;margin-bottom:10px;display:block;"></i><div style="font-size:15px;font-weight:700;color:#1A472A;margin-bottom:4px;">'+(inC.length?'No opportunities match these asset types yet':'No opportunities published in '+esc(CTRY)+' yet')+'</div><div style="font-size:13px;color:#566070;">We will email you as soon as a matching opportunity is published.</div></div>';return;}
   document.getElementById('oppList').innerHTML=L.map(function(x){
     var done=(LIST.interested||[]).indexOf(x.id)>=0,lines=String(x.summary||'').split('\n').filter(Boolean);
     var facts=[['Indicative return',x.ret],['Capital sought',x.capital],['Term',x.tenor],['Currency',x.currency]].filter(function(f){return f[1];});
     return '<div class="card opp" id="o_'+esc(x.id)+'">'+
-      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;"><div style="display:flex;gap:12px;align-items:center;"><div class="aicon"><i class="fa-solid '+(TYPES[x.type]?TYPES[x.type].icon:'fa-bolt')+'"></i></div><div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:13px;color:#6b7280;">'+esc(x.typeLabel)+' · '+esc((x.region?x.region+', ':'')+x.country)+'</div></div></div><span style="font-size:11px;color:#9ca3af;">Ref '+esc(x.id)+' · Published '+esc(x.published)+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;"><div style="display:flex;gap:12px;align-items:center;"><div class="aicon"><i class="fa-solid '+(TYPES[x.type]?TYPES[x.type].icon:'fa-bolt')+'"></i></div><div><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.title)+'</div><div style="font-size:13px;color:#566070;">'+esc(x.typeLabel)+' · '+esc((x.region?x.region+', ':'')+x.country)+'</div></div></div><span style="font-size:11px;color:#646c78;">Ref '+esc(x.id)+' · Published '+esc(x.published)+'</span></div>'+
       (facts.length?'<div class="facts">'+facts.map(function(f){return '<div class="fact"><div class="fact-l">'+f[0]+'</div><div class="fact-v">'+esc(f[1])+'</div></div>';}).join('')+'</div>':'')+
       (lines.length?'<ul class="olines">'+lines.map(function(l){return '<li>'+esc(l)+'</li>';}).join('')+'</ul>':'')+
       (x.example?'<details style="margin:0 0 14px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">See an example</summary><div style="font-size:13px;color:#374151;line-height:1.7;background:#f8faf8;border-radius:8px;padding:12px 14px;margin-top:8px;white-space:pre-line;">'+esc(x.example)+'</div></details>':'')+
       (done?'<div class="int-done"><i class="fa-solid fa-circle-check"></i> Interest registered. Our team will contact you with the next steps.</div>':
        '<div id="ib_'+esc(x.id)+'"><button class="btn-green" style="width:100%;justify-content:center;padding:13px;" onclick="openInt(\''+esc(x.id)+'\')">Express interest <i class="fa-solid fa-arrow-right"></i></button></div>')+
       '</div>';}).join('')+
-    '<p style="font-size:12px;color:#9ca3af;line-height:1.7;text-align:center;margin:8px 0 0;">Indicative information only. Developer identities, terms and full transaction details are shared under NDA. Any investment is subject to due diligence, documentation and formal approval.</p>';
+    '<p style="font-size:12px;color:#646c78;line-height:1.7;text-align:center;margin:8px 0 0;">Indicative information only. Developer identities, terms and full transaction details are shared under NDA. Any investment is subject to due diligence, documentation and formal approval.</p>';
 }
 function openInt(id){
   document.getElementById('ib_'+id).innerHTML='<label class="qlab" style="margin-top:4px;">Message to our team (optional)</label><textarea class="field" id="im_'+id+'" rows="2" placeholder="e.g. indicative amount, timing, questions"></textarea><div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;"><button class="btn-green" id="ic_'+id+'" onclick="sendInt(\''+id+'\')">Confirm interest</button><button class="btn-out" onclick="renderList()">Cancel</button></div><div class="err" id="ie_'+id+'"></div>';
@@ -645,7 +652,7 @@ function renderStep(){
     if(q.t==='area')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
     if(q.t==='check')return '<div class="qrow" id="row_'+q.k+'"><label class="chk"><input type="checkbox" id="'+q.k+'"'+(a[q.k]?' checked':'')+' onchange="clr(this);autosave()"> <span>'+esc(q.q)+'</span></label></div>';
     var multi=q.t==='multi',cur=a[q.k]||(multi?[]:'');
-    return '<div class="qrow" id="row_'+q.k+'">'+lab+(multi?'<div style="font-size:12px;color:#9ca3af;margin:-4px 0 10px;">Choose one or more.</div>':'')+'<div class="pills">'+q.o.map(function(o){var on=multi?cur.indexOf(o.v)>=0:cur===o.v;
+    return '<div class="qrow" id="row_'+q.k+'">'+lab+(multi?'<div style="font-size:12px;color:#646c78;margin:-4px 0 10px;">Choose one or more.</div>':'')+'<div class="pills">'+q.o.map(function(o){var on=multi?cur.indexOf(o.v)>=0:cur===o.v;
       return '<label class="pill'+(on?' sel':'')+'"><input type="'+(multi?'checkbox':'radio')+'" name="'+q.k+'" value="'+esc(o.v)+'"'+(on?' checked':'')+' onchange="pick(this,'+(q.rerender?1:0)+')"><span>'+esc(o.t)+'</span></label>';}).join('')+'</div></div>';
   }).join('');
   document.getElementById('bPrev').style.visibility=S===0?'hidden':'visible';

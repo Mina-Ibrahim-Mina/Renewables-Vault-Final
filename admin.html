@@ -46,6 +46,8 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 .nx-up input{display:none;}
 .nx-up.dis{opacity:.5;pointer-events:none;}
 .nx-req{display:inline-block;background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;margin-left:6px;}
+.nx-later{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#92400e;margin:6px 0 0 12px;cursor:pointer;}
+.nx-later input{accent-color:#d97706;}
 .nx-err{font-size:12.5px;color:#b91c1c;margin-top:6px;}
 .nx-btn{background:#1A472A;color:#fff;border:none;border-radius:8px;padding:12px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
 .nx-btn:disabled{opacity:.6;cursor:default;}
@@ -428,7 +430,7 @@ var NX=null,NUPL={};
 function adminPw(){return sessionStorage.getItem('rva_ap')||'';}
 function apost(body){return fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();});}
 function nxId(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='';for(var i=0;i<6;i++)r+=c[Math.floor(Math.random()*c.length)];return 'RV-'+r;}
-function nxStart(){NX={id:nxId(),dev:'',nd:{},type:'',ans:{},docs:{},derr:{},notify:false,locked:false};NUPL={};nxRender();}
+function nxStart(){NX={id:nxId(),dev:'',nd:{},type:'',ans:{},docs:{},modes:{},derr:{},notify:false,locked:false};NUPL={};nxRender();}
 function nxDevs(){return ((ADATA&&ADATA.registrations)||[]).filter(function(r){return r.type==='Developer';});}
 function nxDevEmail(){if(NX.dev==='new')return String(NX.nd.email||'').trim().toLowerCase();return String(NX.dev||'').toLowerCase();}
 function nxRender(){
@@ -457,6 +459,7 @@ function nxRender(){
             f.map(function(x){return '<div class="nx-file"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i> '+esc(x.name)+'</div>';}).join('')+
             (busy?'<div class="nx-file" style="color:#2C7C3B;">Uploading '+esc(busy)+'...</div>':'')+
             '<label class="nx-up'+(busy?' dis':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="nxPick(\''+d.k+'\',this)"><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>'+
+            (!f.length&&d.tier!=='opt'?'<label class="nx-later"><input type="checkbox"'+(NX.modes[d.k]?' checked':'')+' onchange="nxLater(\''+d.k+'\',this.checked)"> Provide within 30 days</label>':'')+
             (NX.derr[d.k]?'<div class="nx-err">'+esc(NX.derr[d.k])+'</div>':'')+'</div>';});}
       h+='</div>';});
     h+='<div class="nx-card"><label style="display:flex;gap:8px;font-size:13px;align-items:center;"><input type="checkbox" id="nx_notify"'+(NX.notify?' checked':'')+' onchange="NX.notify=this.checked"> Email the developer a confirmation that we registered this asset for them</label>'+
@@ -464,6 +467,8 @@ function nxRender(){
   }
   b.innerHTML=h;
 }
+function nxModes(){var out={};Object.keys(NX.modes||{}).forEach(function(k){if(!(NX.docs[k]||[]).length)out[k]={mode:'later'};});return out;}
+function nxLater(k,on){if(on)NX.modes[k]={mode:'later'};else delete NX.modes[k];}
 function nxSet(k,v){if(k==='dev'&&NX.locked)return;NX[k]=v;if(k==='type'){NX.ans={a_country:'Egypt'};}nxRender();}
 function nxAns(k,v){NX.ans[k]=v;nxRender();}
 function nxPick(k,inp){
@@ -499,10 +504,10 @@ function nxSubmit(){
   var dev=NX.dev==='new'?{firstName:NX.nd.firstName,lastName:NX.nd.lastName||'',email:nxDevEmail(),phone:NX.nd.phone||'',company:NX.nd.company,linkedin:NX.nd.linkedin||''}:{email:nxDevEmail()};
   var b=document.getElementById('nxBtn');b.disabled=true;b.textContent='Adding...';
   apost({action:'admin_submit_asset',password:adminPw(),notify:!!NX.notify,dev:dev,
-    asset:{id:NX.id,type:NX.type,name:NX.ans.a_name,location:NX.ans.a_loc,share:!!NX.ans.share,answers:answers,items:items,docs:docs}})
+    asset:{id:NX.id,type:NX.type,name:NX.ans.a_name,location:NX.ans.a_loc,share:!!NX.ans.share,answers:answers,items:items,docs:docs,modes:nxModes()}})
   .then(function(r){
     if(!r||!r.ok){b.disabled=false;b.textContent='Add asset';e.textContent=(r&&r.error)||'Could not add the asset.';return;}
-    toast('Asset added: RARE '+r.score+'/100, Tier '+r.tier+(r.missing&&r.missing.length?'. Missing documents: '+r.missing.length:''));
+    toast('Asset added: RARE '+r.score+'/100, Tier '+r.tier+(r.missing&&r.missing.length?'. Documents still missing: '+r.missing.length:''));
     NX=null;showTab('ast');loadA();
   }).catch(function(){b.disabled=false;b.textContent='Add asset';e.textContent='Could not reach the server. Please try again.';});
 }

@@ -344,6 +344,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
       <div class="card" style="margin-bottom:20px;">
         <div class="eyebrow-g">WHAT HAPPENS NEXT</div>
         <p style="font-size:15px;color:#374151;line-height:1.7;margin:0 0 18px;">Our team reviews your asset profile and will contact you within <b>5 business days</b> to arrange a discovery call. You can follow the status of this asset on your dashboard.</p>
+        <p id="doneDocs" style="display:none;font-size:14px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;line-height:1.6;margin:0 0 18px;"></p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <button class="btn-green" onclick="goMain()">Back to Dashboard</button>
           <button class="btn-out" onclick="newAsset()"><i class="fa-solid fa-plus"></i> Register another asset</button>
@@ -485,7 +486,7 @@ function goMain(){
   var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone or WhatsApp',U.phone||'Not provided'],['Company',U.company||'Not provided'],['Main asset type',U.energy||'Not provided'],['Registered',U.registered||'Not provided']];
   document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
   liBoxRender();
-  var j=[['Create your profile','Done',1],['Register your asset','A short asset profile for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
+  var j=[['Create your profile','Done',1],['Register your asset','An asset profile of 7 steps for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
   var nextIdx=j.findIndex(function(x){return!x[2];});
   document.getElementById('journey').innerHTML=j.map(function(s,i){var last=i===j.length-1,done=s[2],nx=i===nextIdx;
     return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(done?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';">'+
@@ -573,7 +574,7 @@ function syncAssets(){
   var assets=lsGet(kA(),[]);if(!API||!assets.length)return;
   // retry any submission that did not reach the server
   assets.filter(function(a){return !a.synced&&a.payload;}).forEach(function(a){
-    post(a.payload).then(function(r){if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===a.id){x.synced=true;delete x.payload;}});lsSet(kA(),L);}}).catch(function(){});
+    RV.userKey(U).then(function(k){a.payload.key=k;return post(a.payload);}).then(function(r){if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===a.id){x.synced=true;delete x.payload;}});lsSet(kA(),L);}}).catch(function(){});
   });
   fetch(API+'?action=asset_status&email='+encodeURIComponent(U.email)+'&ids='+encodeURIComponent(assets.map(function(a){return a.id;}).join(',')))
     .then(function(r){return r.json();}).then(function(r){
@@ -756,6 +757,9 @@ function submitAsset(){
     var L=lsGet(kA(),[]);L.push(rec);lsSet(kA(),L);lsSet(kD(),null);DRAFT=null;
     document.getElementById('doneTxt').textContent='Thank you. We have received the asset profile for '+rec.name+'.'+(synced?' A confirmation has been sent to '+U.email+'.':'');
     document.getElementById('doneRef').textContent='Reference: '+rec.id;
+    var owed=Object.keys(payload.asset.modes||{}).filter(function(k){return payload.asset.modes[k].mode==='later';}).map(function(k){return DOCS[k]?DOCS[k].l:k;});
+    var dd=document.getElementById('doneDocs');dd.style.display=owed.length?'block':'none';
+    dd.textContent=owed.length?'Documents to send within 30 days: '+owed.join(', ')+'. Upload them from your dashboard, under Documents needed.':'';
     show('vDone');
     if(synced)loadAssetDocs();
   };
@@ -766,7 +770,9 @@ function submitAsset(){
       body:JSON.stringify({access_key:W3F,subject:'Asset Profile: '+rec.name+' | '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
   };
   if(API){
-    post(payload).then(function(r){if(r&&r.ok)finish(true);
+    RV.userKey(U).then(function(k){payload.key=k;return post(payload);}).then(function(r){if(r&&r.ok)finish(true);
+      else if(r&&r.error==='auth'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
+        err('Your session has expired. Your answers are saved: please log out, log in again and submit.');}
       else if(r&&r.error==='missing_docs'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');}
       else{w3f().finally(function(){finish(false);});}})

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Contact | Renewables Vault</title>
+<link rel="canonical" href="https://renewablesvault.com/contact.html">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0f1f14">
@@ -263,6 +264,7 @@ function sendContact() {
   var btn=document.getElementById('c_btn');
   err.style.display='none';
   if(!name||!email||!reason||!msg){err.style.display='block';err.textContent='Please fill in all required fields.';return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){err.style.display='block';err.textContent='Please enter a valid email address.';return;}
   btn.disabled=true;btn.textContent='Sending...';
   fetch('https://api.web3forms.com/submit',{
     method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
@@ -272,9 +274,14 @@ function sendContact() {
       name:name,email:email,
       message:'Name: '+name+'\nEmail: '+email+'\nOrg: '+document.getElementById('c_org').value+'\nReason: '+reason+'\nMessage: '+msg
     })
-  }).finally(function(){
+  }).then(function(r){return r.json();}).then(function(r){
+    if(!r||!r.success)throw new Error('not sent');
     document.getElementById('cForm').style.display='none';
     document.getElementById('cOk').style.display='block';
+  }).catch(function(){
+    btn.disabled=false;btn.textContent='Send Message';
+    err.style.display='block';
+    err.innerHTML='Your message could not be sent. Please try again, or email us directly at <a href="mailto:contact@renewablesvault.com" style="color:inherit;font-weight:600;">contact@renewablesvault.com</a>.';
   });
 }
 </script></div>

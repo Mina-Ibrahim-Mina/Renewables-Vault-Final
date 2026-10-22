@@ -28,6 +28,27 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
   position:fixed;top:0;width:100%;z-index:50;}
 .topbar-t{color:#fff;font-size:15px;font-weight:700;}
 .topbar-s{color:#4ADE80;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.nx-card{background:#fff;border:1px solid #d1e8d8;border-radius:12px;padding:20px 22px;margin-bottom:16px;}
+.nx-h{font-size:12px;font-weight:700;letter-spacing:.1em;color:#2C7C3B;text-transform:uppercase;margin:0 0 14px;}
+.nx-row{margin-bottom:16px;}
+.nx-row.bad{background:#fef2f2;box-shadow:0 0 0 8px #fef2f2;border-radius:6px;}
+.nx-lab{display:block;font-size:13px;font-weight:600;color:#1c2b1f;margin-bottom:7px;}
+.nx-in{width:100%;box-sizing:border-box;border:1px solid #c8ddd0;border-radius:6px;padding:10px 12px;font-size:14px;font-family:inherit;background:#fff;color:#1c2b1f;}
+.nx-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+@media(max-width:700px){.nx-grid{grid-template-columns:1fr;}}
+.nx-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.nx-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #c8ddd0;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;background:#fff;color:#1c2b1f;}
+.nx-pill.sel{border-color:#2C7C3B;background:#f0f7f2;font-weight:600;}
+.nx-pill input{accent-color:#2C7C3B;margin:0;}
+.nx-doc{border:1px dashed #c8ddd0;border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#fbfdfb;}
+.nx-file{font-size:13px;color:#1c2b1f;padding:3px 0;}
+.nx-up{display:inline-flex;align-items:center;gap:7px;border:1px solid #2C7C3B;color:#2C7C3B;border-radius:6px;padding:7px 12px;font-size:12.5px;font-weight:600;cursor:pointer;background:#fff;margin-top:6px;}
+.nx-up input{display:none;}
+.nx-up.dis{opacity:.5;pointer-events:none;}
+.nx-req{display:inline-block;background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;border-radius:4px;padding:2px 6px;margin-left:6px;}
+.nx-err{font-size:12.5px;color:#b91c1c;margin-top:6px;}
+.nx-btn{background:#1A472A;color:#fff;border:none;border-radius:8px;padding:12px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.nx-btn:disabled{opacity:.6;cursor:default;}
 .tbtn{background:rgba(74,222,128,.1);color:#4ADE80;border:1px solid rgba(74,222,128,.2);
   border-radius:6px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;
   font-family:'Inter',sans-serif;margin-left:8px;}
@@ -101,7 +122,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 <div id="loginScreen">
   <div class="lcard">
     <div style="text-align:center;margin-bottom:28px;">
-      <img src="logo.png" style="height:44px;width:auto;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
+      <img src="logo.png" alt="Renewables Vault" style="height:44px;width:auto;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
       <h1>Admin Panel</h1>
       <p>Renewables Vault · Internal Access Only</p>
     </div>
@@ -134,6 +155,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       <button class="tab" id="t4" onclick="showTab('kyc')"><i class="fa-solid fa-id-card"></i> Investors</button>
       <button class="tab" id="t5" onclick="showTab('int')"><i class="fa-solid fa-handshake"></i> Investor Interest</button>
       <button class="tab" id="t2" onclick="showTab('dev')"><i class="fa-solid fa-users"></i> Registrations</button>
+      <button class="tab" id="t6" onclick="showTab('add')"><i class="fa-solid fa-plus"></i> Add asset</button>
     </div>
     <div id="aMsg" style="font-size:13px;color:#dc2626;margin:0 0 10px;"></div>
     <div id="vd" style="display:none;">
@@ -165,6 +187,11 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       </div>
       <div id="kList"></div>
     </div>
+    <div id="vx" style="display:none;">
+      <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 6px;">Add an asset for a developer</h2>
+      <p style="font-size:13px;color:#6b7280;margin:0 0 18px;">Use this when you have the asset details yourself, for example from a meeting. It is scored with RARE&#8482; like any other asset and appears in Asset Assessments. Documents are optional here; missing ones are shown on the asset card. If the developer registers later with the same email, they will see this asset on their dashboard.</p>
+      <div id="nxBox"></div>
+    </div>
     <div id="vn" style="display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
         <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0;">Investor Interest</h2>
@@ -179,6 +206,8 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 <div id="toast"></div>
 
 <script src="rv-config.js"></script>
+<script src="rv-auth.js"></script>
+<script src="rv-assets.js"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -207,7 +236,8 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 
 function showTab(t){
-  var map={dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5']};
+  var map={dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5'],add:['vx','t6']};
+  if(t==='add'&&!NX)nxStart();
   for(var k in map){if(!document.getElementById(map[k][0]))continue;document.getElementById(map[k][0]).style.display=k===t?'block':'none';document.getElementById(map[k][1]).className='tab'+(k===t?' on':'');}
 }
 
@@ -234,6 +264,7 @@ function useData(r){
     renderK();renderN();
     var f=document.getElementById('aFilter'),cur=f.value;f.innerHTML='<option value="">All statuses</option>'+r.statuses.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
     renderA();renderR();
+    if(NX&&document.getElementById('vx').style.display==='block')nxRender();
 }
 function waNum(p){var d=String(p||'').replace(/\D/g,'');if(/^00/.test(d))d=d.slice(2);if(/^01\d{9}$/.test(d))d='20'+d.slice(1);return d;}
 function av(email,name,size,square){var img=(ADATA&&ADATA.photos||{})[String(email||'').toLowerCase()]||'';
@@ -258,7 +289,7 @@ function renderR(){
   document.getElementById('rList').innerHTML='<div class="tbl">'+rows.map(function(x){var wa=waNum(x.phone);
     return '<div style="padding:14px 20px;border-bottom:1px solid #f0f5f2;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;">'+
       av(x.email,String(x.type).toLowerCase()==='developer'?(x.company||x.name):x.name,40,String(x.type).toLowerCase()==='developer')+'<div style="flex:1;min-width:200px;"><div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.company?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.company)+'</span>':'')+'</div>'+
-      '<div style="font-size:13px;margin-top:3px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,String(x.type).toLowerCase()==='investor')+'</div>'+
+      '<div style="font-size:13px;margin-top:3px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,String(x.type).toLowerCase()==='investor')+'</div>'+
       '<div style="font-size:12px;color:#6b7280;margin-top:3px;">'+esc(x.detail)+'</div>'+nextStep(x)+'</div>'+
       '<div style="text-align:right;"><span style="background:'+(String(x.type).toLowerCase()==='investor'?'#e0f2fe;color:#075985':'#dcfce7;color:#166534')+';font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;">'+esc(x.type)+'</span><div style="font-size:11px;color:#9ca3af;margin-top:6px;">'+esc(x.registered)+'</div></div></div>';}).join('')+'</div>';
 }
@@ -273,13 +304,13 @@ function renderA(){
         '<div style="display:flex;gap:14px;min-width:240px;flex:1;">'+av(a.email,a.company||a.developer,52,true)+'<div style="flex:1;min-width:180px;"><div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
         '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(a.type)+' · '+esc(a.location)+' · Ref '+esc(a.id)+' · '+esc(a.submitted)+'</div>'+
         '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>'+esc(a.developer)+'</b> · '+esc(a.company)+'<br><a href="mailto:'+esc(a.email)+'" style="color:#2C7C3B;">'+esc(a.email)+'</a>'+
-        (wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(a.phone)+'</a>':'')+liLink(a.email)+'</div></div></div>'+
+        (wa?' · <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener" style="color:#2C7C3B;">WhatsApp '+esc(a.phone)+'</a>':'')+liLink(a.email)+'</div></div></div>'+
         '<div style="text-align:right;min-width:150px;"><div style="font-size:30px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';line-height:1;">'+esc(a.score)+'<span style="font-size:13px;color:#9ca3af;">/100</span></div>'+
         '<div style="font-size:13px;font-weight:700;color:'+(tc[a.tier]||'#1A472A')+';">Tier '+esc(a.tier)+'</div>'+
         '<div style="font-size:12px;color:#6b7280;">ACR '+esc(a.acr||'not set')+'</div></div>'+
       '</div>'+
       (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
-      docsHtml(a.docs)+
+      docsHtml(a.docs,a)+
       '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(a.answers)+'</pre></details>'+
       listingEditor(a,i)+
       '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
@@ -333,7 +364,7 @@ function renderK(){
       '<div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;"><div style="display:flex;gap:14px;flex:1;min-width:240px;">'+av(x.email,x.name,52,false)+'<div style="flex:1;min-width:180px;">'+
       '<div style="font-size:16px;font-weight:700;color:#1A472A;">'+esc(x.name)+(x.org?' <span style="font-weight:500;color:#6b7280;">· '+esc(x.org)+'</span>':'')+'</div>'+
       '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(x.category)+' · '+esc(x.type)+' · Access requested '+esc(x.submitted)+'</div>'+
-      '<div style="font-size:13px;margin-top:8px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,true)+'</div>'+
+      '<div style="font-size:13px;margin-top:8px;"><a href="mailto:'+esc(x.email)+'" style="color:#2C7C3B;">'+esc(x.email)+'</a>'+(wa?' · <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener" style="color:#2C7C3B;">WhatsApp '+esc(x.phone)+'</a>':'')+liLink(x.email,true)+'</div>'+
       '<div style="font-size:13px;color:#374151;margin-top:8px;"><b>Wants:</b> '+esc(x.prefs.types.map(function(t){return TL[t]||t;}).join(', '))+' · <b>Countries:</b> '+esc(x.prefs.countries.join(', '))+(x.prefs.ticket?' · <b>Ticket:</b> '+esc(x.prefs.ticket):'')+'</div></div></div>'+
       '<span style="background:'+c[0]+';color:'+c[1]+';font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;height:fit-content;white-space:nowrap;">'+esc(x.status)+'</span></div>'+
       (x.status==='Approved'&&x.code?'<div style="margin-top:10px;font-size:13px;background:#f0f5f2;border-radius:6px;padding:8px 12px;display:inline-block;">Access code: <b style="font-family:monospace;letter-spacing:.08em;">'+esc(x.code)+'</b> · '+(x.activatedOn?'<span style="color:#166534;font-weight:600;">Unlocked on '+esc(x.activatedOn)+'</span>':'<span style="color:#92400e;font-weight:600;">Not yet entered by the investor</span>')+'</div>':'')+
@@ -391,12 +422,107 @@ function saveA(id,i){
 </script>
 
 <script>
+/* ── ADD ASSET (admin enters an asset for a developer) ── */
+var NX=null,NUPL={};
+function adminPw(){return sessionStorage.getItem('rva_ap')||'';}
+function apost(body){return fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();});}
+function nxId(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='';for(var i=0;i<6;i++)r+=c[Math.floor(Math.random()*c.length)];return 'RV-'+r;}
+function nxStart(){NX={id:nxId(),dev:'',nd:{},type:'',ans:{},docs:{},derr:{},notify:false,locked:false};NUPL={};nxRender();}
+function nxDevs(){return ((ADATA&&ADATA.registrations)||[]).filter(function(r){return r.type==='Developer';});}
+function nxDevEmail(){if(NX.dev==='new')return String(NX.nd.email||'').trim().toLowerCase();return String(NX.dev||'').toLowerCase();}
+function nxRender(){
+  var b=document.getElementById('nxBox');if(!b)return;var h='',devs=nxDevs(),seen={};
+  h+='<div class="nx-card"><div class="nx-h">1. Developer</div><div class="nx-row" id="nxr_dev"><label class="nx-lab">Choose the developer</label><select class="nx-in" id="nx_dev" onchange="nxSet(\'dev\',this.value)"'+(NX.locked?' disabled':'')+'><option value="">Select</option>'+
+    devs.filter(function(r){var e=String(r.email).toLowerCase();if(seen[e])return false;seen[e]=1;return true;}).map(function(r){var e=String(r.email).toLowerCase();return '<option value="'+esc(e)+'"'+(NX.dev===e?' selected':'')+'>'+esc(r.name)+' · '+esc(r.company||'')+' · '+esc(e)+'</option>';}).join('')+
+    '<option value="new"'+(NX.dev==='new'?' selected':'')+'>New developer (not registered yet)</option></select>'+(NX.locked?'<div style="font-size:12px;color:#6b7280;margin-top:6px;">Documents are already attached to this developer. To change the developer, click Start again below.</div>':'')+'</div>';
+  if(NX.dev==='new'){var f=function(k,l,ph){return '<div class="nx-row" id="nxr_nd_'+k+'"><label class="nx-lab">'+l+'</label><input class="nx-in" id="nd_'+k+'" value="'+esc(NX.nd[k]||'')+'" placeholder="'+esc(ph)+'" oninput="NX.nd[\''+k+'\']=this.value"'+(NX.locked&&k==='email'?' disabled':'')+'></div>';};
+    h+='<div class="nx-grid">'+f('firstName','First name *','')+f('lastName','Last name','')+f('company','Company *','')+f('email','Email *','name@company.com')+f('phone','Mobile or WhatsApp','+20 10 1234 5678')+f('linkedin','LinkedIn (optional)','linkedin.com/in/name')+'</div>';}
+  h+='</div>';
+  h+='<div class="nx-card"><div class="nx-h">2. Asset type</div><div class="nx-pills" id="nxr_type">'+Object.keys(TYPES).map(function(k){return '<label class="nx-pill'+(NX.type===k?' sel':'')+'"><input type="radio" name="nx_type"'+(NX.type===k?' checked':'')+' onchange="nxSet(\'type\',\''+k+'\')"> '+esc(TYPES[k].label)+'</label>';}).join('')+'</div></div>';
+  if(NX.type){
+    steps(NX.type).forEach(function(st,si){
+      h+='<div class="nx-card"><div class="nx-h">'+(si+3)+'. '+esc(st.title)+'</div>';
+      st.qs.forEach(function(q){if(q.k==='confirm')return;var v=NX.ans[q.k];
+        if(q.t==='check'){h+='<div class="nx-row" id="nxr_'+q.k+'"><label style="display:flex;gap:8px;font-size:13px;align-items:flex-start;"><input type="checkbox"'+(v?' checked':'')+' onchange="NX.ans[\''+q.k+'\']=this.checked" style="margin-top:3px;"> <span>The developer agreed that Renewables Vault may share an anonymised summary of this asset with approved investors.</span></label></div>';return;}
+        h+='<div class="nx-row" id="nxr_'+q.k+'"><label class="nx-lab">'+esc(q.q)+(q.req?' <span style="color:#dc2626">*</span>':'')+'</label>';
+        if(q.t==='radio')h+='<div class="nx-pills">'+q.o.map(function(o){return '<label class="nx-pill'+(v===o.v?' sel':'')+'"><input type="radio" name="nx_'+q.k+'"'+(v===o.v?' checked':'')+' onchange="nxAns(\''+q.k+'\',\''+o.v+'\')"> '+esc(o.t)+'</label>';}).join('')+'</div>';
+        else if(q.t==='area')h+='<textarea class="nx-in" rows="3" oninput="NX.ans[\''+q.k+'\']=this.value">'+esc(v||'')+'</textarea>';
+        else h+='<input class="nx-in" value="'+esc(v||'')+'" placeholder="'+esc(q.ph||'')+'" oninput="NX.ans[\''+q.k+'\']=this.value">';
+        h+='</div>';});
+      var slots=docSlots(NX.type,NX.ans,si);
+      if(slots.length){h+='<div style="font-size:12px;font-weight:700;color:#2C7C3B;margin:6px 0 10px;"><i class="fa-solid fa-paperclip"></i> Documents (optional for the admin)</div>';
+        slots.forEach(function(d){var f=NX.docs[d.k]||[],busy=NUPL[d.k];
+          h+='<div class="nx-doc"><div style="font-size:13px;font-weight:600;color:#1c2b1f;">'+esc(d.l)+(d.req?'<span class="nx-req">REQUIRED FOR DEVELOPERS</span>':'')+'</div>'+
+            f.map(function(x){return '<div class="nx-file"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i> '+esc(x.name)+'</div>';}).join('')+
+            (busy?'<div class="nx-file" style="color:#2C7C3B;">Uploading '+esc(busy)+'...</div>':'')+
+            '<label class="nx-up'+(busy?' dis':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="nxPick(\''+d.k+'\',this)"><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>'+
+            (NX.derr[d.k]?'<div class="nx-err">'+esc(NX.derr[d.k])+'</div>':'')+'</div>';});}
+      h+='</div>';});
+    h+='<div class="nx-card"><label style="display:flex;gap:8px;font-size:13px;align-items:center;"><input type="checkbox" id="nx_notify"'+(NX.notify?' checked':'')+' onchange="NX.notify=this.checked"> Email the developer a confirmation that we registered this asset for them</label>'+
+      '<div id="nxErr" class="nx-err" style="margin-top:12px;"></div><div style="display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap;"><button class="nx-btn" id="nxBtn" onclick="nxSubmit()">Add asset</button><button class="tbtn" style="background:#fff;color:#6b7280;border-color:#d1d5db;" onclick="if(confirm(\'Clear this form and start again?\'))nxStart()">Start again</button></div></div>';
+  }
+  b.innerHTML=h;
+}
+function nxSet(k,v){if(k==='dev'&&NX.locked)return;NX[k]=v;if(k==='type'){NX.ans={};}nxRender();}
+function nxAns(k,v){NX.ans[k]=v;nxRender();}
+function nxPick(k,inp){
+  var files=Array.prototype.slice.call(inp.files||[]).slice(0,DOC_PER_SLOT);inp.value='';if(!files.length)return;
+  var dev=nxDevEmail();NX.derr[k]='';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(dev)){NX.derr[k]='Choose the developer (or enter the new developer email) before uploading.';nxRender();return;}
+  var next=function(){var f=files.shift();if(!f){NUPL[k]='';nxRender();return;}
+    if(!DOC_EXT.test(f.name)){NX.derr[k]=f.name+': this file type is not accepted.';return next();}
+    if(f.size>DOC_MAX){NX.derr[k]=f.name+': larger than 10 MB.';return next();}
+    NUPL[k]=f.name;nxRender();var rd=new FileReader();
+    rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:dev,assetId:NX.id,slot:k,name:f.name,data:String(rd.result||'').split(',')[1]||''})
+      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+((r&&r.error)||'upload failed');})
+      .catch(function(){NX.derr[k]=f.name+': upload failed, please try again.';}).then(next);};
+    rd.readAsDataURL(f);};
+  next();
+}
+function nxSubmit(){
+  var e=document.getElementById('nxErr'),bad=[];e.textContent='';
+  document.querySelectorAll('#nxBox .nx-row.bad').forEach(function(x){x.classList.remove('bad');});
+  if(!NX.dev)bad.push('dev');
+  if(NX.dev==='new'){['firstName','company','email'].forEach(function(k){if(!String(NX.nd[k]||'').trim())bad.push('nd_'+k);});
+    if(NX.nd.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(NX.nd.email).trim()))bad.push('nd_email');}
+  var items=[],answers={};
+  steps(NX.type).forEach(function(st){st.qs.forEach(function(q){if(q.t==='check')return;var v=NX.ans[q.k];
+    if(q.req&&(v===undefined||String(v).trim()===''))bad.push(q.k);
+    if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];items.push({sec:st.title,q:q.q,a:o?o.t:''});answers[q.k]=v||'';}
+    else{items.push({sec:st.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
+  ['q61','q62'].forEach(function(k){if(NX.ans[k]&&!/\d/.test(NX.ans[k]))bad.push(k);});
+  if(Object.keys(NUPL).some(function(k){return NUPL[k];})){e.textContent='Please wait until the files finish uploading.';return;}
+  if(bad.length){bad.forEach(function(k){var r=document.getElementById('nxr_'+k);if(r)r.classList.add('bad');});e.textContent='Please complete the '+bad.length+' highlighted field'+(bad.length===1?'':'s')+'.';
+    var first=document.querySelector('#nxBox .nx-row.bad');if(first)first.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  var docs=[];Object.keys(NX.docs).forEach(function(k){NX.docs[k].forEach(function(x){docs.push({slot:k,id:x.id,name:x.name});});});
+  var dev=NX.dev==='new'?{firstName:NX.nd.firstName,lastName:NX.nd.lastName||'',email:nxDevEmail(),phone:NX.nd.phone||'',company:NX.nd.company,linkedin:NX.nd.linkedin||''}:{email:nxDevEmail()};
+  var b=document.getElementById('nxBtn');b.disabled=true;b.textContent='Adding...';
+  apost({action:'admin_submit_asset',password:adminPw(),notify:!!NX.notify,dev:dev,
+    asset:{id:NX.id,type:NX.type,name:NX.ans.a_name,location:NX.ans.a_loc,share:!!NX.ans.share,answers:answers,items:items,docs:docs}})
+  .then(function(r){
+    if(!r||!r.ok){b.disabled=false;b.textContent='Add asset';e.textContent=(r&&r.error)||'Could not add the asset.';return;}
+    toast('Asset added: RARE '+r.score+'/100, Tier '+r.tier+(r.missing&&r.missing.length?'. Missing documents: '+r.missing.length:''));
+    NX=null;showTab('ast');loadA();
+  }).catch(function(){b.disabled=false;b.textContent='Add asset';e.textContent='Could not reach the server. Please try again.';});
+}
+/* Admin adds a document to an asset that is already submitted */
+function adminDocAdd(a){var i=esc(a.id);
+  return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;"><select id="xs_'+i+'" style="padding:6px 8px;border:1px solid #d1e8d8;border-radius:6px;font-size:12.5px;">'+
+    Object.keys(DOC_NAMES).map(function(k){return '<option value="'+k+'">'+esc(DOC_NAMES[k])+'</option>';}).join('')+'</select>'+
+    '<label class="nx-up" style="margin-top:0;" id="xl_'+i+'"><input type="file" accept="'+DOC_ACCEPT+'" onchange="adminAddDoc(\''+i+'\',\''+esc(a.email)+'\',this)"><i class="fa-solid fa-upload"></i> Add a document</label><span id="xm_'+i+'" style="font-size:12px;color:#6b7280;"></span></div>';}
+function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if(!f)return;var m=document.getElementById('xm_'+id),slot=document.getElementById('xs_'+id).value;
+  if(!DOC_EXT.test(f.name)){m.textContent='This file type is not accepted.';return;}if(f.size>DOC_MAX){m.textContent='Larger than 10 MB.';return;}
+  m.textContent='Uploading '+f.name+'...';var rd=new FileReader();
+  rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:email,assetId:id,slot:slot,name:f.name,data:String(rd.result||'').split(',')[1]||''})
+    .then(function(r){if(r&&r.ok){toast('Document added');loadA();}else m.textContent='Upload failed: '+((r&&r.error)||'');}).catch(function(){m.textContent='Upload failed, please try again.';});};
+  rd.readAsDataURL(f);}
+
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},3000);}
-function docsHtml(d){d=d||[];var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
-  if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;"><i class="fa-solid fa-paperclip"></i> No documents uploaded (submitted before uploads were required).</div>';
+function docsHtml(d,a){d=d||[];var add=a?adminDocAdd(a):'';var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
+  if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#9ca3af;"><i class="fa-solid fa-paperclip"></i> No documents uploaded yet.</div>'+add;
   return '<div style="margin-top:12px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:10px 14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#2C7C3B;margin-bottom:6px;"><span><i class="fa-solid fa-paperclip"></i> DOCUMENTS ('+fl.length+')</span>'+
     (fo?'<a href="'+esc(fo.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">Open folder in Drive</a>':'')+'</div>'+
-    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#6b7280;">'+esc(x.label)+':</span> <a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>';}
+    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#6b7280;">'+esc(x.label)+':</span> <a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>'+add;}
 </script>
 </body>
 </html>

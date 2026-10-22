@@ -142,6 +142,11 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .dbusy{font-size:13px;color:#2C7C3B;margin-bottom:8px;}
 .derr{font-size:12.5px;color:#b91c1c;margin-top:8px;line-height:1.5;}
 .dnote{font-size:12px;color:#9ca3af;margin-top:4px;line-height:1.5;}
+.adoc{font-size:12.5px;margin-top:8px;line-height:1.5;border-radius:6px;padding:7px 10px;}
+.adoc.warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
+.adoc.okd{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.adoc-btn{margin-top:8px;font-size:12.5px;padding:7px 14px;}
+.dreq{display:inline-block;background:#fef3c7;color:#92400e;font-size:10.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:middle;}
 .prep{background:#f0f7f2;border:1px solid #d1e8d8;border-radius:12px;padding:16px 20px;margin:0 0 24px;font-size:13.5px;color:#374151;line-height:1.6;}
 .prep b{color:#1A472A;}
 .prep ul{margin:6px 0 0;padding-left:18px;}
@@ -298,6 +303,19 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 
   <!-- ============ VIEW: SUBMITTED ============ -->
+  <!-- ============ VIEW: DOCUMENTS FOR A SUBMITTED ASSET ============ -->
+  <div id="vDocs" class="view" style="padding:48px;">
+    <div style="max-width:720px;margin:0 auto;">
+      <button onclick="docsDone()" class="backlink"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</button>
+      <div class="eyebrow-g">DOCUMENTS</div>
+      <h1 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 4px;" id="ldTitle"></h1>
+      <p id="ldSub" style="font-size:13px;color:#6b7280;margin:0 0 22px;"></p>
+      <div class="card"><div id="ldBox"></div>
+        <div style="display:flex;justify-content:flex-end;margin-top:20px;"><button class="btn-green" id="ldDone" onclick="docsDone()">Done</button></div>
+      </div>
+    </div>
+  </div>
+
   <div id="vDone" class="view" style="padding:48px;">
     <div style="max-width:640px;margin:0 auto;">
       <div style="background:linear-gradient(135deg,#0f1f14,#1A472A);border-radius:14px;padding:40px 32px;text-align:center;color:#fff;margin-bottom:20px;">
@@ -338,6 +356,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 
 <script src="rv-config.js"></script>
 <script src="rv-auth.js"></script>
+<script src="rv-assets.js"></script>
 <script>
 var W3F='615b6c70-27cb-4e3d-a889-b332649aeef0';
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
@@ -356,95 +375,13 @@ function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 })();
 
 /* ───────────── Asset types & questions ───────────── */
-var TYPES={
-  biofuel:{label:'Biofuel & Biodiesel',icon:'fa-gas-pump',desc:'Biodiesel and biofuel plants selling to industrial buyers.'},
-  circular:{label:'Circular Economy (Waste Recycling)',icon:'fa-recycle',desc:'Recycling and recovery facilities.'},
-  solar:{label:'Solar C&I (Commercial & Industrial)',icon:'fa-solar-panel',desc:'Solar systems supplying businesses, factories and farms.'}
-};
-function typeKey(label){label=String(label||'');return /circular|recycl/i.test(label)?'circular':/solar/i.test(label)?'solar':/bio/i.test(label)?'biofuel':'';}
-
-function O(pairs){return pairs.map(function(p){return{v:p[0],t:p[1]};});}
-var SPECIFIC={
-  biofuel:[
-    {k:'b_cap',t:'text',q:'Production capacity',ph:'e.g. 15,000 tonnes per year',req:1},
-    {k:'b_feed',t:'radio',q:'Main feedstock',req:1,o:O([['uco','Used cooking oil'],['veg','Vegetable oils'],['fat','Animal fats'],['res','Agricultural or other residues'],['mix','Mixed or other']])},
-    {k:'b_prod',t:'radio',q:'Main product sold',req:1,o:O([['bd','Biodiesel (B100 or blends)'],['ind','Bio-heavy fuel or industrial fuel'],['gly','Glycerin and by-products'],['oth','Other']])}
-  ],
-  circular:[
-    {k:'c_stream',t:'radio',q:'Main waste stream processed',req:1,o:O([['pl','Plastics (PET, HDPE, etc.)'],['pa','Paper and cardboard'],['me','Metals'],['or','Organic or food waste'],['cd','Construction and demolition waste'],['mx','Mixed municipal waste'],['ot','Other']])},
-    {k:'c_cap',t:'text',q:'Processing capacity',ph:'e.g. 30,000 tonnes per year',req:1},
-    {k:'c_rev',t:'radio',q:'Main source of revenue',req:1,o:O([['sale','Sale of recycled material'],['gate','Gate or tipping fees'],['svc','Collection or service contract'],['mix','A mix of these']])}
-  ],
-  solar:[
-    {k:'s_cap',t:'text',q:'Installed capacity',ph:'e.g. 2.5 MWp',req:1},
-    {k:'s_model',t:'radio',q:'Business model',req:1,o:O([['ppa','Power purchase agreement (client pays per kWh)'],['lease','Lease or rental (fixed monthly payment)'],['oth','Other']])},
-    {k:'s_client',t:'radio',q:'Client sector',req:1,o:O([['ind','Industrial or factory'],['agr','Agriculture'],['com','Commercial and retail'],['hos','Hospitality'],['oth','Other']])}
-  ]
-};
-var CONTRACT={
-  biofuel:O([['fsa','Supply or offtake agreement with agreed pricing'],['ota','Framework or service contract'],['other','Spot sales, no long-term contract']]),
-  circular:O([['fsa','Long-term offtake contract for recycled material'],['ota','Gate-fee or waste-service contract'],['other','Spot sales, no long-term contract']]),
-  solar:O([['ppa','PPA with the client (per-kWh tariff)'],['ota','Lease or rental agreement'],['other','Other, no long-term contract']])
-};
-/* Documents: which uploads each step asks for, based on the answers. Must match requiredDocs_ in the server script. */
-var DOC_EXT=/\.(pdf|jpe?g|png|webp|heic|docx?|xlsx?|pptx?|csv)$/i,DOC_ACCEPT='.pdf,.jpg,.jpeg,.png,.webp,.heic,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv',DOC_MAX=10*1024*1024,DOC_PER_SLOT=5;
-function contractLabel(t){return t==='solar'?'Signed PPA or lease agreement':t==='circular'?'Signed offtake or waste service contract':'Signed supply or offtake contract';}
-function docSlots(type,a,step){a=a||{};var L=[];
-  if(step===0)L.push({k:'d_photos',l:'Photos of the asset or a short company presentation',h:'Optional, but it helps our team understand the asset.',req:0});
-  if(step===1){
-    if(a.q11&&a.q11!=='other')L.push({k:'d_contract',l:contractLabel(type),h:'The contract you described above, all pages including the signature page.',req:1});
-    if(a.q15&&a.q15!=='first_year')L.push({k:'d_payments',l:'Proof of the buyer\u2019s payments for the last 12 months',h:'Invoices with the matching bank statements, or a statement of account from the buyer.',req:1});
-  }
-  if(step===2){
-    L.push({k:'d_cr',l:'Commercial register extract and tax card',h:'A recent copy of both. You can upload them as separate files.',req:1});
-    if(a.q33==='3y'||a.q33==='1y')L.push({k:'d_fs',l:'Latest audited financial statements',h:'The most recent year, including the auditor\u2019s report.',req:1});
-    if(a.q52==='in_process')L.push({k:'d_lic',l:'Proof of your licence application',h:'The application receipt or the authority\u2019s acknowledgement.',req:1});
-    else if(a.q52==='licensed'||a.q52==='provisional')L.push({k:'d_lic',l:'Operating licence and permits for the asset',h:'Upload each licence or permit as a file.',req:1});
-    if(a.q43==='restrict')L.push({k:'d_loan',l:'Existing loan agreement or a letter from the lender',h:'Required because a lender has security over the revenue.',req:1});
-    else if(a.q43==='no_restrict')L.push({k:'d_loan',l:'Existing loan agreement or a letter from the lender',h:'Optional.',req:0});
-  }
-  if(step===3)L.push({k:'d_val',l:'Valuation report or recent asset valuation',h:'Optional.',req:0});
-  return L;}
-function steps(type){return [
-  {title:'The asset',desc:'Basic information about the asset you would like to finance.',qs:[
-    {k:'a_name',t:'text',q:'Asset name',ph:'e.g. 10th of Ramadan Biodiesel Plant',req:1},
-    {k:'a_loc',t:'text',q:'Location (city or governorate)',ph:'e.g. 10th of Ramadan City, Sharqia',req:1}
-  ].concat(SPECIFIC[type]).concat([
-    {k:'q21',t:'radio',q:'How long has the asset been operating?',req:1,o:O([['gt7','More than 7 years'],['3to7','3 to 7 years'],['1to3','1 to 3 years'],['lt1','Less than 1 year'],['not_yet','Not yet operating']])},
-    {k:'q23',t:'radio',q:'Current output compared with full capacity',req:1,o:O([['gt80','Above 80%'],['60to80','60% to 80%'],['40to60','40% to 60%'],['lt40','Below 40%']])}
-  ])},
-  {title:'Revenue & contracts',desc:'How the asset earns its revenue.',qs:[
-    {k:'q11',t:'radio',q:'What kind of contract does the revenue come from?',req:1,o:CONTRACT[type]},
-    {k:'q12',t:'radio',q:'Who is the main buyer or client?',req:1,o:O([['gov','Government entity or public utility'],['ig_corp','Large corporate or multinational'],['local_corp','Established local or regional company'],['sme','Small business']])},
-    {k:'q13',t:'radio',q:'Time remaining on the main contract',req:1,o:O([['gt5','More than 5 years'],['2to5','2 to 5 years'],['1to2','1 to 2 years'],['lt1','Less than 1 year']])},
-    {k:'q15',t:'radio',q:"Buyer's payment record over the last 12 months",req:1,o:O([['perfect','Always on time'],['minor','1–2 short delays'],['first_year','Less than one year of history'],['issues','3 or more late or missed payments']])},
-    {k:'q51',t:'radio',q:'Currency of the revenue',req:1,o:O([['usd','US dollars'],['usd_indexed','Egyptian pounds, indexed to USD'],['egp','Egyptian pounds'],['other','Other']])},
-    {k:'q14',t:'text',q:'Approximate annual revenue from contracts (USD equivalent)',ph:'e.g. 2,400,000',req:0}
-  ]},
-  {title:'Company & legal',desc:'About your company and the legal position of the asset.',qs:[
-    {k:'q31',t:'radio',q:'How long has your company operated in this sector?',req:1,o:O([['gt10','More than 10 years'],['5to10','5 to 10 years'],['2to5','2 to 5 years'],['lt2','Less than 2 years']])},
-    {k:'q33',t:'radio',q:'Do you have audited financial statements?',req:1,o:O([['3y','Yes, 3 years or more'],['1y','Yes, 1 to 2 years'],['first_year','First year of operation'],['none','No']])},
-    {k:'q52',t:'radio',q:'Licences and permits for the asset',req:1,o:O([['licensed','All licences in place'],['provisional','Provisional licence'],['in_process','Application in progress'],['dispute','Under dispute']])},
-    {k:'q43',t:'radio',q:'Are there existing loans secured on the asset or its revenue?',req:1,o:O([['none','No, the asset and revenue are free of loans'],['no_restrict','Yes, but there is no security over the revenue'],['restrict','Yes, a lender has security over the revenue']])},
-    {k:'q42',t:'radio',q:'Can the contract revenue be assigned to a financing partner?',req:1,o:O([['yes','Yes'],['review','Possibly, with buyer consent'],['unsure','Not sure'],['no','No, the contract does not allow it']])},
-    {k:'q35',t:'radio',q:'Any legal disputes or investigations involving the asset?',req:1,o:O([['no','No'],['minor','A minor commercial dispute'],['yes','Yes, an active dispute or investigation']])}
-  ]},
-  {title:'Financing',desc:'What you are looking for.',qs:[
-    {k:'q61',t:'text',q:'Estimated current value of the asset (USD equivalent)',ph:'e.g. 6,000,000',req:1},
-    {k:'q62',t:'text',q:'Amount of capital you are seeking (USD equivalent)',ph:'e.g. 3,000,000',req:1},
-    {k:'q64',t:'radio',q:'Could a company or personal guarantee be provided?',req:1,o:O([['yes','Yes'],['no','No']])},
-    {k:'q66',t:'area',q:'Anything else we should know? (optional)',ph:'e.g. expansion plans, key contracts, timing',req:0},
-    {k:'confirm',t:'check',q:'I confirm the information provided is accurate to the best of my knowledge.',req:1},
-    {k:'share',t:'check',q:'I agree that Renewables Vault may share an anonymised summary of this asset with investors approved by our team. My company name, contact details and exact location are never shown.',req:1}
-  ]}
-];}
 
 /* ───────────── State ───────────── */
 var U=null,DRAFT=null,S=0;
 function kA(){return 'rv_assets_'+U.email.toLowerCase();}
 function kD(){return 'rv_draft_'+U.email.toLowerCase();}
 
-function show(v){['vMain','vType','vForm','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});window.scrollTo(0,0);}
+function show(v){['vMain','vType','vForm','vDocs','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});window.scrollTo(0,0);}
 
 window.addEventListener('DOMContentLoaded',function(){
   U=RVAuth.get();
@@ -453,6 +390,7 @@ window.addEventListener('DOMContentLoaded',function(){
   document.getElementById('loadState').style.display='none';
   goMain();
   syncAssets();
+  loadAssetDocs();
   photoInit();
 });
 
@@ -549,10 +487,73 @@ function renderAssets(assets){
       '<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
       '<div style="font-size:12px;color:#6b7280;margin-top:2px;">'+esc(TYPES[a.type].label)+' · '+esc(a.location)+'</div>'+
       '<div style="font-size:11px;color:#9ca3af;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
-      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+
+      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+docLine(a)+
       '</div></div><span class="chip" style="background:'+c[0]+';color:'+c[1]+';">'+esc(a.status||'Submitted')+'</span></div>';
   }).join('');
 }
+/* ───────────── Documents for submitted assets ───────────── */
+var ADOCS={},LD=null,LDNEW=[];
+function docLine(a){var d=ADOCS[a.id];if(!d)return '';
+  return (d.missing.length?'<div class="adoc warn"><i class="fa-solid fa-paperclip"></i> Documents needed: '+d.missing.map(function(k){return esc(DOC_NAMES[k]||k);}).join(', ')+'</div>'
+    :'<div class="adoc okd"><i class="fa-solid fa-circle-check"></i> '+d.docs.length+' document'+(d.docs.length===1?'':'s')+' received</div>')+
+    '<button class="btn-out adoc-btn" onclick="openDocs(\''+esc(a.id)+'\')"><i class="fa-solid fa-upload"></i> '+(d.missing.length?'Upload documents':'Add more documents')+'</button>';}
+function loadAssetDocs(){
+  if(!API)return;
+  RV.userKey(U).then(function(k){return k?post({action:'asset_docs',email:U.email,key:k}):null;}).then(function(r){
+    if(!r||!r.ok||!r.assets)return;
+    var L=lsGet(kA(),[]),ids={},added=false;L.forEach(function(a){ids[a.id]=1;});
+    r.assets.forEach(function(a){ADOCS[a.id]=a;
+      if(!ids[a.id]){L.push({id:a.id,type:a.type,name:a.name,location:a.location,submitted:a.submitted,status:a.status,note:a.note,synced:true});added=true;}});
+    if(added)lsSet(kA(),L);
+    if(document.getElementById('vMain').classList.contains('on')){if(added)goMain();else renderAssets(L);}
+  }).catch(function(){});
+}
+function ldSlots(d){
+  if(d.known)return allDocSlots(d.type,d.answers);
+  return CORE_DOCS.map(function(k){return {k:k,l:k==='d_contract'?contractLabel(d.type):DOC_NAMES[k],h:'',req:1};})
+    .concat([{k:'d_loan',l:DOC_NAMES.d_loan,h:'Only if a lender has security over the asset or its revenue.',req:0},{k:'d_photos',l:DOC_NAMES.d_photos,h:'',req:0},{k:'d_val',l:DOC_NAMES.d_val,h:'',req:0}]);
+}
+function openDocs(id){LD=ADOCS[id];if(!LD)return;LDNEW=[];UPL={};DERR={};
+  document.getElementById('ldTitle').textContent=LD.name;
+  document.getElementById('ldSub').textContent='Ref '+LD.id+'. Upload the documents our team needs to review this asset. They are stored privately and seen only by the Renewables Vault team.';
+  renderLate();show('vDocs');}
+function renderLate(){
+  var L=ldSlots(LD),miss={};LD.missing.forEach(function(k){miss[k]=1;});
+  L.sort(function(a,b){return (miss[b.k]?1:0)-(miss[a.k]?1:0);});
+  document.getElementById('ldBox').innerHTML=L.map(function(d){
+    var f=LD.docs.filter(function(x){return x.slot===d.k;}),busy=UPL[d.k];
+    return '<div class="qrow docrow" id="lrow_'+d.k+'"><label class="qlab">'+esc(d.l)+(miss[d.k]?'<span class="dreq">REQUESTED</span>':(d.req?'':' <span class="dopt">(optional)</span>'))+'</label>'+
+      (d.h?'<div class="dhint">'+esc(d.h)+'</div>':'')+
+      f.map(function(x){return '<div class="dfile"><span class="dname"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i><span class="t">'+esc(x.name)+'</span></span><span class="dsz">Received</span></div>';}).join('')+
+      (busy?'<div class="dbusy"><i class="fa-solid fa-spinner fa-spin"></i> Uploading '+esc(busy)+'...</div>':'')+
+      '<label class="dpick'+(busy?' dis':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="pickLate(\''+d.k+'\',this)"'+(busy?' disabled':'')+'><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>'+
+      (DERR[d.k]?'<div class="derr">'+esc(DERR[d.k])+'</div>':'')+'</div>';
+  }).join('')+'<div class="dnote">PDF, Word, Excel or clear photos, up to 10 MB each.</div>';
+}
+function pickLate(k,inp){
+  var files=Array.prototype.slice.call(inp.files||[]).slice(0,DOC_PER_SLOT);inp.value='';if(!files.length)return;DERR[k]='';
+  var next=function(){
+    var f=files.shift();if(!f){UPL[k]='';renderLate();return;}
+    if(!DOC_EXT.test(f.name)){DERR[k]=f.name+': '+upErr('bad_type');return next();}
+    if(f.size>DOC_MAX){DERR[k]=f.name+': '+upErr('too_big');return next();}
+    UPL[k]=f.name;renderLate();
+    var rd=new FileReader();
+    rd.onload=function(){var data=String(rd.result||'').split(',')[1]||'';
+      RV.userKey(U).then(function(key){return post({action:'upload_doc',email:U.email,key:key,assetId:LD.id,slot:k,name:f.name,data:data});})
+        .then(function(r){if(r&&r.ok&&r.file){LD.docs.push({slot:k,label:DOC_NAMES[k],name:r.file.name});LD.missing=LD.missing.filter(function(x){return x!==k;});LDNEW.push(r.file.name);}
+          else DERR[k]=f.name+': '+upErr(r&&r.error);})
+        .catch(function(){DERR[k]=f.name+': '+upErr('');}).then(next);};
+    rd.onerror=function(){DERR[k]=f.name+': '+upErr('');next();};
+    rd.readAsDataURL(f);};
+  next();
+}
+function docsDone(){
+  if(Object.keys(UPL).some(function(k){return UPL[k];})){alertDocs('Please wait until your files finish uploading.');return;}
+  if(LD&&LDNEW.length){var id=LD.id,names=LDNEW.slice();RV.userKey(U).then(function(key){return post({action:'docs_notify',email:U.email,key:key,assetId:id,names:names});}).catch(function(){});}
+  LD=null;LDNEW=[];goMain();
+}
+function alertDocs(m){var b=document.getElementById('ldDone');b.textContent=m;setTimeout(function(){b.textContent='Done';},2500);}
+
 function syncAssets(){
   var assets=lsGet(kA(),[]);if(!API||!assets.length)return;
   // retry any submission that did not reach the server

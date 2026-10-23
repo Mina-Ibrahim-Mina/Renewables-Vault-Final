@@ -453,6 +453,7 @@ function nxRender(){
         h+='<div class="nx-row" id="nxr_'+q.k+'"><label class="nx-lab">'+esc(q.q)+(q.req?' <span style="color:#dc2626">*</span>':'')+'</label>';
         if(q.t==='radio')h+='<div class="nx-pills">'+q.o.map(function(o){return '<label class="nx-pill'+(v===o.v?' sel':'')+'"><input type="radio" name="nx_'+q.k+'"'+(v===o.v?' checked':'')+' onchange="nxAns(\''+q.k+'\',\''+o.v+'\')"> '+esc(o.t)+'</label>';}).join('')+'</div>';
         else if(q.t==='area')h+='<textarea class="nx-in" rows="3" oninput="NX.ans[\''+q.k+'\']=this.value">'+esc(v||'')+'</textarea>';
+        else if(q.t==='num')h+='<input class="nx-in" value="'+esc(v||'')+'" placeholder="'+esc(q.ph||'')+'" oninput="NX.ans[\''+q.k+'\']=this.value;this.nextSibling.textContent=amountNote(this.value)"><div style="font-size:12px;color:#166534;margin-top:5px;">'+esc(amountNote(v))+'</div>';
         else h+='<input class="nx-in" value="'+esc(v||'')+'" placeholder="'+esc(q.ph||'')+'" oninput="NX.ans[\''+q.k+'\']=this.value">';
         h+='</div>';});
       var slots=docSlots(NX.type,NX.ans,si);
@@ -499,7 +500,7 @@ function nxSubmit(){
     if(q.req&&(v===undefined||String(v).trim()===''))bad.push(q.k);
     if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];items.push({sec:st.title,q:q.q,a:o?o.t:''});answers[q.k]=v||'';}
     else{items.push({sec:st.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
-  steps(NX.type).forEach(function(st){st.qs.forEach(function(q){if(q.t==='num'&&NX.ans[q.k]&&!/\d/.test(NX.ans[q.k]))bad.push(q.k);});});
+  steps(NX.type).forEach(function(st){st.qs.forEach(function(q){if(q.t==='num'&&NX.ans[q.k]&&(!parseAmount(NX.ans[q.k])||isLocalCcy(NX.ans[q.k])))bad.push(q.k);});});
   if(Object.keys(NUPL).some(function(k){return NUPL[k];})){e.textContent='Please wait until the files finish uploading.';return;}
   if(bad.length){bad.forEach(function(k){var r=document.getElementById('nxr_'+k);if(r)r.classList.add('bad');});e.textContent='Please complete the '+bad.length+' highlighted field'+(bad.length===1?'':'s')+'.';
     var first=document.querySelector('#nxBox .nx-row.bad');if(first)first.scrollIntoView({behavior:'smooth',block:'center'});return;}

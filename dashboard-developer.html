@@ -700,6 +700,7 @@ function clearDocErr(){var e=document.getElementById('fErr');if(e&&/document/.te
 function upErr(e){return e==='too_big'?'This file is larger than 10 MB. Please upload a smaller copy.':
   e==='bad_type'?'This file type is not accepted. Please use PDF, Word, Excel or an image.':
   e==='auth'?'Your session has expired. Please log out, log in again and continue.':
+  e==='storage'?'We could not save this file because of a problem on our side, not your connection. Our team has been alerted. To continue now, choose \u201cSend within 30 days\u201d for this document and upload it later from your dashboard.':
   e==='too_many'?'This asset already has the maximum of 60 files. Please combine documents into one PDF, or email us at contact@renewablesvault.com.':
   'The upload did not go through. Please check your connection and try again. If it keeps failing, email us at contact@renewablesvault.com.';}
 function pickDocs(k,inp){

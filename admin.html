@@ -484,7 +484,7 @@ function nxPick(k,inp){
     if(f.size>DOC_MAX){NX.derr[k]=f.name+': larger than 10 MB.';return next();}
     NUPL[k]=f.name;nxRender();var rd=new FileReader();
     rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:dev,assetId:NX.id,slot:k,name:f.name,data:String(rd.result||'').split(',')[1]||''})
-      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+(r&&r.error==='too_many'?'this asset already has 60 files.':((r&&r.error)||'upload failed'));})
+      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+(r&&r.error==='too_many'?'this asset already has 60 files.':r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':((r&&r.error)||'upload failed'));})
       .catch(function(){NX.derr[k]=f.name+': upload failed, please try again.';}).then(next);};
     rd.readAsDataURL(f);};
   next();
@@ -524,7 +524,7 @@ function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if
   if(!DOC_EXT.test(f.name)){m.textContent='This file type is not accepted.';return;}if(f.size>DOC_MAX){m.textContent='Larger than 10 MB.';return;}
   m.textContent='Uploading '+f.name+'...';var rd=new FileReader();
   rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:email,assetId:id,slot:slot,name:f.name,data:String(rd.result||'').split(',')[1]||''})
-    .then(function(r){if(r&&r.ok){toast('Document added');loadA();}else m.textContent='Upload failed: '+((r&&r.error)||'');}).catch(function(){m.textContent='Upload failed, please try again.';});};
+    .then(function(r){if(r&&r.ok){toast('Document added');loadA();}else m.textContent=r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':'Upload failed: '+((r&&r.error)||'');}).catch(function(){m.textContent='Upload failed, please try again.';});};
   rd.readAsDataURL(f);}
 
 /* Jacob RARE™ breakdown on the asset card (internal only) */

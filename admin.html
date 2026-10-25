@@ -131,7 +131,11 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       <h1>Admin Panel</h1>
       <p>Renewables Vault · Internal Access Only</p>
     </div>
-    <input type="password" id="passIn" placeholder="Admin password (line 16 of the RV Assessments script)" class="field-d" autocomplete="current-password">
+    <input type="password" id="passIn" placeholder="Admin password" aria-label="Admin password" class="field-d" autocomplete="current-password">
+    <div id="codeBox" style="display:none;">
+      <p id="codeMsg" style="color:#bccabb;font-size:13px;text-align:center;margin:0 0 10px;line-height:1.5;"></p>
+      <input type="text" id="codeIn" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 digit code" aria-label="6 digit code from your email" class="field-d" style="letter-spacing:.3em;text-align:center;">
+    </div>
     <button class="btn-g" id="loginBtn">Login</button>
     <div id="loginErr" style="color:#fc8181;font-size:13px;text-align:center;margin-top:10px;display:none;"></div>
   </div>
@@ -219,22 +223,33 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('passIn').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('codeIn').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 document.getElementById('logoutBtn').addEventListener('click',doLogout);
 document.getElementById('refreshBtn').addEventListener('click',function(){loadA();});
 
+/* Two step login: password, then the 6 digit code emailed to you. The browser keeps only a temporary session pass. */
+var PW='';
+function resetLogin(){PW='';var p=document.getElementById('passIn');p.style.display='';p.value='';document.getElementById('codeBox').style.display='none';document.getElementById('codeIn').value='';document.getElementById('loginBtn').textContent='Login';}
 function doLogin(){
-  var pw=document.getElementById('passIn').value,e=document.getElementById('loginErr'),b=document.getElementById('loginBtn');
-  e.style.display='none';if(!pw)return;
+  var e=document.getElementById('loginErr'),b=document.getElementById('loginBtn'),inCode=document.getElementById('codeBox').style.display!=='none';
+  var pw=inCode?PW:document.getElementById('passIn').value,code=inCode?document.getElementById('codeIn').value.replace(/\D/g,''):'';
+  e.style.display='none';if(!pw||(inCode&&code.length!==6))return;
   if(!AAPI){e.textContent='The server is not connected. Check rv-config.js.';e.style.display='block';return;}
   b.disabled=true;b.textContent='Checking...';
-  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_list',password:pw})}).then(function(r){return r.json();}).then(function(r){
-    b.disabled=false;b.textContent='Login';
-    if(!r.ok){e.textContent=r.error==='Incorrect password'?'Incorrect password.':(r.error||'Could not log in.');e.style.display='block';return;}
-    sessionStorage.setItem('rva_ap',pw);enterPanel();useData(r);
-  }).catch(function(){b.disabled=false;b.textContent='Login';e.textContent='Could not reach the server. Please try again.';e.style.display='block';});
+  var body={action:'admin_login',password:pw};if(code)body.code=code;
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(r){
+    b.disabled=false;b.textContent=inCode?'Verify code':'Login';
+    if(r&&r.ok&&r.token){sessionStorage.setItem('rva_ap',r.token);resetLogin();enterPanel();loadA();return;}
+    if(r&&r.ok&&r.step==='code'){PW=pw;document.getElementById('passIn').value='';document.getElementById('passIn').style.display='none';
+      document.getElementById('codeBox').style.display='block';
+      document.getElementById('codeMsg').textContent='We emailed a 6 digit code to '+(r.to||'you')+'. It expires in 10 minutes.';
+      b.textContent='Verify code';document.getElementById('codeIn').focus();return;}
+    var m=r&&r.error;if(m&&/Code expired|Too many/.test(m))resetLogin();
+    e.textContent=m==='Incorrect password'?'Incorrect password.':m==='Wrong code'?'Wrong code. Please check the email and try again.':(m||'Could not log in.');e.style.display='block';
+  }).catch(function(){b.disabled=false;b.textContent=inCode?'Verify code':'Login';e.textContent='Could not reach the server. Please try again.';e.style.display='block';});
 }
 function enterPanel(){document.getElementById('loginScreen').style.display='none';document.getElementById('adminPanel').style.display='block';showTab('ast');}
-function doLogout(){sessionStorage.removeItem('rva_ap');sessionStorage.removeItem('rva');ADATA=null;document.getElementById('loginScreen').style.display='flex';document.getElementById('adminPanel').style.display='none';document.getElementById('passIn').value='';}
+function doLogout(){var t=sessionStorage.getItem('rva_ap');if(t&&AAPI&&/^rvt_/.test(t)){try{fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_logout',password:t})}).catch(function(){});}catch(x){}}resetLogin();sessionStorage.removeItem('rva_ap');sessionStorage.removeItem('rva');ADATA=null;document.getElementById('loginScreen').style.display='flex';document.getElementById('adminPanel').style.display='none';document.getElementById('passIn').value='';}
 
 window.addEventListener('DOMContentLoaded',function(){
   sessionStorage.removeItem('rva');
@@ -260,7 +275,7 @@ function loadA(){
 }
 function useData(r){
     ADATA=r;aMsg('');document.getElementById('aTools').style.display='flex';
-    document.getElementById('srvVer').textContent='Server '+(r.version||'older than v38: paste the latest script and deploy');
+    var sv=document.getElementById('srvVer');sv.textContent='Server '+(r.version||'older than v38: paste the latest script and deploy')+(r.weakPassword?' · Admin password is short: use 12 or more characters':'');sv.style.color=r.weakPassword?'#b45309':'#646c78';
     var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All investors</option><optgroup label="Access">'+r.invStatuses.map(function(x){return '<option value="a:'+esc(x)+'"'+('a:'+x===kc?' selected':'')+'>Access: '+esc(x)+'</option>';}).join('')+'</optgroup><optgroup label="Full KYC">'+(r.kycStatuses||[]).map(function(x){return '<option value="k:'+esc(x)+'"'+('k:'+x===kc?' selected':'')+'>KYC: '+esc(x)+'</option>';}).join('')+'</optgroup>';
     document.getElementById('s1').textContent=r.assessments.length;
     document.getElementById('s2').textContent=r.assessments.filter(function(a){return a.published;}).length;

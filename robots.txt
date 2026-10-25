@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /admin.html
 Disallow: /dashboard-investor.html
 Disallow: /dashboard-developer.html
 Disallow: /seed.html

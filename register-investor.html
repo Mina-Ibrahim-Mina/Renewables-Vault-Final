@@ -243,6 +243,7 @@ var RVAuth={
         <span>I agree that Renewables Vault may store and use the information I provide to review my profile and contact me, as described in the <a href="legal.html#privacy" target="_blank" rel="noopener" style="color:#2C7C3B;font-weight:600;">Privacy Policy</a>. *</span>
       </label>
     </div>
+    <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;"><label for="i_hp">Leave this field empty</label><input id="i_hp" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="err" id="i_err" style="grid-column:1/-1;"></div>
     <div style="grid-column:1/-1;"><button class="btn-lime full" id="i_btn" onclick="subInv()">Create Investor Account</button></div>
   </div>
@@ -253,6 +254,7 @@ var RVAuth={
 <script src="rv-config.js"></script>
 <script src="rv-auth.js"></script>
 <script>
+var RV_T0=Date.now();
 function subInv() {
   var g=function(id){return document.getElementById(id);};
   var first=g('i_first').value.trim(),last=g('i_last').value.trim(),email=g('i_email').value.trim(),pass=g('i_pass').value;
@@ -270,15 +272,14 @@ function subInv() {
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
   if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}
   btn.disabled=true;btn.textContent='Creating account...';
-  RV.serverRegister({action:'register',type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true,linkedin:li},pass,function(res,k){
+  RV.serverRegister({action:'register',hp:document.getElementById('i_hp').value,ft:Date.now()-RV_T0,type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true,linkedin:li},pass,function(res,k){
     if(res==='restored'){window.location.href='dashboard-investor.html';return;}
     if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
+    if(res==='check'){return fail('Please check your details and press the button again.');}
     if(res!=='new'||!k){return fail('We could not create your account just now. Please check your internet connection and try again. If it keeps happening, email contact@renewablesvault.com.');}
     var user={firstName:first,lastName:last,email:email,phone:phone,linkedin:li,consent:true,k:k,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
     users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);
-    var w3f=fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'New Investor Registration: '+first+' '+last+' | '+org,name:first+' '+last,email:email,message:'NEW INVESTOR REGISTRATION\n=========================\nName: '+first+' '+last+'\nEmail: '+email+'\nMobile or WhatsApp: '+(phone||'Not provided')+'\nLinkedIn: '+(li||'Not provided')+'\nOrg: '+org+'\nType: '+itype+'\nTicket: '+(ticket||'Not specified')+'\nNote: '+(note||'None')+'\nDate: '+new Date().toLocaleDateString()+'\n=========================\nAdmin: renewablesvault.com/admin.html'})});
-    var done=false,go=function(){if(!done){done=true;window.location.href='dashboard-investor.html';}};
-    (Promise.allSettled?Promise.allSettled([w3f]):Promise.resolve(w3f).then(null,function(){})).then(go);setTimeout(go,8000);
+    window.location.href='dashboard-investor.html';   // the server saves the account and emails the team
   });
 }
 </script></div>

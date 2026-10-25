@@ -794,11 +794,11 @@ function submitAsset(){
     if(synced)loadAssetDocs();
   };
   var w3f=function(){
-    var txt='ASSET PROFILE (server not connected, not yet scored)\n==============================\nRef: '+rec.id+'\nType: '+TYPES[type].label+'\nDeveloper: '+U.firstName+' '+U.lastName+'\nCompany: '+(U.company||'')+'\nEmail: '+U.email+'\nPhone: '+(U.phone||'')+'\n';
-    var sec='';items.forEach(function(it){if(it.sec!==sec){sec=it.sec;txt+='\n['+sec.toUpperCase()+']\n';}txt+=it.q+': '+(it.a||'Not provided')+'\n';});
+    var txt='ASSET PROFILE NOT YET SAVED ON THE SERVER\n\nThe developer submitted an asset but the server did not confirm it. The dashboard will send it again automatically the next time the developer opens it. No answers are included here for confidentiality.\n\nRef: '+rec.id+'\nType: '+TYPES[type].label+'\nDeveloper: '+U.firstName+' '+U.lastName+'\nCompany: '+(U.company||'')+'\nEmail: '+U.email+'\nPhone: '+(U.phone||'');
     return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({access_key:W3F,subject:'Asset Profile: '+rec.name+' | '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
+      body:JSON.stringify({access_key:W3F,subject:'Asset not yet saved: '+rec.id+' | '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
   };
+
   if(API){
     RV.userKey(U).then(function(k){payload.key=k;return post(payload);}).then(function(r){if(r&&r.ok)finish(true);
       else if(r&&r.error==='auth'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';

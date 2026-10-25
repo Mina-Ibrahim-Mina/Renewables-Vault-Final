@@ -178,6 +178,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
           <select id="aFilter" aria-label="Filter by status" onchange="renderA()" style="padding:7px 10px;border:1px solid #d1e8d8;border-radius:6px;font-size:13px;">
             <option value="">All statuses</option></select>
           <button class="tbtn" onclick="loadA()" style="background:#1A472A;color:#fff;"><i class="fa-solid fa-rotate"></i> Refresh</button>
+          <span id="srvVer" style="font-size:11px;color:#646c78;white-space:nowrap;"></span>
         </div>
       </div>
       <div id="aList"></div>
@@ -259,6 +260,7 @@ function loadA(){
 }
 function useData(r){
     ADATA=r;aMsg('');document.getElementById('aTools').style.display='flex';
+    document.getElementById('srvVer').textContent='Server '+(r.version||'older than v38: paste the latest script and deploy');
     var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All investors</option><optgroup label="Access">'+r.invStatuses.map(function(x){return '<option value="a:'+esc(x)+'"'+('a:'+x===kc?' selected':'')+'>Access: '+esc(x)+'</option>';}).join('')+'</optgroup><optgroup label="Full KYC">'+(r.kycStatuses||[]).map(function(x){return '<option value="k:'+esc(x)+'"'+('k:'+x===kc?' selected':'')+'>KYC: '+esc(x)+'</option>';}).join('')+'</optgroup>';
     document.getElementById('s1').textContent=r.assessments.length;
     document.getElementById('s2').textContent=r.assessments.filter(function(a){return a.published;}).length;

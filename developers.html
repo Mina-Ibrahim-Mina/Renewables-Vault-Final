@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8">
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>For Developers | Renewables Vault</title>
 <link rel="canonical" href="https://renewablesvault.com/developers.html">
@@ -200,24 +200,11 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 <main id="main">
 <script>
 var RVAuth={
-  get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
+  get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
   set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
-  out:function(){localStorage.removeItem('rv_user');window.location.href='index.html';}
+  forget:function(u){try{var e=String((u||{}).email||'').toLowerCase(),us=JSON.parse(localStorage.getItem('rv_users')||'[]');localStorage.setItem('rv_users',JSON.stringify(us.filter(function(x){return String(x&&x.email).toLowerCase()!==e;})));localStorage.removeItem('rv_user');}catch(x){}},
+  out:function(){RVAuth.forget(RVAuth.get());window.location.href='index.html';}
 };
-function genCode(e){
-  var s=e.toLowerCase().trim()+'RV_RENEWABLES_VAULT_2026',h=0;
-  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-  var c=Math.abs(h).toString(36).toUpperCase();
-  while(c.length<8)c='0'+c;
-  return c.substring(0,8);
-}
-function genRC(e){
-  var s=e.toLowerCase().trim()+'RV_RECOVERY_2026',h=0;
-  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-  var c=Math.abs(h).toString(36).toUpperCase();
-  while(c.length<6)c='0'+c;
-  return 'RC-'+c.substring(0,6);
-}
 (function(){
   var u=RVAuth.get();
   var el=document.getElementById('navAuth');

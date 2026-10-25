@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8">
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <title>Log In to Your Account | Renewables Vault</title>
 <link rel="canonical" href="https://renewablesvault.com/login.html">
@@ -190,24 +190,11 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 <main id="main">
 <script>
 var RVAuth={
-  get:function(){try{return JSON.parse(localStorage.getItem('rv_user'));}catch(e){return null;}},
+  get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
   set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
-  out:function(){localStorage.removeItem('rv_user');window.location.href='index.html';}
+  forget:function(u){try{var e=String((u||{}).email||'').toLowerCase(),us=JSON.parse(localStorage.getItem('rv_users')||'[]');localStorage.setItem('rv_users',JSON.stringify(us.filter(function(x){return String(x&&x.email).toLowerCase()!==e;})));localStorage.removeItem('rv_user');}catch(x){}},
+  out:function(){RVAuth.forget(RVAuth.get());window.location.href='index.html';}
 };
-function genCode(e){
-  var s=e.toLowerCase().trim()+'RV_RENEWABLES_VAULT_2026',h=0;
-  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-  var c=Math.abs(h).toString(36).toUpperCase();
-  while(c.length<8)c='0'+c;
-  return c.substring(0,8);
-}
-function genRC(e){
-  var s=e.toLowerCase().trim()+'RV_RECOVERY_2026',h=0;
-  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
-  var c=Math.abs(h).toString(36).toUpperCase();
-  while(c.length<6)c='0'+c;
-  return 'RC-'+c.substring(0,6);
-}
 (function(){
   var u=RVAuth.get();
   var el=document.getElementById('navAuth');
@@ -239,45 +226,9 @@ function genRC(e){
       <button class="btn-lime full" id="loginBtn">Log In</button>
     </div>
     <div style="text-align:center;margin-top:16px;display:flex;justify-content:center;gap:20px;">
-      <a href="#" id="forgotLink" style="font-size:13px;color:#2C7C3B;font-weight:600;text-decoration:none;">Forgot password?</a>
+      <a href="forgot-password.html" id="forgotLink" style="font-size:13px;color:#2C7C3B;font-weight:600;text-decoration:none;">Forgot password?</a>
       <span style="color:#d1e8d8;font-size:13px;">|</span>
       <a href="register.html" style="font-size:13px;color:#566070;text-decoration:none;">New user? Register &#8594;</a>
-    </div>
-  </div>
-  <div id="v2" class="view">
-    <a href="#" id="backLink" style="font-size:13px;color:#566070;text-decoration:none;display:flex;align-items:center;gap:6px;margin-bottom:28px;">
-      <i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> Back to login
-    </a>
-    <div style="text-align:center;margin-bottom:24px;">
-      <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Reset Your Password</h2>
-      <p style="font-size:14px;color:#566070;margin:0;line-height:1.6;">
-        Enter your email and the recovery code sent to you.
-        Don't have one? <a href="forgot-password.html" style="color:#2C7C3B;font-weight:600;text-decoration:none;">Get it here &#8594;</a>
-      </p>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:14px;">
-      <div><label class="lbl" for="r_email">Email Address</label><input class="field" id="r_email" type="email" placeholder="your@email.com"></div>
-      <div>
-        <label class="lbl" for="r_code">Recovery Code</label>
-        <input class="field" id="r_code" type="text" placeholder="e.g. RC-AB12CD" style="letter-spacing:.1em;font-weight:700;text-transform:uppercase;">
-      </div>
-      <div class="err" id="r_err"></div>
-      <button class="btn-lime full" id="verifyBtn">Verify &amp; Continue</button>
-    </div>
-  </div>
-  <div id="v3" class="view">
-    <div style="text-align:center;margin-bottom:28px;">
-      <div style="width:52px;height:52px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
-        <i class="fa-solid fa-circle-check" style="color:#16a34a;font-size:24px;"></i>
-      </div>
-      <h2 style="font-size:22px;font-weight:700;color:#1A472A;margin:0 0 8px;">Identity Verified</h2>
-      <p style="font-size:14px;color:#566070;margin:0;">Set your new password below.</p>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:14px;">
-      <div><label class="lbl" for="np1">New Password</label><input class="field" id="np1" type="password" placeholder="At least 6 characters"></div>
-      <div><label class="lbl" for="np2">Confirm New Password</label><input class="field" id="np2" type="password" placeholder="Repeat new password"></div>
-      <div class="err" id="np_err"></div>
-      <button class="btn-lime full" id="saveBtn">Save &amp; Log In</button>
     </div>
   </div>
 </div>
@@ -285,13 +236,7 @@ function genRC(e){
 <script src="rv-config.js"></script>
 <script src="rv-auth.js"></script>
 <script>
-var vEmail='';
-function sv(id){['v1','v2','v3'].forEach(function(v){document.getElementById(v).className=v===id?'view on':'view';})}
-document.getElementById('forgotLink').addEventListener('click',function(e){e.preventDefault();if(RV.api()){location.href='forgot-password.html';}else{sv('v2');}});
-document.getElementById('backLink').addEventListener('click',function(e){e.preventDefault();sv('v1');});
 document.getElementById('loginBtn').addEventListener('click',doLogin);
-document.getElementById('verifyBtn').addEventListener('click',verifyRC);
-document.getElementById('saveBtn').addEventListener('click',savePass);
 document.getElementById('l_pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 function doLogin(){
   var email=document.getElementById('l_email').value.trim();
@@ -300,10 +245,7 @@ function doLogin(){
   var fail=function(m){err.style.display='block';err.textContent=m;btn.disabled=false;btn.textContent='Log In';};
   err.style.display='none';
   if(!email||!pass){return fail('Please enter your email and password.');}
-  var users=JSON.parse(localStorage.getItem('rv_users')||'[]'),user=null;
-  for(var i=0;i<users.length;i++){if(String(users[i].email).toLowerCase()===email.toLowerCase()&&users[i].password===pass){user=users[i];break;}}
-  if(user){RVAuth.set(user);window.location.href=RV.home(user);return;}
-  if(!RV.api()){return fail('Incorrect email or password. Use "Forgot password?" to reset.');}
+  if(!RV.api()){return fail('Log in is not available right now. Please try again later.');}
   btn.disabled=true;btn.textContent='Checking...';
   var KK='';RV.key(email,pass).then(function(k){KK=k;return RV.post({action:'login',email:email,key:k});}).then(function(r){
     if(r&&r.ok){var u=RV.restore(r.profile,r.assets,KK);window.location.href=RV.home(u);return;}
@@ -313,28 +255,6 @@ function doLogin(){
     else if(e==='locked')fail('Too many attempts. Please wait 15 minutes, or use "Forgot password?".');
     else fail('Incorrect email or password. Use "Forgot password?" to reset.');
   }).catch(function(){fail('Could not connect. Please check your internet connection and try again.');});
-}
-function verifyRC(){
-  var email=document.getElementById('r_email').value.trim();
-  var code=document.getElementById('r_code').value.trim().toUpperCase();
-  var err=document.getElementById('r_err');
-  err.style.display='none';
-  if(!email||!code){err.style.display='block';err.textContent='Please enter both your email and recovery code.';return;}
-  if(code!==genRC(email)){err.style.display='block';err.textContent='Incorrect recovery code. Please check your email or get a new code.';return;}
-  vEmail=email;sv('v3');
-}
-function savePass(){
-  var p1=document.getElementById('np1').value;
-  var p2=document.getElementById('np2').value;
-  var err=document.getElementById('np_err');
-  err.style.display='none';
-  if(!p1||p1.length<6){err.style.display='block';err.textContent='Password must be at least 6 characters.';return;}
-  if(p1!==p2){err.style.display='block';err.textContent='Passwords do not match.';return;}
-  var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
-  var found=false,user=null;
-  for(var i=0;i<users.length;i++){if(users[i].email===vEmail){users[i].password=p1;found=true;user=users[i];}}
-  if(found){localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);window.location.href=user.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';}
-  else{err.style.display='block';err.textContent='Account not found in this browser. Please register again. Your profile is saved on our side.';}
 }
 </script></div>
 </main>

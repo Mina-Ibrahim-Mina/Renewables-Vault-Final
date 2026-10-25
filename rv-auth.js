@@ -111,3 +111,27 @@ var RV = {
     return '<div style="' + st + 'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:' + Math.round(size * 0.38) + 'px;">' + ini.replace(/[<>&"]/g, '') + '</div>';
   }
 };
+
+/* Older versions of the site kept the password itself in this browser. Any that are left are replaced once by the
+ * one-way key, so no readable password stays on the device. */
+(function () {
+  try {
+    var read = function (k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+    var todo = read('rv_users', []).concat([read('rv_user', null)]).filter(function (x) { return x && x.email && x.password; });
+    if (!todo.length || !window.crypto || !crypto.subtle) return;
+    var keys = {};
+    Promise.all(todo.map(function (x) {
+      return RV.key(x.email, x.password).then(function (k) { keys[String(x.email).toLowerCase() + '|' + x.password] = k; });
+    })).then(function () {
+      var fix = function (x) {
+        if (!x || !x.password) return x;
+        var k = keys[String(x.email).toLowerCase() + '|' + x.password];
+        if (k) { if (!/^[a-f0-9]{64}$/.test(x.k || '')) x.k = k; delete x.password; }
+        return x;
+      };
+      localStorage.setItem('rv_users', JSON.stringify(read('rv_users', []).map(fix)));   // read again: the page may have changed it meanwhile
+      var cur = read('rv_user', null);
+      if (cur && cur.password) localStorage.setItem('rv_user', JSON.stringify(fix(cur)));
+    }).catch(function () {});
+  } catch (e) {}
+})();

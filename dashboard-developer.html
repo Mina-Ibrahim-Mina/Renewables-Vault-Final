@@ -550,7 +550,10 @@ function loadAssetDocs(){
     if(document.getElementById('vMain').classList.contains('on')){if(added)goMain();else renderAssets(L);}
   }).catch(function(){});
 }
-function ldSlots(d){
+function ldSlots(d){var L=ldBase(d),have={};L.forEach(function(x){have[x.k]=1;});
+  (d.requested||[]).forEach(function(k){if(!have[k]&&DOC_NAMES[k])L.push({k:k,l:DOC_NAMES[k],h:'Requested by our team.',req:1});});
+  return L;}
+function ldBase(d){
   if(d.known)return allDocSlots(d.type,d.answers);
   return CORE_DOCS.map(function(k){return {k:k,l:k==='d_contract'?contractLabel(d.type):DOC_NAMES[k],h:'',req:1};})
     .concat([{k:'d_loan',l:DOC_NAMES.d_loan,h:'Only if a lender has security over the asset or its revenue.',req:0},{k:'d_photos',l:DOC_NAMES.d_photos,h:'',req:0},{k:'d_val',l:DOC_NAMES.d_val,h:'',req:0}]);

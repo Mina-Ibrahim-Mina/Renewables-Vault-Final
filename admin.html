@@ -544,6 +544,34 @@ function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if
     .then(function(r){if(r&&r.ok){toast('Document added');loadA();}else m.textContent=r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':'Upload failed: '+((r&&r.error)||'');}).catch(function(){m.textContent='Upload failed, please try again.';});};
   rd.readAsDataURL(f);}
 
+/* Ask the developer for missing documents: tick what is missing, add a note, one click sends one email */
+function slotOfLabel(l){for(var k in DOC_NAMES)if(DOC_NAMES[k]===l)return k;return '';}
+function reqDocsBox(a){var i=esc(a.id),have={},req={},ev={};
+  (a.docs||[]).forEach(function(x){var k=slotOfLabel(x.label);if(k)have[k]=(have[k]||0)+1;});
+  (a.requested||[]).forEach(function(r){req[r.k]=r;});
+  ((a.detail&&a.detail.evidence)||[]).forEach(function(x){ev[x.k]=x.status;});
+  var nReq=Object.keys(req).length;
+  return '<details style="margin-top:10px;"><summary style="font-size:13px;color:#b45309;font-weight:700;cursor:pointer;"><i class="fa-solid fa-envelope-open-text"></i> Request missing documents'+(nReq?' ('+nReq+' already requested)':'')+'</summary>'+
+    '<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-top:8px;">'+
+    '<div style="font-size:12px;color:#566070;margin-bottom:8px;">Tick what is missing, then send one email to '+esc(a.email)+'. <a href="#" onclick="rqTick(\''+i+'\');return false;" style="color:#2C7C3B;font-weight:600;">Tick all not received</a></div>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px 14px;">'+
+    Object.keys(DOC_NAMES).map(function(k){
+      var tag=have[k]?'<span style="color:#166534;">received</span>':req[k]?'<span style="color:#b45309;">requested '+esc(req[k].on)+'</span>':ev[k]==='later'?'<span style="color:#92400e;">within 30 days</span>':ev[k]==='na'?'<span style="color:#991b1b;">not available</span>':'';
+      return '<label style="font-size:12.5px;display:flex;gap:6px;align-items:flex-start;padding:3px 0;cursor:pointer;"><input type="checkbox" class="rq_'+i+'" value="'+k+'" data-have="'+(have[k]?1:0)+'" style="margin-top:2px;"><span>'+esc(DOC_NAMES[k])+(tag?' <span style="font-size:11px;">('+tag+')</span>':'')+'</span></label>';}).join('')+'</div>'+
+    '<textarea id="rqn_'+i+'" rows="2" aria-label="Note to the developer" placeholder="Note to the developer (optional)" style="width:100%;margin-top:8px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box;"></textarea>'+
+    '<div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap;"><button class="tbtn" id="rqb_'+i+'" style="background:#b45309;color:#fff;" onclick="rqSend(\''+i+'\')"><i class="fa-solid fa-paper-plane"></i> Send request</button>'+
+    '<span id="rqm_'+i+'" style="font-size:12px;color:#566070;">One email lists all ticked documents. The status changes to More information needed.</span></div></div></details>';}
+function rqTick(id){document.querySelectorAll('.rq_'+id).forEach(function(c){c.checked=c.getAttribute('data-have')!=='1';});}
+function rqSend(id){var slots=[];document.querySelectorAll('.rq_'+id+':checked').forEach(function(c){slots.push(c.value);});
+  var m=document.getElementById('rqm_'+id),b=document.getElementById('rqb_'+id);
+  if(!slots.length){m.style.color='#b91c1c';m.textContent='Please tick at least one document.';return;}
+  b.disabled=true;m.style.color='#566070';m.textContent='Sending...';
+  apost({action:'admin_request_docs',password:adminPw(),id:id,slots:slots,note:document.getElementById('rqn_'+id).value}).then(function(r){
+    b.disabled=false;
+    if(r&&r.ok){toast('Request sent to '+r.to+': '+slots.length+' document'+(slots.length>1?'s':'')+(r.emailed?'':' (email could not be sent, see the Errors tab)'));loadA();}
+    else{m.style.color='#b91c1c';m.textContent=(r&&r.error)||'Could not send the request.';}
+  }).catch(function(){b.disabled=false;m.style.color='#b91c1c';m.textContent='Could not reach the server. Please try again.';});}
+
 /* Jacob RARE™ breakdown on the asset card (internal only) */
 function jacobCard(d){if(!d||!d.pillars)return '';
   var st={uploaded:['Uploaded','#166534'],later:['Within 30 days','#92400e'],na:['Not available','#991b1b'],missing:['Not provided','#566070']};
@@ -557,7 +585,7 @@ function jacobCard(d){if(!d||!d.pillars)return '';
     '</details>';}
 
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},3000);}
-function docsHtml(d,a){d=d||[];var add=a?adminDocAdd(a):'';var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
+function docsHtml(d,a){d=d||[];var add=a?adminDocAdd(a)+reqDocsBox(a):'';var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
   if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#646c78;"><i class="fa-solid fa-paperclip"></i> No documents uploaded yet.</div>'+add;
   return '<div style="margin-top:12px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:10px 14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#2C7C3B;margin-bottom:6px;"><span><i class="fa-solid fa-paperclip"></i> DOCUMENTS ('+fl.length+')</span>'+
     (fo?'<a href="'+esc(fo.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">Open folder in Drive</a>':'')+'</div>'+

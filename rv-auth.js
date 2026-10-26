@@ -42,8 +42,8 @@ var RV = {
   serverRegister: function (body, pass, cb, knownKey) {
     if (!RV.api()) return cb('offline');
     (knownKey ? Promise.resolve(knownKey) : RV.key(body.email, pass)).then(function (k) { body.key = k; return RV.post(body); }).then(function (r) {
-      if (r && r.ok && r.existing) { RV.restore(r.profile, r.assets, body.key); cb('restored', body.key); }
-      else if (r && r.ok) cb('new', body.key);
+      if (r && r.ok && r.existing) { RV.restore(r.profile, r.assets, r.session || body.key); cb('restored', r.session || body.key); }
+      else if (r && r.ok) cb('new', r.session || body.key);
       else if (r && r.error === 'exists') cb('exists');
       else if (r && r.error === 'check') cb('check');
       else cb('offline');
@@ -51,7 +51,7 @@ var RV = {
   },
   /* The key for a logged in user. Older sessions that still hold the password are upgraded once: the password is replaced by the key. */
   userKey: function (u) {
-    if (u && /^[a-f0-9]{64}$/.test(u.k || '')) return Promise.resolve(u.k);
+    if (u && RV.isCred(u.k)) return Promise.resolve(u.k);
     if (!u || !u.password) return Promise.resolve('');
     return RV.key(u.email, u.password).then(function (k) {
       u.k = k; delete u.password;
@@ -65,6 +65,8 @@ var RV = {
       return k;
     });
   },
+  /* What the browser keeps after login: a session pass (rvs1...) from the server, or an older login key */
+  isCred: function (k) { return /^[a-f0-9]{64}$/.test(k || '') || /^rvs1\.[a-z0-9]{6,12}\.[a-f0-9]{64}$/.test(k || ''); },
   home: function (u) { return u.type === 'investor' ? 'dashboard-investor.html' : 'dashboard-developer.html'; },
   /* Optional profile photo or company logo. mode 'cover' crops a photo to a square, 'contain' fits a logo on white. cb(dataUrl) or cb(null, message) */
   pickPhoto: function (mode, cb) {
@@ -133,6 +135,34 @@ var RV = {
       localStorage.setItem('rv_users', JSON.stringify(read('rv_users', []).map(fix)));   // read again: the page may have changed it meanwhile
       var cur = read('rv_user', null);
       if (cur && cur.password) localStorage.setItem('rv_user', JSON.stringify(fix(cur)));
+    }).catch(function () {});
+  } catch (e) {}
+})();
+
+/* Session passes. Browsers that still hold the older login key swap it once for a session pass, which reveals nothing
+ * about the password and expires 30 days after login. Keys of other accounts once used on this browser are removed.
+ * An expired pass logs the browser out. */
+(function () {
+  try {
+    var read = function (k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+    var cur = read('rv_user', null), me = cur && String(cur.email || '').toLowerCase();
+    var us = read('rv_users', []), changed = false;
+    us.forEach(function (x) { if (x && String(x.email || '').toLowerCase() !== me && /^[a-f0-9]{64}$/.test(x.k || '')) { delete x.k; changed = true; } });
+    if (changed) localStorage.setItem('rv_users', JSON.stringify(us));
+    if (!cur) return;
+    var m = /^rvs1\.([a-z0-9]+)\./.exec(cur.k || '');
+    if (m && parseInt(m[1], 36) < Date.now()) {                      // pass expired: log out on this browser
+      localStorage.removeItem('rv_user');
+      localStorage.setItem('rv_users', JSON.stringify(read('rv_users', []).filter(function (x) { return String(x && x.email || '').toLowerCase() !== me; })));
+      return;
+    }
+    if (!/^[a-f0-9]{64}$/.test(cur.k || '') || !RV.api()) return;
+    RV.post({ action: 'session', email: cur.email, key: cur.k }).then(function (r) {
+      if (!r || !r.ok || !r.session) return;
+      var fix = function (x) { if (x && String(x.email || '').toLowerCase() === me && /^[a-f0-9]{64}$/.test(x.k || '')) x.k = r.session; return x; };
+      if (window.U && typeof window.U === 'object') fix(window.U);   // the dashboard's own copy, so it never saves the old key back
+      var now = read('rv_user', null); if (now) localStorage.setItem('rv_user', JSON.stringify(fix(now)));
+      localStorage.setItem('rv_users', JSON.stringify(read('rv_users', []).map(fix)));
     }).catch(function () {});
   } catch (e) {}
 })();

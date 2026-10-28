@@ -99,9 +99,9 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 /* RV mobile fix v10 */
 @media(max-width:768px){
   html,body{overflow-x:hidden;}
-  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="grid-template-columns"]{grid-template-columns:minmax(0,1fr) !important;}
   [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
-  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"],[style*="padding:100px 48px"]{padding-left:20px !important;padding-right:20px !important;}
   [style*="display:flex"]{flex-wrap:wrap;}
   img,video,table{max-width:100%;}
   h1{font-size:30px !important;line-height:1.2 !important;}
@@ -513,7 +513,7 @@ function goMain(){EDITING=false;
   var pf=[['Full name',U.firstName+' '+U.lastName],['Email',U.email],['Phone or WhatsApp',U.phone||'Not provided'],['Company',U.company||'Not provided'],['Main asset type',U.energy||'Not provided'],['Registered',U.registered||'Not provided']];
   document.getElementById('profFields').innerHTML=pf.map(function(p){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">'+p[0]+'</div><div style="font-size:14px;color:#1c2b1f;font-weight:600;word-break:break-word;">'+esc(p[1])+'</div></div>';}).join('')+liRow();
   liBoxRender();
-  var j=[['Create your profile','Done',1],['Register your asset','An asset profile of 7 steps for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60–75 days',0]];
+  var j=[['Create your profile','Done',1],['Register your asset','An asset profile of 7 steps for each asset',assets.length?1:0],['Review','Our team reviews and contacts you within 5 business days',0],['Discovery call','We discuss your asset and financing needs',0],['Term sheet & close','Due diligence and closing in 60 to 75 days',0]];
   var nextIdx=j.findIndex(function(x){return!x[2];});
   document.getElementById('journey').innerHTML=j.map(function(s,i){var last=i===j.length-1,done=s[2],nx=i===nextIdx;
     return '<div style="margin-left:15px;padding-left:18px;padding-bottom:'+(last?0:16)+'px;position:relative;border-left:'+(last?'none':(done?'2px solid #4ADE80':'2px dashed #d1e8d8'))+';">'+
@@ -804,6 +804,7 @@ function sendChanges(){
     if(r&&r.error==='locked')return again('This asset has been published to investors, so it can no longer be changed here. Please contact our team.');
     if(r&&r.error==='missing_docs')return again('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');
     if(r&&r.error==='auth')return again('Your session has expired. Your changes are saved: please log out, log in again and send them.');
+    if(r&&r.error==='too_big')return again('Some answers are too long to save. Please shorten the longest text answers and send again.');
     again('We could not send your changes. Please check your connection and try again. Your changes are saved.');
   }).catch(function(){again('We could not send your changes. Please check your connection and try again. Your changes are saved.');});
 }
@@ -841,6 +842,7 @@ function submitAsset(){
     RV.userKey(U).then(function(k){payload.key=k;return post(payload);}).then(function(r){if(r&&r.ok)finish(true);
       else if(r&&r.error==='auth'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('Your session has expired. Your answers are saved: please log out, log in again and submit.');}
+      else if(r&&r.error==='too_big'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';err('Some answers are too long to save. Please shorten the longest text answers and submit again.');}
       else if(r&&r.error==='missing_docs'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');}
       else{w3f().finally(function(){finish(false);});}})

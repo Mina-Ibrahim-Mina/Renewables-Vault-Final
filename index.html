@@ -148,9 +148,9 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;}
 /* RV mobile fix v10 */
 @media(max-width:768px){
   html,body{overflow-x:hidden;}
-  [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  [style*="grid-template-columns"]{grid-template-columns:minmax(0,1fr) !important;}
   [style*="padding:48px"],[style*="padding: 48px"]{padding-left:20px !important;padding-right:20px !important;}
-  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"]{padding-left:20px !important;padding-right:20px !important;}
+  [style*="padding:80px 48px"],[style*="padding:96px 48px"],[style*="padding:64px 48px"],[style*="padding:100px 48px"]{padding-left:20px !important;padding-right:20px !important;}
   [style*="display:flex"]{flex-wrap:wrap;}
   img,video,table{max-width:100%;}
   h1{font-size:30px !important;line-height:1.2 !important;}
@@ -173,7 +173,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 }
 @media(max-width:400px){.nav-inner img{height:34px !important;}}
 @media(max-width:480px){#navAuth>span{display:none !important;}}
-@media(max-width:768px){.hflow{flex-wrap:nowrap !important;gap:6px !important;}.hflow > div > div:first-child{width:48px !important;height:48px !important;}.hflow > div > div:last-child{font-size:9px !important;letter-spacing:.04em !important;}}
+@media(max-width:768px){.hflow{flex-wrap:nowrap !important;gap:8px !important;}.hflow > div{min-width:0;}.hflow > div > div:first-child{width:52px !important;height:52px !important;}.hflow > div > div:last-child{font-size:11px !important;letter-spacing:.05em !important;}.hflow-card{padding:28px 18px !important;}}
+@media(max-width:520px){.hflow{flex-direction:column !important;gap:4px !important;}.hflow > div:nth-child(even){transform:rotate(90deg);line-height:1;}}
 </style>
 <style>.skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;background:#4ADE80;color:#0f1f14;padding:10px 16px;border-radius:6px;font-weight:700;text-decoration:none;}.skip-link:focus{left:12px;}</style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Renewables Vault","url":"https://renewablesvault.com/","logo":"https://renewablesvault.com/logo.png","email":"contact@renewablesvault.com","areaServed":["Egypt","Middle East and North Africa","Africa"],"description":"Upfront capital for operating clean energy assets, by purchasing part of their future contracted revenue."}</script>
@@ -230,7 +231,7 @@ var RVAuth={
         <a href="developers.html" class="btn-out">For Developers</a>
       </div>
     </div>
-    <div style="background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.15);border-radius:16px;padding:40px;text-align:center;">
+    <div class="hflow-card" style="background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.15);border-radius:16px;padding:40px;text-align:center;">
       <div class="hflow" style="display:flex;align-items:center;justify-content:center;gap:20px;">
         <div style="text-align:center;">
           <div style="width:60px;height:60px;border:1.5px solid rgba(74,222,128,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">

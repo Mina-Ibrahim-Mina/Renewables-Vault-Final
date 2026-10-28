@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Developer Dashboard | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png?v=2">
@@ -11,10 +11,10 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="rv-icons.css?v=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+<link rel="preload" href="inter-latin.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="rv-fonts.css?v=1">
 <style>
 *{box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
@@ -392,7 +392,7 @@ var RVAuth={
 };
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}if(U&&k===kD())queueDraftSync(v);}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}if(U&&k===kD()&&!EDITING)queueDraftSync(v);}
 /* Unfinished profile is also kept on the server, so the developer can continue on another phone or computer */
 var dsT=null,dsPending=null;
 function queueDraftSync(v){if(!API)return;if(v)v.t=Date.now();dsPending={v:v};clearTimeout(dsT);dsT=setTimeout(flushDraft,1500);}
@@ -420,7 +420,8 @@ function pullDraft(){
 /* ───────────── State ───────────── */
 var U=null,DRAFT=null,S=0;
 function kA(){return 'rv_assets_'+U.email.toLowerCase();}
-function kD(){return 'rv_draft_'+U.email.toLowerCase();}
+var EDITING=false;
+function kD(){return 'rv_'+(EDITING?'edit':'draft')+'_'+U.email.toLowerCase();}
 
 function show(v){['vMain','vType','vForm','vDocs','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});window.scrollTo(0,0);}
 
@@ -496,7 +497,7 @@ function savePhoto(img){
 }
 
 /* ───────────── Main view ───────────── */
-function goMain(){
+function goMain(){EDITING=false;
   show('vMain');
   document.getElementById('dName').textContent='Welcome, '+U.firstName+' '+U.lastName+'.';
   document.getElementById('dSub').textContent=[U.company,U.country||'Egypt'].filter(Boolean).join(' · ');
@@ -538,7 +539,17 @@ var ADOCS={},LD=null,LDNEW=[];
 function docLine(a){var d=ADOCS[a.id];if(!d)return '';
   return (d.missing.length?'<div class="adoc warn"><i class="fa-solid fa-paperclip"></i> Documents needed: '+d.missing.map(function(k){return esc(DOC_NAMES[k]||k);}).join(', ')+'</div>'
     :'<div class="adoc okd"><i class="fa-solid fa-circle-check"></i> '+d.docs.length+' document'+(d.docs.length===1?'':'s')+' received</div>')+
-    '<button class="btn-out adoc-btn" onclick="openDocs(\''+esc(a.id)+'\')"><i class="fa-solid fa-upload"></i> '+(d.missing.length?'Upload documents':'Add more documents')+'</button>';}
+    '<button class="btn-out adoc-btn" onclick="openDocs(\''+esc(a.id)+'\')"><i class="fa-solid fa-upload"></i> '+(d.missing.length?'Upload documents':'Add more documents')+'</button>'+
+    (d.known&&!d.published?' <button class="btn-out adoc-btn" onclick="editAsset(\''+esc(a.id)+'\')"><i class="fa-solid fa-sliders"></i> Update information</button>'
+      :d.published?'<div style="font-size:11.5px;color:#646c78;margin-top:6px;">Published to investors: to change the information, please contact our team.</div>':'');}
+/* Update a submitted asset while our team is still reviewing it: the form opens with the saved answers */
+function editAsset(id){var d=ADOCS[id];if(!d||!d.known||d.published)return;
+  EDITING=true;var cur=lsGet(kD(),null);
+  if(cur&&cur.id===id&&cur.type)DRAFT=cur;
+  else{var ans={};Object.keys(d.answers||{}).forEach(function(k){if(k!=='_modes')ans[k]=d.answers[k];});
+    var docs={};(d.docs||[]).forEach(function(x){if(x.slot)(docs[x.slot]=docs[x.slot]||[]).push({id:'',name:x.name,received:true});});
+    DRAFT={v:FORM_VERSION,type:d.type,step:0,ans:ans,docs:docs,modes:(d.answers&&d.answers._modes)||{},id:id,edit:true,name:d.name};}
+  UPL={};DERR={};lsSet(kD(),DRAFT);S=Math.min(DRAFT.step||0,steps(DRAFT.type).length-1);renderStep();show('vForm');}
 function loadAssetDocs(){
   if(!API)return;
   RV.userKey(U).then(function(k){return k?post({action:'asset_docs',email:U.email,key:k}):null;}).then(function(r){
@@ -627,13 +638,14 @@ function startForm(type){DRAFT={v:FORM_VERSION,type:type,step:0,ans:{a_country:'
 function resumeDraft(){DRAFT=lsGet(kD(),null);if(!DRAFT)return goMain();UPL={};DERR={};
   if(!DRAFT.v||DRAFT.v<FORM_VERSION){DRAFT.v=FORM_VERSION;DRAFT.step=0;DRAFT.modes={};}   /* drafts started on the earlier, shorter form */
   DRAFT.modes=DRAFT.modes||{};DRAFT.docs=DRAFT.docs||{};S=Math.min(DRAFT.step||0,steps(DRAFT.type).length-1);renderStep();show('vForm');}
-function discardDraft(){if(confirm('Discard this unfinished asset profile?')){dropDraftDocs(lsGet(kD(),null));lsSet(kD(),null);DRAFT=null;goMain();}}
+function discardDraft(){if(DRAFT&&DRAFT.edit){if(confirm('Discard your changes? The asset stays as you last sent it.')){lsSet(kD(),null);DRAFT=null;goMain();}return;}
+  if(confirm('Discard this unfinished asset profile?')){dropDraftDocs(lsGet(kD(),null));lsSet(kD(),null);DRAFT=null;goMain();}}
 function saveAndExit(){collect();DRAFT.step=S;lsSet(kD(),DRAFT);goMain();}
 
 /* ───────────── Form rendering ───────────── */
 function renderStep(){
   var st=steps(DRAFT.type),s=st[S],a=DRAFT.ans;
-  document.getElementById('fTitle').textContent=TYPES[DRAFT.type].label;
+  document.getElementById('fTitle').textContent=TYPES[DRAFT.type].label+(DRAFT.edit?' · Updating '+DRAFT.id:'');
   document.getElementById('prog').innerHTML=st.map(function(x,i){return '<div class="prog-step'+(i<S?' done':i===S?' active':'')+'"></div>';}).join('');
   document.getElementById('sTitle').textContent=s.title;
   document.getElementById('sCount').textContent='Step '+(S+1)+' of '+st.length;
@@ -653,7 +665,7 @@ function renderStep(){
   renderDocs();
   document.getElementById('bPrev').style.visibility=S===0?'hidden':'visible';
   var last=S===st.length-1,b=document.getElementById('bNext');
-  b.innerHTML=last?'<i class="fa-solid fa-paper-plane"></i> Submit asset profile':'Next <i class="fa-solid fa-arrow-right"></i>';
+  b.innerHTML=last?'<i class="fa-solid fa-paper-plane"></i> '+(DRAFT.edit?'Send changes':'Submit asset profile'):'Next <i class="fa-solid fa-arrow-right"></i>';
   b.className=last?'btn-lime':'btn-green';b.disabled=false;
 }
 function pick(el){el.closest('.pills').querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel');});el.closest('.pill').classList.add('sel');el.closest('.qrow').classList.remove('bad');collect();renderDocs();autosave();}
@@ -672,8 +684,8 @@ function renderDocs(){
     var f=DRAFT.docs[d.k]||[],busy=UPL[d.k],m=dmode(d.k),old=document.getElementById('row_'+d.k),bad=old&&old.classList.contains('bad')&&!docOk(d);
     var h='<div class="qrow docrow'+(bad?' bad':'')+'" id="row_'+d.k+'"><div class="dtop"><i class="fa-solid fa-paperclip"></i><span class="dlab">'+esc(d.l)+'</span><span class="dtier t-'+d.tier+'">'+TIER_TXT[d.tier]+'</span></div>'+
       (d.h?'<div class="dhint">'+esc(d.h)+'</div>':'')+
-      f.map(function(x){return '<div class="dfile"><span class="dname"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i><span class="t">'+esc(x.name)+'</span><span class="dsz">'+fmtSize(x.size)+'</span></span>'+
-        '<button type="button" class="dx" onclick="removeDoc(\''+d.k+'\',\''+esc(x.id)+'\')">Remove</button></div>';}).join('')+
+      f.map(function(x){return '<div class="dfile"><span class="dname"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i><span class="t">'+esc(x.name)+'</span><span class="dsz">'+(x.size?fmtSize(x.size):'')+'</span></span>'+
+        (DRAFT.edit||x.received?'<span class="dsz">Received</span>':'<button type="button" class="dx" onclick="removeDoc(\''+d.k+'\',\''+esc(x.id)+'\')">Remove</button>')+'</div>';}).join('')+
       (busy?'<div class="dbusy"><i class="fa-solid fa-spinner fa-spin"></i> Uploading '+esc(busy)+'...</div>':'');
     var dim=d.tier!=='opt'&&!f.length&&m.mode!=='upload';
     if(f.length<DOC_PER_SLOT)h+='<label class="dpick'+(busy?' dis':'')+(dim?' dim':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="pickDocs(\''+d.k+'\',this)"'+(busy?' disabled':'')+'><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>';
@@ -774,9 +786,31 @@ function nextS(){if(!validate())return;var st=steps(DRAFT.type);
 function prevS(){collect();if(S>0){S--;DRAFT.step=S;lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}}
 
 /* ───────────── Submit ───────────── */
+function sendChanges(){
+  var b=document.getElementById('bNext');b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+  var type=DRAFT.type,a=DRAFT.ans,items=[],answers={},id=DRAFT.id;
+  steps(type).forEach(function(s){s.qs.forEach(function(q){if(q.t==='check')return;var v=a[q.k];
+    if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];items.push({sec:s.title,q:q.q,a:o?o.t:''});answers[q.k]=v;}
+    else{items.push({sec:s.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
+  var again=function(m){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Send changes';err(m);};
+  RV.userKey(U).then(function(k){return post({action:'update_asset',email:U.email,key:k,asset:{id:id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,answers:answers,items:items,modes:draftModes()}});})
+  .then(function(r){
+    if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===id){x.name=r.name||x.name;x.location=r.location||x.location;x.status=r.status||x.status;}});lsSet(kA(),L);
+      lsSet(kD(),null);DRAFT=null;EDITING=false;
+      document.querySelector('#vDone h1').textContent='Changes sent';
+      document.getElementById('doneTxt').textContent='Thank you. Your changes to '+(r.name||'your asset')+' were sent to our team'+(r.changes?' ('+r.changes+' answer'+(r.changes===1?'':'s')+' updated).':'.')+' A confirmation has been sent to '+U.email+'.';
+      document.getElementById('doneRef').textContent='Reference: '+id;document.getElementById('doneDocs').style.display='none';
+      show('vDone');loadAssetDocs();return;}
+    if(r&&r.error==='locked')return again('This asset has been published to investors, so it can no longer be changed here. Please contact our team.');
+    if(r&&r.error==='missing_docs')return again('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');
+    if(r&&r.error==='auth')return again('Your session has expired. Your changes are saved: please log out, log in again and send them.');
+    again('We could not send your changes. Please check your connection and try again. Your changes are saved.');
+  }).catch(function(){again('We could not send your changes. Please check your connection and try again. Your changes are saved.');});
+}
 function newId(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='';for(var i=0;i<6;i++)r+=c[Math.floor(Math.random()*c.length)];return 'RV-'+r;}
 function submitAsset(){
   clearTimeout(asT);
+  if(DRAFT&&DRAFT.edit)return sendChanges();
   var b=document.getElementById('bNext');b.disabled=true;b.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
   var type=DRAFT.type,a=DRAFT.ans,st=steps(type),items=[],answers={};
   st.forEach(function(s){s.qs.forEach(function(q){if(q.t==='check')return;var v=a[q.k];
@@ -788,6 +822,7 @@ function submitAsset(){
   var finish=function(synced){
     rec.synced=synced;if(!synced)rec.payload=payload;
     var L=lsGet(kA(),[]);L.push(rec);lsSet(kA(),L);lsSet(kD(),null);DRAFT=null;
+    document.querySelector('#vDone h1').textContent='Asset profile submitted';
     document.getElementById('doneTxt').textContent='Thank you. We have received the asset profile for '+rec.name+'.'+(synced?' A confirmation has been sent to '+U.email+'.':'');
     document.getElementById('doneRef').textContent='Reference: '+rec.id;
     var owed=Object.keys(payload.asset.modes||{}).filter(function(k){return payload.asset.modes[k].mode==='later';}).map(function(k){return DOCS[k]?DOCS[k].l:k;});

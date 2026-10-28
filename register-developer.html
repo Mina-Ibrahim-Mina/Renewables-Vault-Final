@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
 <link rel="stylesheet" href="rv-icons.css?v=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+<link rel="preload" href="inter-latin.woff2?v=1" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="rv-fonts.css?v=1">
 <title>Developer Registration | Renewables Vault</title>
 <link rel="canonical" href="https://renewablesvault.com/register-developer.html">
 <link rel="icon" type="image/png" href="favicon.png?v=2">
@@ -256,6 +256,7 @@ var RVAuth={
       </label>
     </div>
     <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;"><label for="d_hp">Leave this field empty</label><input id="d_hp" type="text" tabindex="-1" autocomplete="off"></div>
+    <div id="d_vcbox" style="display:none;grid-column:1/-1;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 14px;"><p id="d_vcmsg" style="font-size:13px;color:#1A472A;margin:0 0 8px;line-height:1.5;"></p><label class="lbl" for="d_vc">Verification code</label><input class="field" id="d_vc" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 digit code" style="letter-spacing:.3em;"></div>
     <div class="err" id="d_err" style="grid-column:1/-1;"></div>
     <div style="grid-column:1/-1;"><button class="btn-lime full" id="d_btn" onclick="subDev()">Create Developer Account</button></div>
   </div>
@@ -281,9 +282,12 @@ function subDev() {
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
   if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}
   btn.disabled=true;btn.textContent='Creating account...';
-  RV.serverRegister({action:'register',hp:document.getElementById('d_hp').value,ft:Date.now()-RV_T0,type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,linkedin:li},pass,function(res,k){
+  RV.serverRegister({action:'register',vcode:document.getElementById('d_vc').value.replace(/\D/g,''),hp:document.getElementById('d_hp').value,ft:Date.now()-RV_T0,type:'developer',firstName:first,lastName:last,email:email,phone:phone,company:company,energy:energy,stage:'',consent:true,linkedin:li},pass,function(res,k,x){
     if(res==='restored'){window.location.href='dashboard-developer.html';return;}
     if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
+    if(res==='verify'){document.getElementById('d_vcbox').style.display='block';document.getElementById('d_vcmsg').textContent=x&&x.wait?'We already sent codes to '+(x.to||'this email')+'. Please use the latest one, or try again in an hour.':'Our team has already prepared a profile for this email. To protect it, we sent a 6 digit code to '+((x&&x.to)||'your email')+'. Enter it below and press the button again.';document.getElementById('d_vc').focus();btn.disabled=false;btn.textContent='Create Developer Account';return;}
+    if(res==='wrong_code'){return fail('That code is not right. Please check the email and try again.');}
+    if(res==='verify_expired'){document.getElementById('d_vc').value='';return fail('The code has expired. Press the button again to receive a new one.');}
     if(res==='check'){return fail('Please check your details and press the button again.');}
     if(res!=='new'||!k){return fail('We could not create your account just now. Please check your internet connection and try again. If it keeps happening, email contact@renewablesvault.com.');}
     var user={firstName:first,lastName:last,email:email,phone:phone,linkedin:li,k:k,company:company,energy:energy,country:country,stage:'',description:'',type:'developer',status:'pending',consent:true,registered:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};

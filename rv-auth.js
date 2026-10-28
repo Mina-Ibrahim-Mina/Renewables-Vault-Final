@@ -46,6 +46,7 @@ var RV = {
       else if (r && r.ok) cb('new', r.session || body.key);
       else if (r && r.error === 'exists') cb('exists');
       else if (r && r.error === 'check') cb('check');
+      else if (r && /^(verify|wrong_code|verify_expired)$/.test(r.error)) cb(r.error, null, r);
       else cb('offline');
     }).catch(function () { cb('offline'); });
   },

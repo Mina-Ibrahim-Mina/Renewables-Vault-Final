@@ -2,8 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X19FH9Z28D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X19FH9Z28D');</script>
+<script src="rv-consent.js?v=1"></script>
 <link rel="stylesheet" href="rv-icons.css?v=1">
 
 
@@ -188,8 +187,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </nav>
 <main id="main">
-<script src="rv-config.js"></script>
-<script src="rv-auth.js"></script>
+<script src="rv-config.js?v=54"></script>
+<script src="rv-auth.js?v=54"></script>
 <script>
 var RV_T0=Date.now();
 var RVAuth={
@@ -278,6 +277,7 @@ function subDev() {
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
   if(phone.replace(/\D/g,'').length<8){return fail('Please enter a valid mobile or WhatsApp number, including the country code.');}
   if(pass.length<8){return fail('Password must be at least 8 characters.');}
+  var WEAK=/^(password|passw0rd|12345678|123456789|1234567890|87654321|11111111|00000000|qwertyui|qwerty123|abc12345|abcd1234|iloveyou|letmein1|welcome1|admin123|egypt123|cairo123|renewables)/i;if(WEAK.test(pass)||/^(.)\1+$/.test(pass)||pass.toLowerCase()===email.toLowerCase().split('@')[0]){return fail('This password is too easy to guess. Please choose a different one.');}
   if(!consent){return fail('Please tick the box to agree to the Privacy Policy.');}
   var users=JSON.parse(localStorage.getItem('rv_users')||'[]');
   if(users.find(function(u){return String(u.email).toLowerCase()===email.toLowerCase();})){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a> instead.',true);}

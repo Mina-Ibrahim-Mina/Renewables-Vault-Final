@@ -377,16 +377,16 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </footer>
 
-<script src="rv-config.js?v=54"></script>
-<script src="rv-auth.js?v=54"></script>
-<script src="rv-assets.js?v=54"></script>
+<script src="rv-config.js?v=55"></script>
+<script src="rv-auth.js?v=55"></script>
+<script src="rv-assets.js?v=55"></script>
 <script>
 var W3F='615b6c70-27cb-4e3d-a889-b332649aeef0';
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
 var RVAuth={
   get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
   set:function(u){localStorage.setItem('rv_user',JSON.stringify(u));},
-  forget:function(u){try{var e=String((u||{}).email||'').toLowerCase(),us=JSON.parse(localStorage.getItem('rv_users')||'[]');localStorage.setItem('rv_users',JSON.stringify(us.filter(function(x){return String(x&&x.email).toLowerCase()!==e;})));localStorage.removeItem('rv_user');}catch(x){}},
+  forget:function(u){try{if(window.rvBeforeLogout)window.rvBeforeLogout();}catch(x){}try{var e=String((u||{}).email||'').toLowerCase(),us=JSON.parse(localStorage.getItem('rv_users')||'[]');localStorage.setItem('rv_users',JSON.stringify(us.filter(function(x){return String(x&&x.email).toLowerCase()!==e;})));localStorage.removeItem('rv_user');if(e){['rv_draft_','rv_edit_','rv_kyc_','rv_kyc2_'].forEach(function(p){localStorage.removeItem(p+e);});var ka='rv_assets_'+e,L=JSON.parse(localStorage.getItem(ka)||'[]').filter(function(a){return a&&a.payload&&!a.synced;});if(L.length)localStorage.setItem(ka,JSON.stringify(L));else localStorage.removeItem(ka);}}catch(x){}},
   out:function(){RVAuth.forget(RVAuth.get());window.location.href='index.html';}
 };
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
@@ -420,6 +420,8 @@ function pullDraft(){
 var U=null,DRAFT=null,S=0;
 function kA(){return 'rv_assets_'+U.email.toLowerCase();}
 var EDITING=false;
+/* On logout: send the unfinished draft to the server first, so clearing it from this browser loses nothing */
+window.rvBeforeLogout=function(){try{if(!U||!U.k||!API)return;clearTimeout(dsT);var d=dsPending?dsPending.v:lsGet('rv_draft_'+U.email.toLowerCase(),null);dsPending=null;if(d&&d.type){d.t=d.t||Date.now();var body=JSON.stringify({action:'draft_save',email:U.email,key:U.k,draft:d});var sent=false;try{sent=navigator.sendBeacon&&navigator.sendBeacon(API,body);}catch(e){}if(!sent){try{fetch(API,{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:body});}catch(e){}}}}catch(e){}};
 function kD(){return 'rv_'+(EDITING?'edit':'draft')+'_'+U.email.toLowerCase();}
 
 function show(v){['vMain','vType','vForm','vDocs','vDone'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===v);});window.scrollTo(0,0);}
@@ -525,9 +527,9 @@ function renderAssets(assets){
   document.getElementById('assetList').innerHTML=assets.slice().reverse().map(function(a){
     var c=CHIP[a.status]||CHIP['Submitted'];
     return '<div class="arow"><div style="display:flex;gap:14px;align-items:flex-start;flex:1;min-width:220px;">'+
-      '<div class="aicon"><i class="fa-solid '+TYPES[a.type].icon+'"></i></div><div>'+
+      '<div class="aicon"><i class="fa-solid '+(TYPES[a.type]||TYPES.solar).icon+'"></i></div><div>'+
       '<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
-      '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc(TYPES[a.type].label)+' · '+esc(a.location)+'</div>'+
+      '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc((TYPES[a.type]||TYPES.solar).label)+' · '+esc(a.location)+'</div>'+
       '<div style="font-size:11px;color:#646c78;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
       (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+docLine(a)+
       '</div></div><span class="chip" style="background:'+c[0]+';color:'+c[1]+';">'+esc(a.status||'Submitted')+'</span></div>';
@@ -715,6 +717,7 @@ function clearDocErr(){var e=document.getElementById('fErr');if(e&&/document/.te
 function upErr(e){return e==='too_big'?'This file is larger than 10 MB. Please upload a smaller copy.':
   e==='bad_type'?'This file type is not accepted. Please use PDF, Word, Excel or an image.':
   e==='auth'?'Your session has expired. Please log out, log in again and continue.':
+  e==='quota'?'You have uploaded a lot of files in the last few hours. Please try again later today, or choose “Send within 30 days” for this document and continue.':
   e==='storage'?'We could not save this file because of a problem on our side, not your connection. Our team has been alerted. To continue now, choose \u201cSend within 30 days\u201d for this document and upload it later from your dashboard.':
   e==='too_many'?'This asset already has the maximum of 60 files. Please combine documents into one PDF, or email us at contact@renewablesvault.com.':
   'The upload did not go through. Please check your connection and try again. If it keeps failing, email us at contact@renewablesvault.com.';}

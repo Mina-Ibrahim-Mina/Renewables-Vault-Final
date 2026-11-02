@@ -200,7 +200,7 @@ var RVAuth={
   if(!el)return;
   if(u){
     var d=u.type==='investor'?'dashboard-investor.html':'dashboard-developer.html';
-    el.innerHTML='<span style="font-size:12px;color:#bccabb;margin-right:4px;">Hi, '+u.firstName+'</span>'+
+    el.innerHTML='<span style="font-size:12px;color:#bccabb;margin-right:4px;">Hi, '+String(u.firstName||'').replace(/[&<>"']/g,function(c){return '&#'+c.charCodeAt(0)+';';})+'</span>'+
       '<a href="'+d+'" class="btn-nav">My Account</a>'+
       '<a href="#" onclick="RVAuth.out();return false;" style="font-size:12px;color:#869486;text-decoration:none;">Logout</a>';
   }else{
@@ -232,8 +232,8 @@ var RVAuth={
   </div>
 </div>
 </section>
-<script src="rv-config.js?v=55"></script>
-<script src="rv-auth.js?v=55"></script>
+<script src="rv-config.js?v=56"></script>
+<script src="rv-auth.js?v=56"></script>
 <script>
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('l_pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});

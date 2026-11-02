@@ -165,6 +165,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       <button class="tab" id="t5" onclick="showTab('int')"><i class="fa-solid fa-handshake"></i> Investor Interest</button>
       <button class="tab" id="t2" onclick="showTab('dev')"><i class="fa-solid fa-users"></i> Registrations</button>
       <button class="tab" id="t6" onclick="showTab('add')"><i class="fa-solid fa-plus"></i> Add asset</button>
+      <button class="tab" id="t7" onclick="showTab('prv')"><i class="fa-solid fa-shield-halved"></i> Privacy</button>
     </div>
     <div id="aMsg" style="font-size:13px;color:#dc2626;margin:0 0 10px;"></div>
     <div id="vd" style="display:none;">
@@ -197,6 +198,16 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
       </div>
       <div id="kList"></div>
     </div>
+    <div id="vp" style="display:none;">
+      <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 6px;">Privacy requests</h2>
+      <p style="font-size:13px;color:#566070;margin:0 0 16px;line-height:1.6;">When someone asks to see or delete their personal data (Egypt Data Protection Law), find everything we hold for their email here. You can download a copy to send them, or delete it. Every lookup and deletion is recorded in the Data requests tab of the Sheet.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+        <input id="pvEmail" type="email" aria-label="Email address" placeholder="Email address" autocomplete="off" style="flex:1;min-width:220px;max-width:360px;padding:9px 12px;border:1px solid #c8ddd0;border-radius:6px;font-size:14px;">
+        <button class="tbtn" id="pvFind" style="background:#1A472A;color:#fff;" onclick="pvFind()">Find their data</button>
+      </div>
+      <div id="pvMsg" style="font-size:13px;color:#566070;"></div>
+      <div id="pvOut"></div>
+    </div>
     <div id="vx" style="display:none;">
       <h2 style="font-size:18px;font-weight:700;color:#1A472A;margin:0 0 6px;">Add an asset for a developer</h2>
       <p style="font-size:13px;color:#566070;margin:0 0 18px;">Use this when you have the asset details yourself, for example from a meeting. It is scored with RARE&#8482; like any other asset and appears in Asset Assessments. Documents are optional here; missing ones are shown on the asset card. If the developer registers later with the same email, they will see this asset on their dashboard.</p>
@@ -215,9 +226,9 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <div id="toast"></div>
 
-<script src="rv-config.js?v=55"></script>
-<script src="rv-auth.js?v=55"></script>
-<script src="rv-assets.js?v=55"></script>
+<script src="rv-config.js?v=56"></script>
+<script src="rv-auth.js?v=56"></script>
+<script src="rv-assets.js?v=56"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -257,7 +268,7 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 
 function showTab(t){
-  var map={dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5'],add:['vx','t6']};
+  var map={dev:['vd','t2'],ast:['va','t3'],kyc:['vk','t4'],int:['vn','t5'],add:['vx','t6'],prv:['vp','t7']};
   if(t==='add'&&!NX)nxStart();
   for(var k in map){if(!document.getElementById(map[k][0]))continue;document.getElementById(map[k][0]).style.display=k===t?'block':'none';document.getElementById(map[k][1]).className='tab'+(k===t?' on':'');}
 }
@@ -571,6 +582,40 @@ function rqSend(id){var slots=[];document.querySelectorAll('.rq_'+id+':checked')
     if(r&&r.ok){toast('Request sent to '+r.to+': '+slots.length+' document'+(slots.length>1?'s':'')+(r.emailed?'':' (email could not be sent, see the Errors tab)'));loadA();}
     else{m.style.color='#b91c1c';m.textContent=(r&&r.error)||'Could not send the request.';}
   }).catch(function(){b.disabled=false;m.style.color='#b91c1c';m.textContent='Could not reach the server. Please try again.';});}
+
+/* Privacy requests: find, download and delete one person's data */
+var PV=null;
+function pvMsg(t,c){var m=document.getElementById('pvMsg');m.style.color=c||'#566070';m.textContent=t;}
+function pvFind(){var em=document.getElementById('pvEmail').value.trim();if(!em)return;pvMsg('Searching...');document.getElementById('pvOut').innerHTML='';
+  apost({action:'admin_person',password:adminPw(),email:em}).then(function(r){
+    if(!r||!r.ok){PV=null;return pvMsg((r&&r.error)||'Could not search.','#b91c1c');}
+    PV=r;var total=r.tabs.reduce(function(a,t){return a+t.rows.length;},0),docs=r.folders.reduce(function(a,f){return a+f.files;},0);
+    pvMsg(total||docs?'Found '+total+' record'+(total===1?'':'s')+' and '+docs+' document'+(docs===1?'':'s')+' for '+r.email+'.':'Nothing is held for '+r.email+'.');
+    if(!total&&!docs)return;
+    var nAs=(r.tabs.filter(function(t){return t.tab==='Assessments';})[0]||{rows:[]}).rows.length;
+    document.getElementById('pvOut').innerHTML='<div style="background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:12px 16px;margin-bottom:14px;">'+
+      r.tabs.filter(function(t){return t.rows.length;}).map(function(t){return '<details style="margin:4px 0;"><summary style="font-size:13px;cursor:pointer;"><b>'+esc(t.tab)+'</b>: '+t.rows.length+'</summary>'+
+        t.rows.map(function(row){return '<div style="font-size:12px;background:#fff;border:1px solid #eef3ef;border-radius:6px;padding:6px 10px;margin:6px 0;">'+row.map(function(v,i){return v?'<div><span style="color:#646c78;">'+esc(t.headers[i]||'')+':</span> '+esc(String(v).slice(0,400))+'</div>':'';}).join('')+'</div>';}).join('')+'</details>';}).join('')+
+      (r.folders.length?'<div style="font-size:13px;margin-top:6px;"><b>Documents</b>: '+r.folders.map(function(f){return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">'+esc(f.name)+'</a> ('+f.files+')';}).join(', ')+'</div>':'')+
+      '<button class="tbtn" style="margin-top:10px;background:#fff;border:1px solid #1A472A;color:#1A472A;" onclick="pvDownload()"><i class="fa-solid fa-upload" style="transform:rotate(180deg);"></i> Download a copy (for an access request)</button></div>'+
+      '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;">'+
+      '<div style="font-size:13px;font-weight:700;color:#991b1b;margin-bottom:6px;">Delete this person\'s data</div>'+
+      '<div style="font-size:12.5px;color:#374151;line-height:1.55;margin-bottom:8px;">This cannot be undone from the panel. Before deleting, check with your lawyer whether you must keep KYC or transaction records for a period by law.'+(r.published.length?' <b>This person has a published asset ('+esc(r.published.join(', '))+'): unpublish it first.</b>':'')+'</div>'+
+      (nAs?'<label style="font-size:12.5px;display:flex;gap:6px;align-items:center;margin-bottom:8px;"><input type="checkbox" id="pvAssets"> Also delete their '+nAs+' asset'+(nAs===1?'':'s')+' and documents</label>':'')+
+      '<input id="pvConfirm" aria-label="Type the email again to confirm" placeholder="Type the email again to confirm" autocomplete="off" style="width:100%;max-width:360px;padding:8px 10px;border:1px solid #fecaca;border-radius:6px;font-size:13px;box-sizing:border-box;">'+
+      '<div style="margin-top:8px;"><button class="tbtn" id="pvDel" style="background:#b91c1c;color:#fff;" onclick="pvDelete()">Delete their data</button></div></div>';
+  }).catch(function(){pvMsg('Could not reach the server. Please try again.','#b91c1c');});}
+function pvDownload(){if(!PV)return;var out={email:PV.email,exported:new Date().toISOString(),data:{}};
+  PV.tabs.forEach(function(t){if(t.rows.length)out.data[t.tab]=t.rows.map(function(row){var o={};row.forEach(function(v,i){if(v)o[t.headers[i]||('Column '+(i+1))]=v;});return o;});});
+  out.documents=PV.folders.map(function(f){return {folder:f.name,files:f.files};});
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));a.download='renewables-vault-data-'+PV.email.replace(/[^a-z0-9]+/gi,'-')+'.json';document.body.appendChild(a);a.click();a.remove();}
+function pvDelete(){if(!PV)return;var b=document.getElementById('pvDel'),c=document.getElementById('pvConfirm').value.trim(),wa=document.getElementById('pvAssets');
+  b.disabled=true;b.textContent='Deleting...';
+  apost({action:'admin_person_delete',password:adminPw(),email:PV.email,confirm:c,withAssets:!!(wa&&wa.checked)}).then(function(r){
+    b.disabled=false;b.textContent='Delete their data';
+    if(!r||!r.ok)return pvMsg((r&&r.error)||'Could not delete.','#b91c1c');
+    document.getElementById('pvOut').innerHTML='';pvMsg('Deleted. '+r.summary+'. Recorded in the Data requests tab. Backups older than today expire within 30 days.','#166534');PV=null;loadA();
+  }).catch(function(){b.disabled=false;b.textContent='Delete their data';pvMsg('Could not reach the server. Please try again.','#b91c1c');});}
 
 /* Jacob RARE™ breakdown on the asset card (internal only) */
 function jacobCard(d){if(!d||!d.pillars)return '';

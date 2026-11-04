@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script src="rv-consent.js?v=1"></script>
 <link rel="stylesheet" href="rv-icons.css?v=1">
@@ -247,7 +247,7 @@ var RVAuth={
     </p>
   </div>
 </section>
-<script src="rv-config.js?v=56"></script>
+<script src="rv-config.js?v=57"></script>
 <script>
 var RV_T0=Date.now();
 function sendContact() {
@@ -261,13 +261,7 @@ function sendContact() {
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){return fail('Please enter a valid email address.');}
   btn.disabled=true;btn.textContent='Sending...';
   var direct='Your message could not be sent. Please try again, or email us directly at <a href="mailto:contact@renewablesvault.com" style="color:inherit;font-weight:600;">contact@renewablesvault.com</a>.';
-  /* Backup route, used only when our own server cannot be reached */
-  var backup=function(){
-    return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({access_key:'615b6c70-27cb-4e3d-a889-b332649aeef0',subject:'Contact Form: '+reason+' | '+name,name:name,email:email,
-        message:'Name: '+name+'\nEmail: '+email+'\nOrg: '+org+'\nReason: '+reason+'\nMessage: '+msg})})
-      .then(function(r){return r.json();}).then(function(r){if(!r||!r.success)throw new Error('not sent');done();}).catch(function(){fail(direct);});
-  };
+  var backup=function(){fail(direct);};   // our own server could not be reached: show the email address instead
   var api=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
   if(!api)return backup();
   fetch(api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://api.web3forms.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Developer Dashboard | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png?v=2">
@@ -377,11 +377,10 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </footer>
 
-<script src="rv-config.js?v=56"></script>
-<script src="rv-auth.js?v=56"></script>
-<script src="rv-assets.js?v=56"></script>
+<script src="rv-config.js?v=57"></script>
+<script src="rv-auth.js?v=57"></script>
+<script src="rv-assets.js?v=57"></script>
 <script>
-var W3F='615b6c70-27cb-4e3d-a889-b332649aeef0';
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
 var RVAuth={
   get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
@@ -834,11 +833,8 @@ function submitAsset(){
     show('vDone');
     if(synced)loadAssetDocs();
   };
-  var w3f=function(){
-    var txt='ASSET PROFILE NOT YET SAVED ON THE SERVER\n\nThe developer submitted an asset but the server did not confirm it. The dashboard will send it again automatically the next time the developer opens it. No answers are included here for confidentiality.\n\nRef: '+rec.id+'\nType: '+TYPES[type].label+'\nDeveloper: '+U.firstName+' '+U.lastName+'\nCompany: '+(U.company||'')+'\nEmail: '+U.email+'\nPhone: '+(U.phone||'');
-    return fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({access_key:W3F,subject:'Asset not yet saved: '+rec.id+' | '+(U.company||U.lastName),name:U.firstName+' '+U.lastName,email:U.email,message:txt})}).catch(function(){});
-  };
+  var w3f=function(){return Promise.resolve();};   // nothing sent elsewhere: the dashboard sends the profile to our server again automatically
+
 
   if(API){
     RV.userKey(U).then(function(k){payload.key=k;return post(payload);}).then(function(r){if(r&&r.ok)finish(true);

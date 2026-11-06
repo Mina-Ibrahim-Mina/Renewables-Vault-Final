@@ -226,9 +226,9 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <div id="toast"></div>
 
-<script src="rv-config.js?v=57"></script>
-<script src="rv-auth.js?v=57"></script>
-<script src="rv-assets.js?v=57"></script>
+<script src="rv-config.js?v=59"></script>
+<script src="rv-auth.js?v=59"></script>
+<script src="rv-assets.js?v=59"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -284,8 +284,14 @@ function loadA(){
     useData(r);
   }).catch(function(){aMsg('Could not reach the assessments service. Click Refresh to try again.');});
 }
+/* Photos come in groups after the list (the server no longer sends them all at once) */
+function fillPhotos(){document.querySelectorAll('[data-ph]').forEach(function(d){var src=(ADATA&&ADATA.photos||{})[d.getAttribute('data-ph')];
+  if(src&&/^data:image\/(jpeg|png|webp);base64,/.test(src)){var im=document.createElement('img');im.src=src;im.alt='';im.style.cssText=d.style.cssText;im.style.objectFit='cover';im.style.border='1px solid #d1e8d8';im.style.background='#fff';d.replaceWith(im);}});}
+function loadPhotos(list){var pw=sessionStorage.getItem('rva_ap')||'';if(!list||!list.length||!AAPI)return;var chunk=list.slice(0,100),rest=list.slice(100);
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_photos',password:pw,emails:chunk})}).then(function(r){return r.json();}).then(function(r){
+    if(r&&r.ok&&ADATA){for(var k in r.photos)ADATA.photos[k]=r.photos[k];fillPhotos();loadPhotos(rest);}}).catch(function(){});}
 function useData(r){
-    ADATA=r;aMsg('');document.getElementById('aTools').style.display='flex';
+    ADATA=r;r.photos=r.photos||{};aMsg('');document.getElementById('aTools').style.display='flex';
     var sv=document.getElementById('srvVer');sv.textContent='Server '+(r.version||'older than v38: paste the latest script and deploy')+(r.weakPassword?' · Admin password is short: use 12 or more characters':'');sv.style.color=r.weakPassword?'#b45309':'#646c78';
     var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All investors</option><optgroup label="Access">'+r.invStatuses.map(function(x){return '<option value="a:'+esc(x)+'"'+('a:'+x===kc?' selected':'')+'>Access: '+esc(x)+'</option>';}).join('')+'</optgroup><optgroup label="Full KYC">'+(r.kycStatuses||[]).map(function(x){return '<option value="k:'+esc(x)+'"'+('k:'+x===kc?' selected':'')+'>KYC: '+esc(x)+'</option>';}).join('')+'</optgroup>';
     document.getElementById('s1').textContent=r.assessments.length;
@@ -297,13 +303,14 @@ function useData(r){
     renderK();renderN();
     var f=document.getElementById('aFilter'),cur=f.value;f.innerHTML='<option value="">All statuses</option>'+r.statuses.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
     renderA();renderR();
+    if(r.photoEmails&&r.photoEmails.length)setTimeout(function(){loadPhotos(r.photoEmails.filter(function(e){return !r.photos[e];}));},50);
     if(NX&&document.getElementById('vx').style.display==='block')nxRender();
 }
 function waNum(p){var d=String(p||'').replace(/\D/g,'');if(/^00/.test(d))d=d.slice(2);if(/^01\d{9}$/.test(d))d='20'+d.slice(1);return d;}
-function av(email,name,size,square){var img=(ADATA&&ADATA.photos||{})[String(email||'').toLowerCase()]||'';
+function av(email,name,size,square){var em=String(email||'').toLowerCase(),img=(ADATA&&ADATA.photos||{})[em]||'';
   var ini=String(name||'?').trim().split(/\s+/).map(function(w){return w.charAt(0);}).join('').slice(0,2).toUpperCase();
   var st='width:'+size+'px;height:'+size+'px;border-radius:'+(square?'10px':'50%')+';flex-shrink:0;';
-  return img?'<img src="'+img+'" alt="" style="'+st+'object-fit:cover;border:1px solid #d1e8d8;background:#fff;">':'<div style="'+st+'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:'+Math.round(size*0.38)+'px;">'+esc(ini)+'</div>';}
+  return img?'<img src="'+img+'" alt="" style="'+st+'object-fit:cover;border:1px solid #d1e8d8;background:#fff;">':'<div data-ph="'+esc(em)+'" style="'+st+'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:'+Math.round(size*0.38)+'px;">'+esc(ini)+'</div>';}
 function liLink(email,opt){var m={};(ADATA&&ADATA.registrations||[]).forEach(function(r){if(r.linkedin)m[String(r.email).toLowerCase()]=r.linkedin;});
   var u=m[String(email||'').toLowerCase()];
   return u?' · <a href="'+esc(u)+'" target="_blank" rel="noopener" style="color:#0a66c2;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>':(opt?' · <span style="color:#646c78;">No LinkedIn</span>':' · <span style="color:#dc2626;">No LinkedIn yet</span>');}
@@ -384,7 +391,7 @@ function pubA(id,i,publish){
   var n=document.getElementById('ln_'+i);
   var body={action:'admin_publish',password:sessionStorage.getItem('rva_ap')||'',id:id,publish:publish,title:g('lt'),country:g('lc'),region:g('lr'),capital:g('lk'),tenor:g('lm'),currency:g('lu'),summary:g('ls'),ret:g('lx'),example:g('le'),notifyInvestors:!!(n&&n.checked)};
   fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();})
-    .then(function(r){if(r.ok){toast(publish?('Published'+(r.notified?' and '+r.notified+' investor'+(r.notified>1?'s':'')+' emailed':'')):'Unpublished');loadA();}else toast(r.error||'Could not save');})
+    .then(function(r){if(r.ok){toast(publish?('Published'+(r.notified?('. '+r.notified+' matching investor'+(r.notified>1?'s':'')+' will be emailed'+(r.sentNow!==undefined&&r.sentNow<r.notified?' ('+r.sentNow+' now, the rest in hourly batches)':'')):'')):'Unpublished');loadA();}else toast(r.error||'Could not save');})
     .catch(function(){toast('Could not reach the assessments service');});
 }
 var KC={'Submitted':['#e0f2fe','#075985'],'Under review':['#fef3c7','#92400e'],'More information needed':['#ffedd5','#9a3412'],'Approved':['#dcfce7','#166534'],'Not approved':['#f3f4f6','#4b5563']};

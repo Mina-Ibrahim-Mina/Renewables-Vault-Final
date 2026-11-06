@@ -38,7 +38,7 @@ var RV = {
       .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
       .replace(/\u066C/g, ',').replace(/\u066B/g, '.');
   },
-  /* Register on the server first. cb(result): 'new' | 'restored' (same email+password existed) | 'exists' | 'check' (looked automated: press again) | 'offline' */
+  /* Register on the server first. cb(result): 'new' | 'restored' (same email+password existed) | 'exists' | 'check' (looked automated: press again) | 'verify' (code emailed) | 'busy' (sign-ups paused) | 'offline' */
   serverRegister: function (body, pass, cb, knownKey) {
     if (!RV.api()) return cb('offline');
     (knownKey ? Promise.resolve(knownKey) : RV.key(body.email, pass)).then(function (k) { body.key = k; return RV.post(body); }).then(function (r) {
@@ -46,6 +46,7 @@ var RV = {
       else if (r && r.ok) cb('new', r.session || body.key);
       else if (r && r.error === 'exists') cb('exists');
       else if (r && r.error === 'check') cb('check');
+      else if (r && r.error === 'busy') cb('busy');
       else if (r && /^(verify|wrong_code|verify_expired)$/.test(r.error)) cb(r.error, null, r);
       else cb('offline');
     }).catch(function () { cb('offline'); });

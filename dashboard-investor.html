@@ -321,8 +321,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </footer>
 
-<script src="rv-config.js?v=57"></script>
-<script src="rv-auth.js?v=57"></script>
+<script src="rv-config.js?v=59"></script>
+<script src="rv-auth.js?v=59"></script>
 <script>
 var RVAuth={
   get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
@@ -427,7 +427,6 @@ function api(body){body.email=U.email;body.key=KEY;return RV.post(body);}
 function loadStatus(){
   stateMsg('Loading your dashboard...','','');
   api({action:'investor_status'}).then(function(r){
-    if(r&&!r.ok&&r.error==='auth'&&!LINKED){LINKED=true;linkAccount();return;}
     if(r&&!r.ok&&/unknown action/i.test(r.error||'')){stateMsg('Investor area being updated','We are finishing an update to the investor area. Please try again in a few minutes.','<button class="btn-green" onclick="loadStatus()">Try again</button>');return;}
     if(!r||!r.ok){stateMsg('Please log in again','We could not confirm your account. Please log out and log in again with your latest password.','<button class="btn-green" onclick="RVAuth.out()">Log out</button><div style="margin-top:12px;"><a href="forgot-password.html" style="font-size:13px;color:#566070;">Forgot your password?</a></div>');return;}
     ST=r;renderMain();if(!PINIT){PINIT=1;photoInit();}

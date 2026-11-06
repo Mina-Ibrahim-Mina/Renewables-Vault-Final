@@ -251,8 +251,8 @@ var RVAuth={
 <div style="max-width:640px;margin:22px auto 0;background:#f8faf8;border:1px solid #d1e8d8;border-radius:12px;padding:18px 22px;"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#2C7C3B;margin-bottom:10px;"><i class="fa-solid fa-lock"></i> YOUR DATA AND SECURITY</div><ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.7;"><li>Your password is never sent to us or stored, on our servers or in your browser. Only a one way code is used to recognise you.</li><li>The whole website uses an encrypted (https) connection.</li><li>Your personal and KYC details are seen only by the Renewables Vault team and are never shared with developers or third parties without your consent.</li><li>You can ask us to delete your data at any time by writing to contact@renewablesvault.com.</li></ul><div style="font-size:12px;color:#646c78;margin-top:8px;">More in our <a href="legal.html#privacy" style="color:#2C7C3B;">Privacy Policy</a>.</div></div>
 </div>
 </section>
-<script src="rv-config.js?v=57"></script>
-<script src="rv-auth.js?v=57"></script>
+<script src="rv-config.js?v=59"></script>
+<script src="rv-auth.js?v=59"></script>
 <script>
 var RV_T0=Date.now();
 function subInv() {
@@ -276,10 +276,11 @@ function subInv() {
   RV.serverRegister({action:'register',vcode:document.getElementById('i_vc').value.replace(/\D/g,''),hp:document.getElementById('i_hp').value,ft:Date.now()-RV_T0,type:'investor',firstName:first,lastName:last,email:email,phone:phone,org:org,investorType:itype,ticket:ticket,note:note,consent:true,linkedin:li},pass,function(res,k,x){
     if(res==='restored'){window.location.href='dashboard-investor.html';return;}
     if(res==='exists'){return fail('An account with this email already exists. Please <a href="login.html" style="color:#dc2626;font-weight:700;">log in</a>, or use "Forgot password?" on the login page.',true);}
-    if(res==='verify'){document.getElementById('i_vcbox').style.display='block';document.getElementById('i_vcmsg').textContent=x&&x.wait?'We already sent codes to '+(x.to||'this email')+'. Please use the latest one, or try again in an hour.':'Our team has already prepared a profile for this email. To protect it, we sent a 6 digit code to '+((x&&x.to)||'your email')+'. Enter it below and press the button again.';document.getElementById('i_vc').focus();btn.disabled=false;btn.textContent='Create Investor Account';return;}
+    if(res==='verify'){document.getElementById('i_vcbox').style.display='block';document.getElementById('i_vcmsg').textContent=x&&x.wait?'We already sent codes to '+(x.to||'this email')+'. Please use the latest one, or try again in an hour.':'To confirm this email address is yours, we sent a 6 digit code to '+((x&&x.to)||'your email')+'. Enter it below and press the button again. If you already have an account, the email tells you how to log in.';document.getElementById('i_vc').focus();btn.disabled=false;btn.textContent='Create Investor Account';return;}
     if(res==='wrong_code'){return fail('That code is not right. Please check the email and try again.');}
     if(res==='verify_expired'){document.getElementById('i_vc').value='';return fail('The code has expired. Press the button again to receive a new one.');}
     if(res==='check'){return fail('Please check your details and press the button again.');}
+    if(res==='busy'){return fail('We are receiving an unusual number of sign-ups right now, so new ones are paused for a short while. Please try again later, or email contact@renewablesvault.com.');}
     if(res!=='new'||!k){return fail('We could not create your account just now. Please check your internet connection and try again. If it keeps happening, email contact@renewablesvault.com.');}
     var user={firstName:first,lastName:last,email:email,phone:phone,linkedin:li,consent:true,k:k,org:org,investorType:itype,ticket:ticket,note:note,type:'investor',status:'pending',approved:false,registered:new Date().toLocaleDateString()};
     users.push(user);localStorage.setItem('rv_users',JSON.stringify(users));RVAuth.set(user);

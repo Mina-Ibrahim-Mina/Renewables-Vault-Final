@@ -232,8 +232,8 @@ var RVAuth={
   </div>
 </div>
 </section>
-<script src="rv-config.js?v=60"></script>
-<script src="rv-auth.js?v=60"></script>
+<script src="rv-config.js?v=61"></script>
+<script src="rv-auth.js?v=61"></script>
 <script>
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('l_pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
@@ -243,6 +243,7 @@ function doLogin(){
   var err=document.getElementById('l_err'),btn=document.getElementById('loginBtn');
   var fail=function(m){err.style.display='block';err.textContent=m;btn.disabled=false;btn.textContent='Log In';};
   err.style.display='none';
+  if(!RV.storageOk()){return fail(RV.storageMsg);}
   if(!email||!pass){return fail('Please enter your email and password.');}
   if(!RV.api()){return fail('Log in is not available right now. Please try again later.');}
   btn.disabled=true;btn.textContent='Checking...';

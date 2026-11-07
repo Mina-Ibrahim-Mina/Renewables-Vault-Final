@@ -1,5 +1,9 @@
 /* Renewables Vault: shared account helpers (do not edit) */
 var RV = {
+  /* Some browsers (company settings, "Block all cookies") stop websites from saving anything. Signing in needs it,
+     so the pages say so clearly instead of showing a connection error. */
+  storageOk: function () { try { var k = 'rv_st'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } },
+  storageMsg: 'Your browser is blocking this website from saving data, which is needed to keep you signed in. Please allow cookies and site data for renewablesvault.com in your browser settings, or use another browser.',
   api: function () { return (typeof RV_API === 'string' && /^https:\/\//.test(RV_API)) ? RV_API : ''; },
   key: function (email, pass) {
     var d = new TextEncoder().encode(String(email).toLowerCase().trim() + '|' + pass + '|RV');

@@ -227,9 +227,9 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <div id="toast"></div>
 
-<script src="rv-config.js?v=60"></script>
-<script src="rv-auth.js?v=60"></script>
-<script src="rv-assets.js?v=60"></script>
+<script src="rv-config.js?v=61"></script>
+<script src="rv-auth.js?v=61"></script>
+<script src="rv-assets.js?v=61"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -297,6 +297,8 @@ function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return
   if(H.known){if(!H.reminders)w.push('Hourly reminders and the email queue are not scheduled. In Apps Script, run setupReminders once');if(!H.backups)w.push('The nightly backup is not scheduled. In Apps Script, run setupBackups once');}
   if(H.backupAgeHours<0)w.push('No backup has been made yet');else if(H.backupAgeHours>50)w.push('The last backup is '+Math.round(H.backupAgeHours/24)+' days old');
   if(!H.brevo)w.push('No Brevo key saved, so emails go through Gmail (about 100 a day)');
+  if(H.brevoFailing)w.push('Brevo is refusing emails ('+String(H.brevoFailing).slice(0,60)+'), so they go through Gmail (about 100 a day). Check the Brevo key and plan, then run testEmail');
+  if(H.mailLost)w.push(H.mailLost+' email'+(H.mailLost>1?'s':'')+' could not be sent at all in the last 6 hours (sign-up codes or resets may be missing)');
   if(H.errors24h)w.push(H.errors24h+' server error'+(H.errors24h>1?'s':'')+' in the last 24 hours (see the Errors tab of the Sheet)');
   i.push('Last backup: '+(H.lastBackup||'none'));if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
   hb.innerHTML=(w.length?'<div style="color:#b45309;font-weight:600;">Needs attention</div><ul style="margin:2px 0 6px 18px;padding:0;color:#7c4a03;">'+w.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<span style="color:#1A472A;font-weight:600;">All systems running</span> · ')+'<span style="color:#646c78;">'+esc(i.join(' · '))+'</span>';

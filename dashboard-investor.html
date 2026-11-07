@@ -321,8 +321,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </footer>
 
-<script src="rv-config.js?v=60"></script>
-<script src="rv-auth.js?v=60"></script>
+<script src="rv-config.js?v=61"></script>
+<script src="rv-auth.js?v=61"></script>
 <script>
 var RVAuth={
   get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},

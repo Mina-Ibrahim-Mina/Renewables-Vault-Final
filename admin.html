@@ -186,6 +186,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
           <span id="srvVer" style="font-size:11px;color:#646c78;white-space:nowrap;"></span>
         </div>
       </div>
+      <div id="healthBar" style="display:none;font-size:12px;line-height:1.6;background:#fff;border:1px solid #d1e8d8;border-radius:8px;padding:8px 12px;margin:0 0 14px;"></div>
       <div id="aList"></div>
     </div>
     <div id="vk" style="display:none;">
@@ -226,9 +227,9 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <div id="toast"></div>
 
-<script src="rv-config.js?v=59"></script>
-<script src="rv-auth.js?v=59"></script>
-<script src="rv-assets.js?v=59"></script>
+<script src="rv-config.js?v=60"></script>
+<script src="rv-auth.js?v=60"></script>
+<script src="rv-assets.js?v=60"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -290,9 +291,20 @@ function fillPhotos(){document.querySelectorAll('[data-ph]').forEach(function(d)
 function loadPhotos(list){var pw=sessionStorage.getItem('rva_ap')||'';if(!list||!list.length||!AAPI)return;var chunk=list.slice(0,100),rest=list.slice(100);
   fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_photos',password:pw,emails:chunk})}).then(function(r){return r.json();}).then(function(r){
     if(r&&r.ok&&ADATA){for(var k in r.photos)ADATA.photos[k]=r.photos[k];fillPhotos();loadPhotos(rest);}}).catch(function(){});}
+/* Health line: schedules, backups, emails waiting and recent server errors (from server v53) */
+function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return;if(!H){hb.style.display='none';return;}
+  var w=[],i=[];
+  if(H.known){if(!H.reminders)w.push('Hourly reminders and the email queue are not scheduled. In Apps Script, run setupReminders once');if(!H.backups)w.push('The nightly backup is not scheduled. In Apps Script, run setupBackups once');}
+  if(H.backupAgeHours<0)w.push('No backup has been made yet');else if(H.backupAgeHours>50)w.push('The last backup is '+Math.round(H.backupAgeHours/24)+' days old');
+  if(!H.brevo)w.push('No Brevo key saved, so emails go through Gmail (about 100 a day)');
+  if(H.errors24h)w.push(H.errors24h+' server error'+(H.errors24h>1?'s':'')+' in the last 24 hours (see the Errors tab of the Sheet)');
+  i.push('Last backup: '+(H.lastBackup||'none'));if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
+  hb.innerHTML=(w.length?'<div style="color:#b45309;font-weight:600;">Needs attention</div><ul style="margin:2px 0 6px 18px;padding:0;color:#7c4a03;">'+w.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<span style="color:#1A472A;font-weight:600;">All systems running</span> · ')+'<span style="color:#646c78;">'+esc(i.join(' · '))+'</span>';
+  hb.style.display='block';}
 function useData(r){
     ADATA=r;r.photos=r.photos||{};aMsg('');document.getElementById('aTools').style.display='flex';
     var sv=document.getElementById('srvVer');sv.textContent='Server '+(r.version||'older than v38: paste the latest script and deploy')+(r.weakPassword?' · Admin password is short: use 12 or more characters':'');sv.style.color=r.weakPassword?'#b45309':'#646c78';
+    showHealth(r.health);
     var kf=document.getElementById('kFilter'),kc=kf.value;kf.innerHTML='<option value="">All investors</option><optgroup label="Access">'+r.invStatuses.map(function(x){return '<option value="a:'+esc(x)+'"'+('a:'+x===kc?' selected':'')+'>Access: '+esc(x)+'</option>';}).join('')+'</optgroup><optgroup label="Full KYC">'+(r.kycStatuses||[]).map(function(x){return '<option value="k:'+esc(x)+'"'+('k:'+x===kc?' selected':'')+'>KYC: '+esc(x)+'</option>';}).join('')+'</optgroup>';
     document.getElementById('s1').textContent=r.assessments.length;
     document.getElementById('s2').textContent=r.assessments.filter(function(a){return a.published;}).length;

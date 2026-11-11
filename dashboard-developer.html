@@ -377,9 +377,9 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </footer>
 
-<script src="rv-config.js?v=62"></script>
-<script src="rv-auth.js?v=62"></script>
-<script src="rv-assets.js?v=62"></script>
+<script src="rv-config.js?v=63"></script>
+<script src="rv-auth.js?v=63"></script>
+<script src="rv-assets.js?v=63"></script>
 <script>
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
 var RVAuth={
@@ -623,7 +623,7 @@ function syncAssets(){
       if(changed){lsSet(kA(),L);if(document.getElementById('vMain').classList.contains('on'))renderAssets(L);}
     }).catch(function(){});
 }
-function post(payload){return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(r){return r.json();});}
+function post(payload){return RV.send(API,payload,/upload_doc/.test(payload&&payload.action)?300000:0);}
 
 /* ───────────── Type picker & drafts ───────────── */
 function newAsset(){

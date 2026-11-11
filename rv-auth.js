@@ -11,10 +11,17 @@ var RV = {
       return Array.prototype.map.call(new Uint8Array(b), function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
     });
   },
-  post: function (body) {
-    return fetch(RV.api(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
-      .then(function (r) { return r.json(); });
+  /* Every call to the server gives up after a while (90 seconds, 5 minutes for a file upload), so a dead mobile
+     connection ends with a clear message instead of a button that waits forever. */
+  send: function (url, body, ms) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var t = ctl ? setTimeout(function () { ctl.abort(); }, ms || window.RV_TIMEOUT_MS || 90000) : 0;
+    var o = { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) };
+    if (ctl) o.signal = ctl.signal;
+    return fetch(url, o).then(function (r) { return r.json(); })
+      .then(function (r) { clearTimeout(t); return r; }, function (e) { clearTimeout(t); throw e; });
   },
+  post: function (body, ms) { return RV.send(RV.api(), body, ms); },
   /* Save an account returned by the server on this browser and log in. Only the one-way key is kept, never the password. */
   restore: function (profile, assets, key) {
     var email = String(profile.email).toLowerCase(), users = [];
@@ -42,6 +49,8 @@ var RV = {
       .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
       .replace(/\u066C/g, ',').replace(/\u066B/g, '.');
   },
+  /* A code typed with an Arabic or Persian keyboard (١٢٣ or ۱۲۳) is the same code */
+  digits: function (s) { return RV.ascii(s).replace(/\D/g, ''); },
   /* Register on the server first. cb(result): 'new' | 'restored' (same email+password existed) | 'exists' | 'check' (looked automated: press again) | 'verify' (code emailed) | 'busy' (sign-ups paused) | 'offline' */
   serverRegister: function (body, pass, cb, knownKey) {
     if (!RV.api()) return cb('offline');
@@ -171,4 +180,21 @@ var RV = {
       localStorage.setItem('rv_users', JSON.stringify(read('rv_users', []).map(fix)));
     }).catch(function () {});
   } catch (e) {}
+})();
+
+/* Dashboards only. After logging out, the browser's Back button can bring the previous page back exactly as it was,
+   and a dashboard open in another tab stays on screen. Both now check who is signed in: if that changed, the page
+   hides itself and goes to the login page (or reloads for the new account). */
+(function () {
+  if (!/dashboard-(developer|investor)(\.html)?$/.test(location.pathname)) return;
+  var who = function () { try { var u = JSON.parse(localStorage.getItem('rv_user')); return u && u.email ? String(u.email).toLowerCase() : ''; } catch (e) { return null; } };
+  var first = who();
+  var check = function () {
+    var now = who();
+    if (now === null || now === first) return;
+    document.documentElement.style.visibility = 'hidden';
+    if (now) location.reload(); else location.replace('login.html');
+  };
+  window.addEventListener('pageshow', function (e) { if (e.persisted) check(); });
+  window.addEventListener('storage', function (e) { if (e.key === 'rv_user' || e.key === null) check(); });
 })();

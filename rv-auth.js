@@ -13,15 +13,71 @@ var RV = {
   },
   /* Every call to the server gives up after a while (90 seconds, 5 minutes for a file upload), so a dead mobile
      connection ends with a clear message instead of a button that waits forever. */
+  /* When many people use the site at the same moment, Google can turn a request away (it runs at most 30 at once
+     for this site) and the server can answer 'server_busy'. The request is then sent again after a short, growing,
+     slightly random pause (about 3, 6 and 12 seconds), only when that is certainly safe:
+     - Google turned it away (an error page or status, the script never ran): any request;
+     - the server says server_busy with retry: nothing was saved or sent yet;
+     - the connection failed: only requests that just read (sending them twice changes nothing). */
+  busyMsg: 'Many people are using the website at this moment. Please wait a minute and try again.',
+  READS: /^(ping|login|session|home|asset_status|asset_docs|draft_get|photo_get|investor_status|listings|admin_list|admin_photos|admin_person)$/,
   send: function (url, body, ms) {
-    var ctl = window.AbortController ? new AbortController() : null;
-    var t = ctl ? setTimeout(function () { ctl.abort(); }, ms || window.RV_TIMEOUT_MS || 90000) : 0;
-    var o = { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) };
-    if (ctl) o.signal = ctl.signal;
-    return fetch(url, o).then(function (r) { return r.json(); })
-      .then(function (r) { clearTimeout(t); return r; }, function (e) { clearTimeout(t); throw e; });
+    var act = String(body && body.action || ''), read = RV.READS.test(act), tries = 0;
+    var once = function () {
+      var ctl = window.AbortController ? new AbortController() : null;
+      var t = ctl ? setTimeout(function () { ctl.abort(); }, ms || window.RV_TIMEOUT_MS || 90000) : 0;
+      var o = { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) };
+      if (ctl) o.signal = ctl.signal;
+      var again = function (why) {
+        if (tries >= 3) return null;
+        tries++;
+        var wait = (window.RV_RETRY_MS || 3000) * Math.pow(2, tries - 1) * (0.6 + Math.random() * 0.8);
+        return new Promise(function (res) { setTimeout(res, wait); }).then(once);
+      };
+      return fetch(url, o).then(function (r) {
+        return r.text().then(function (txt) {
+          clearTimeout(t);
+          var j = null; try { j = JSON.parse(txt); } catch (e) {}
+          if (j && j.error === 'server_busy') { var p = j.retry ? again('busy') : null; return p || j; }
+          if (j) return j;
+          var turnedAway = r.status === 429 || r.status === 503 || /too many|simultaneous|try again later|invoked too many/i.test(txt);
+          var p2 = (turnedAway || read) ? again('refused') : null;
+          if (p2) return p2;
+          throw new Error('not json');
+        });
+      }, function (e) {
+        clearTimeout(t);
+        var timedOut = e && e.name === 'AbortError';
+        var p3 = (read && !timedOut) ? again('network') : null;
+        if (p3) return p3;
+        throw e;
+      });
+    };
+    return once();
   },
-  post: function (body, ms) { return RV.send(RV.api(), body, ms); },
+  /* A dashboard asks for everything it shows on opening in one request ('home'), instead of 3 or 4 at the same
+     moment. Each part is then handed to the code that asks for it, once. With an older server, or if anything goes
+     wrong, each part is simply asked for on its own as before. */
+  _pre: {}, _preAt: 0,
+  preload: function (parts, u, extra) {
+    if (!u || !u.email || !RV.api() || !window.Promise) return;
+    var b = RV.userKey(u).then(function (k) {
+      if (!k) throw new Error('no key');
+      var body = { action: 'home', parts: parts, email: u.email, key: k };
+      for (var x in (extra || {})) body[x] = extra[x];
+      return RV.send(RV.api(), body);
+    }).then(function (r) { if (!r || !r.ok || !r.parts) throw new Error('no bundle'); return r.parts; });
+    b.catch(function () {});
+    RV._pre = {}; RV._preAt = Date.now();
+    parts.forEach(function (k) { var one = b.then(function (ps) { if (!ps[k]) throw new Error('missing'); return ps[k]; }); one.catch(function () {}); RV._pre[k] = one; });
+  },
+  take: function (body) {
+    var k = body && body.action, pr = k && RV._pre[k];
+    if (!pr || Date.now() - RV._preAt > 60000) { if (k && k !== 'session') RV._pre = {}; return null; }   // anything else asked: the bundle is no longer current
+    delete RV._pre[k];
+    return pr.then(null, function () { return RV.send(RV.api(), body); });
+  },
+  post: function (body, ms) { return RV.take(body) || RV.send(RV.api(), body, ms); },
   /* Save an account returned by the server on this browser and log in. Only the one-way key is kept, never the password. */
   restore: function (profile, assets, key) {
     var email = String(profile.email).toLowerCase(), users = [];
@@ -60,6 +116,7 @@ var RV = {
       else if (r && r.error === 'exists') cb('exists');
       else if (r && r.error === 'check') cb('check');
       else if (r && r.error === 'busy') cb('busy');
+      else if (r && r.error === 'server_busy') cb('server_busy');
       else if (r && /^(verify|wrong_code|verify_expired)$/.test(r.error)) cb(r.error, null, r);
       else cb('offline');
     }).catch(function () { cb('offline'); });

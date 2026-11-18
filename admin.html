@@ -230,9 +230,9 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <div id="toast"></div>
 
-<script src="rv-config.js?v=63"></script>
-<script src="rv-auth.js?v=63"></script>
-<script src="rv-assets.js?v=63"></script>
+<script src="rv-config.js?v=65"></script>
+<script src="rv-auth.js?v=65"></script>
+<script src="rv-assets.js?v=65"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -283,11 +283,17 @@ function aMsg(m){document.getElementById('aMsg').textContent=m;}
 function loadA(){
   if(!AAPI){aMsg('The assessments service is not connected yet. Add its URL to rv-config.js (see the setup guide).');return;}
   var pw=sessionStorage.getItem('rva_ap')||'';aMsg('Loading...');
-  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_list',password:pw})}).then(function(r){return r.json();}).then(function(r){
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_list',password:pw,lite:1})}).then(function(r){return r.json();}).then(function(r){
     if(!r.ok){doLogout();var e=document.getElementById('loginErr');e.textContent=r.error==='Incorrect password'?'Please log in again.':(r.error||'Could not load.');e.style.display='block';return;}
     useData(r);
   }).catch(function(){aMsg('Could not reach the assessments service. Click Refresh to try again.');});
 }
+/* Written answers load when you open them (they are most of the list's size) */
+document.addEventListener('toggle',function(e){var d=e.target;if(!d||!d.open||!d.getAttribute||!d.getAttribute('data-ans')||d.getAttribute('data-got'))return;
+  var pre=d.querySelector('pre'),pw=sessionStorage.getItem('rva_ap')||'';d.setAttribute('data-got','1');
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_answers',password:pw,id:d.getAttribute('data-ans')})}).then(function(r){return r.json();}).then(function(r){
+    if(r&&r.ok){pre.textContent=r.answers||'No answers saved.';}else{d.removeAttribute('data-got');pre.textContent='Could not load the answers. Close and open again to retry.';}
+  }).catch(function(){d.removeAttribute('data-got');pre.textContent='Could not load the answers. Close and open again to retry.';});},true);
 /* Photos come in groups after the list (the server no longer sends them all at once) */
 function fillPhotos(){document.querySelectorAll('[data-ph]').forEach(function(d){var src=(ADATA&&ADATA.photos||{})[d.getAttribute('data-ph')];
   if(src&&/^data:image\/(jpeg|png|webp);base64,/.test(src)){var im=document.createElement('img');im.src=src;im.alt='';im.style.cssText=d.style.cssText;im.style.objectFit='cover';im.style.border='1px solid #d1e8d8';im.style.background='#fff';d.replaceWith(im);}});}
@@ -303,6 +309,7 @@ function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return
   if(H.brevoFailing)w.push('Brevo is refusing emails ('+String(H.brevoFailing).slice(0,60)+'), so they go through Gmail (about 100 a day). Check the Brevo key and plan, then run testEmail');
   if(H.mailLost)w.push(H.mailLost+' email'+(H.mailLost>1?'s':'')+' could not be sent at all in the last 6 hours (sign-up codes or resets may be missing)');
   if(H.errors24h)w.push(H.errors24h+' server error'+(H.errors24h>1?'s':'')+' in the last 24 hours (see the Errors tab of the Sheet)');
+  if(H.busy>=20)w.push(H.busy+' requests in the last 6 hours had to wait too long and the visitor was asked to try again (the website does this automatically). If you see this often, the site has outgrown Google Apps Script');
   i.push('Last backup: '+(H.lastBackup||'none'));if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
   hb.innerHTML=(w.length?'<div style="color:#b45309;font-weight:600;">Needs attention</div><ul style="margin:2px 0 6px 18px;padding:0;color:#7c4a03;">'+w.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<span style="color:#1A472A;font-weight:600;">All systems running</span> · ')+'<span style="color:#646c78;">'+esc(i.join(' · '))+'</span>';
   hb.style.display='block';}
@@ -382,7 +389,7 @@ function renderA(){
       (a.flags?'<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:12px;color:#991b1b;margin-top:12px;white-space:pre-line;">'+esc(a.flags)+'</div>':'')+
       jacobCard(a.detail)+
       docsHtml(a.docs,a)+
-      '<details style="margin-top:12px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+esc(a.answers)+'</pre></details>'+
+      '<details style="margin-top:12px;"'+(a.lite?' data-ans="'+esc(a.id)+'"':'')+'><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">View answers</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:#374151;background:#f8faf8;border-radius:6px;padding:12px;margin:8px 0 0;">'+(a.lite?'Loading...':esc(a.answers))+'</pre></details>'+
       listingEditor(a,i)+
       '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;border-top:1px solid #f0f5f2;padding-top:14px;">'+
         '<select id="st_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.statuses.map(function(x){return '<option'+(x===a.status?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select>'+

@@ -232,8 +232,8 @@ var RVAuth={
   </div>
 </div>
 </section>
-<script src="rv-config.js?v=63"></script>
-<script src="rv-auth.js?v=63"></script>
+<script src="rv-config.js?v=65"></script>
+<script src="rv-auth.js?v=65"></script>
 <script>
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('l_pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
@@ -252,7 +252,9 @@ function doLogin(){
     var e=r&&r.error;
     if(e==='wrong_password'||e==='not_found')fail('Email or password is incorrect. Use "Forgot password?" to reset it, or register if you are new.');
     else if(e==='locked')fail('Too many attempts. Please wait 15 minutes, or use "Forgot password?".');
-    else fail('Incorrect email or password. Use "Forgot password?" to reset.');
+    else if(e==='server_busy')fail(RV.busyMsg);
+    else if(e==='bad_request')fail('Please check the email address and try again.');
+    else fail('We could not log you in just now. Please try again in a minute. If it keeps happening, email contact@renewablesvault.com.');   // not a wrong password: do not send people to reset it
   }).catch(function(){fail('Could not connect. Please check your internet connection and try again.');});
 }
 </script></div>

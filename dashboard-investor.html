@@ -322,8 +322,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
   </div>
 </footer>
 
-<script src="rv-config.js?v=63"></script>
-<script src="rv-auth.js?v=63"></script>
+<script src="rv-config.js?v=65"></script>
+<script src="rv-auth.js?v=65"></script>
 <script>
 var RVAuth={
   get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
@@ -410,6 +410,7 @@ window.addEventListener('DOMContentLoaded',function(){
   if(!RV.api()){stateMsg('Temporarily unavailable','Our investor service is being updated. Please try again shortly or contact us.','<a href="contact.html" class="btn-green" style="text-decoration:none;">Contact us</a>');return;}
   if(!(U.k||U.password)){stateMsg('Please log in again','For your security, please log out and log in again to continue.','<button class="btn-green" onclick="RVAuth.out()">Log out</button>');return;}
   try{localStorage.removeItem('rv_kyc_'+U.email.toLowerCase());}catch(e){}
+  RV.preload(['investor_status','photo_get','listings'],U);   // one request for what the dashboard shows on opening
   RV.userKey(U).then(function(k){KEY=k;loadStatus();});
 });
 var PINIT=0;

@@ -332,6 +332,8 @@ var RVAuth={
   out:function(){RVAuth.forget(RVAuth.get());window.location.href='index.html';}
 };
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function jsa(s){return esc(JSON.stringify(String(s==null?'':s)));}
+function safeUrl(u){u=String(u||'').trim();return /^https:\/\/[^\s"'<>]+$/i.test(u)?u:'';}
 function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 (function(){var u=RVAuth.get(),el=document.getElementById('navAuth');if(!el)return;
@@ -430,7 +432,7 @@ function loadStatus(){
 
 /* ───────────── LinkedIn (required) ───────────── */
 function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
-function liRow(){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#646c78;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#646c78;font-weight:500;">Optional, not added</span> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#2C7C3B;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Add</button>')+'</div></div>';}
+function liRow(){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(safeUrl(U.linkedin))+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#646c78;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#646c78;font-weight:500;">Optional, not added</span> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#2C7C3B;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Add</button>')+'</div></div>';}
 function liBoxRender(msg,edit){
   var b=document.getElementById('liBox');if(!b)return;
   if(!edit){b.innerHTML='';return;}
@@ -588,7 +590,7 @@ function renderList(){
       (lines.length?'<ul class="olines">'+lines.map(function(l){return '<li>'+esc(l)+'</li>';}).join('')+'</ul>':'')+
       (x.example?'<details style="margin:0 0 14px;"><summary style="font-size:13px;color:#2C7C3B;font-weight:700;cursor:pointer;">See an example</summary><div style="font-size:13px;color:#374151;line-height:1.7;background:#f8faf8;border-radius:8px;padding:12px 14px;margin-top:8px;white-space:pre-line;">'+esc(x.example)+'</div></details>':'')+
       (done?'<div class="int-done"><i class="fa-solid fa-circle-check"></i> Interest registered. Our team will contact you with the next steps.</div>':
-       '<div id="ib_'+esc(x.id)+'"><button class="btn-green" style="width:100%;justify-content:center;padding:13px;" onclick="openInt(\''+esc(x.id)+'\')">Express interest <i class="fa-solid fa-arrow-right"></i></button></div>')+
+       '<div id="ib_'+esc(x.id)+'"><button class="btn-green" style="width:100%;justify-content:center;padding:13px;" onclick="openInt('+jsa(x.id)+')">Express interest <i class="fa-solid fa-arrow-right"></i></button></div>')+
       '</div>';}).join('')+
     '<p style="font-size:12px;color:#646c78;line-height:1.7;text-align:center;margin:8px 0 0;">Indicative information only. Developer identities, terms and full transaction details are shared under NDA. Any investment is subject to due diligence, documentation and formal approval.</p>';
 }

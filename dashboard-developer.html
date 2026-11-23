@@ -389,6 +389,8 @@ var RVAuth={
   out:function(){RVAuth.forget(RVAuth.get());window.location.href='index.html';}
 };
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function jsa(s){return esc(JSON.stringify(String(s==null?'':s)));}
+function safeUrl(u){u=String(u||'').trim();return /^https:\/\/[^\s"'<>]+$/i.test(u)?u:'';}
 function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}if(U&&k===kD()&&!EDITING)queueDraftSync(v);}
 /* Unfinished profile is also kept on the server, so the developer can continue on another phone or computer */
@@ -443,7 +445,7 @@ window.addEventListener('DOMContentLoaded',function(){
 
 /* ───────────── LinkedIn (required) ───────────── */
 function saveU(){try{localStorage.setItem('rv_user',JSON.stringify(U));var us=JSON.parse(localStorage.getItem('rv_users')||'[]');us.forEach(function(x){if(String(x.email).toLowerCase()===U.email.toLowerCase())x.linkedin=U.linkedin;});localStorage.setItem('rv_users',JSON.stringify(us));}catch(e){}}
-function liRow(){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(U.linkedin)+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#646c78;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
+function liRow(){return '<div><div style="font-size:10px;color:#646c78;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;">LinkedIn</div><div style="font-size:14px;font-weight:600;">'+(U.linkedin?'<a href="'+esc(safeUrl(U.linkedin))+'" target="_blank" rel="noopener" style="color:#0a66c2;text-decoration:none;"><i class="fa-brands fa-linkedin"></i> View profile</a> <button onclick="liBoxRender(\'\',1);document.getElementById(\'liIn\').value=U.linkedin;document.getElementById(\'liBox\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="background:none;border:none;color:#646c78;font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;">Change</button>':'<span style="color:#dc2626;">Not added yet</span>')+'</div></div>';}
 function liBoxRender(msg,edit){
   var b=document.getElementById('liBox');if(!b)return;
   if(U.linkedin&&!edit){b.innerHTML='';return;}
@@ -541,8 +543,8 @@ var ADOCS={},LD=null,LDNEW=[];
 function docLine(a){var d=ADOCS[a.id];if(!d)return '';
   return (d.missing.length?'<div class="adoc warn"><i class="fa-solid fa-paperclip"></i> Documents needed: '+d.missing.map(function(k){return esc(DOC_NAMES[k]||k);}).join(', ')+'</div>'
     :'<div class="adoc okd"><i class="fa-solid fa-circle-check"></i> '+d.docs.length+' document'+(d.docs.length===1?'':'s')+' received</div>')+
-    '<button class="btn-out adoc-btn" onclick="openDocs(\''+esc(a.id)+'\')"><i class="fa-solid fa-upload"></i> '+(d.missing.length?'Upload documents':'Add more documents')+'</button>'+
-    (d.known&&!d.published?' <button class="btn-out adoc-btn" onclick="editAsset(\''+esc(a.id)+'\')"><i class="fa-solid fa-sliders"></i> Update information</button>'
+    '<button class="btn-out adoc-btn" onclick="openDocs('+jsa(a.id)+')"><i class="fa-solid fa-upload"></i> '+(d.missing.length?'Upload documents':'Add more documents')+'</button>'+
+    (d.known&&!d.published?' <button class="btn-out adoc-btn" onclick="editAsset('+jsa(a.id)+')"><i class="fa-solid fa-sliders"></i> Update information</button>'
       :d.published?'<div style="font-size:11.5px;color:#646c78;margin-top:6px;">Published to investors: to change the information, please contact our team.</div>':'');}
 /* Update a submitted asset while our team is still reviewing it: the form opens with the saved answers */
 function editAsset(id){var d=ADOCS[id];if(!d||!d.known||d.published)return;
@@ -687,7 +689,7 @@ function renderDocs(){
     var h='<div class="qrow docrow'+(bad?' bad':'')+'" id="row_'+d.k+'"><div class="dtop"><i class="fa-solid fa-paperclip"></i><span class="dlab">'+esc(d.l)+'</span><span class="dtier t-'+d.tier+'">'+TIER_TXT[d.tier]+'</span></div>'+
       (d.h?'<div class="dhint">'+esc(d.h)+'</div>':'')+
       f.map(function(x){return '<div class="dfile"><span class="dname"><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i><span class="t">'+esc(x.name)+'</span><span class="dsz">'+(x.size?fmtSize(x.size):'')+'</span></span>'+
-        (DRAFT.edit||x.received?'<span class="dsz">Received</span>':'<button type="button" class="dx" onclick="removeDoc(\''+d.k+'\',\''+esc(x.id)+'\')">Remove</button>')+'</div>';}).join('')+
+        (DRAFT.edit||x.received?'<span class="dsz">Received</span>':'<button type="button" class="dx" onclick="removeDoc(\''+d.k+'\','+jsa(x.id)+')">Remove</button>')+'</div>';}).join('')+
       (busy?'<div class="dbusy"><i class="fa-solid fa-spinner fa-spin"></i> Uploading '+esc(busy)+'...</div>':'');
     var dim=d.tier!=='opt'&&!f.length&&m.mode!=='upload';
     if(f.length<DOC_PER_SLOT)h+='<label class="dpick'+(busy?' dis':'')+(dim?' dim':'')+'"><input type="file" multiple accept="'+DOC_ACCEPT+'" onchange="pickDocs(\''+d.k+'\',this)"'+(busy?' disabled':'')+'><i class="fa-solid fa-upload"></i> '+(f.length?'Add another file':'Upload file')+'</label>';

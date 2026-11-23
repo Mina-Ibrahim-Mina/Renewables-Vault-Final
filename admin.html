@@ -234,7 +234,11 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 <script src="rv-auth.js?v=65"></script>
 <script src="rv-assets.js?v=65"></script>
 <script>
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+/* A value placed inside an onclick: quoted for script first, then for the page, so no stored text can end the string and run */
+function jsa(s){return esc(JSON.stringify(String(s==null?'':s)));}
+/* Only https links are ever built from stored data */
+function safeUrl(u){u=String(u||'').trim();return /^https:\/\/[^\s"'<>]+$/i.test(u)?u:'';}
 
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('passIn').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
@@ -309,6 +313,7 @@ function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return
   if(H.brevoFailing)w.push('Brevo is refusing emails ('+String(H.brevoFailing).slice(0,60)+'), so they go through Gmail (about 100 a day). Check the Brevo key and plan, then run testEmail');
   if(H.mailLost)w.push(H.mailLost+' email'+(H.mailLost>1?'s':'')+' could not be sent at all in the last 6 hours (sign-up codes or resets may be missing)');
   if(H.errors24h)w.push(H.errors24h+' server error'+(H.errors24h>1?'s':'')+' in the last 24 hours (see the Errors tab of the Sheet)');
+  if(H.slow>=1)w.push(H.slow+(H.slow===1?' account':' accounts')+' in the last 6 hours asked for data more than 60 times a minute and were slowed down for a minute. This usually means a script is using the login of one member');
   if(H.busy>=20)w.push(H.busy+' requests in the last 6 hours had to wait too long and the visitor was asked to try again (the website does this automatically). If you see this often, the site has outgrown Google Apps Script');
   i.push('Last backup: '+(H.lastBackup||'none'));if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
   hb.innerHTML=(w.length?'<div style="color:#b45309;font-weight:600;">Needs attention</div><ul style="margin:2px 0 6px 18px;padding:0;color:#7c4a03;">'+w.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<span style="color:#1A472A;font-weight:600;">All systems running</span> · ')+'<span style="color:#646c78;">'+esc(i.join(' · '))+'</span>';
@@ -337,7 +342,7 @@ function av(email,name,size,square){var em=String(email||'').toLowerCase(),img=(
   return img?'<img src="'+img+'" alt="" style="'+st+'object-fit:cover;border:1px solid #d1e8d8;background:#fff;">':'<div data-ph="'+esc(em)+'" style="'+st+'background:#1A472A;color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:'+Math.round(size*0.38)+'px;">'+esc(ini)+'</div>';}
 var LIM=null,LIM_D=null;
 function liLink(email,opt){if(LIM_D!==ADATA){LIM={};LIM_D=ADATA;(ADATA&&ADATA.registrations||[]).forEach(function(r){if(r.linkedin)LIM[String(r.email).toLowerCase()]=r.linkedin;});}var m=LIM;
-  var u=m[String(email||'').toLowerCase()];
+  var u=safeUrl(m[String(email||'').toLowerCase()]);
   return u?' · <a href="'+esc(u)+'" target="_blank" rel="noopener" style="color:#0a66c2;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>':(opt?' · <span style="color:#646c78;">No LinkedIn</span>':' · <span style="color:#dc2626;">No LinkedIn yet</span>');}
 function nextStep(x){
   var em=String(x.email||'').toLowerCase(),dev=String(x.type).toLowerCase()==='developer',done;
@@ -395,7 +400,7 @@ function renderA(){
         '<select id="st_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.statuses.map(function(x){return '<option'+(x===a.status?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select>'+
         '<input id="nt_'+i+'" value="'+esc(a.note)+'" placeholder="Note shown to the developer (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
         '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="nf_'+i+'" checked> Email developer</label>'+
-        '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveA(\''+esc(a.id)+'\','+i+')">Save</button>'+
+        '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveA('+jsa(a.id)+','+i+')">Save</button>'+
         '<span style="font-size:11px;color:#646c78;">Updated '+esc(a.updated)+'</span>'+
       '</div></div>';
   }));
@@ -418,8 +423,8 @@ function listingEditor(a,i){
     lab('Indicative return (seen only by approved investors)')+'<input id="lx_'+i+'" style="'+F+'" placeholder="e.g. 11 to 13% per year in USD" value="'+esc(L.ret)+'">'+
     lab('Example for investors (optional, seen only by approved investors)')+'<textarea id="le_'+i+'" rows="3" style="'+F+'" placeholder="e.g. An investment of USD 100,000 for 2 years receives quarterly payments from the asset\'s contracted revenue...">'+esc(L.example)+'</textarea>'+
     '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;">'+
-    (a.published?'<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="pubA(\''+esc(a.id)+'\','+i+',true)">Save listing</button><button class="tbtn" style="background:#fff;color:#dc2626;border:1px solid #fca5a5;" onclick="pubA(\''+esc(a.id)+'\','+i+',false)">Unpublish</button>'
-      :'<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="ln_'+i+'" checked> Email approved investors whose preferences match</label><button class="tbtn" style="background:#16a34a;color:#fff;" onclick="pubA(\''+esc(a.id)+'\','+i+',true)">Publish to investors</button>')+
+    (a.published?'<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="pubA('+jsa(a.id)+','+i+',true)">Save listing</button><button class="tbtn" style="background:#fff;color:#dc2626;border:1px solid #fca5a5;" onclick="pubA('+jsa(a.id)+','+i+',false)">Unpublish</button>'
+      :'<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="ln_'+i+'" checked> Email approved investors whose preferences match</label><button class="tbtn" style="background:#16a34a;color:#fff;" onclick="pubA('+jsa(a.id)+','+i+',true)">Publish to investors</button>')+
     '</div></div></details>';
 }
 function pubA(id,i,publish){
@@ -451,7 +456,7 @@ function renderK(){
       '<select id="ks_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+ADATA.invStatuses.map(function(s){return '<option'+(s===x.status?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>'+
       '<input id="kn_'+i+'" value="'+esc(x.note)+'" placeholder="Note shown to the investor (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
       '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;" title="Approving always emails the access code. Tick to also email other updates, or to resend the code."><input type="checkbox" id="ke_'+i+'"'+(x.status==='Approved'?'':' checked')+'> '+(x.status==='Approved'?'Resend access code':'Email investor')+'</label>'+
-      '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveK(\''+esc(x.email)+'\','+i+')">Save</button>'+
+      '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveK('+jsa(x.email)+','+i+')">Save</button>'+
       '<span style="font-size:11px;color:#646c78;">Updated '+esc(x.updated)+'</span></div>'+kycBlock(x,i)+'</div>';
   }));
 }
@@ -466,7 +471,7 @@ function kycBlock(x,i){
     '<select id="ys_'+i+'" style="padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+(ADATA.kycStatuses||[]).map(function(s){return '<option'+(s===x.kycStatus?' selected':'')+'>'+esc(s)+'</option>';}).join('')+'</select>'+
     '<input id="yn_'+i+'" value="'+esc(x.note)+'" placeholder="Note shown to the investor (optional)" style="flex:1;min-width:200px;padding:8px 10px;border:1px solid #c8ddd0;border-radius:6px;font-size:13px;">'+
     '<label style="font-size:12px;color:#374151;display:flex;gap:6px;align-items:center;"><input type="checkbox" id="ye_'+i+'" checked> Email investor</label>'+
-    '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveY(\''+esc(x.email)+'\','+i+')">Save KYC</button></div></div>';
+    '<button class="tbtn" style="background:#1A472A;color:#fff;" onclick="saveY('+jsa(x.email)+','+i+')">Save KYC</button></div></div>';
 }
 function saveY(email,i){
   var body={action:'admin_set_kyc',password:sessionStorage.getItem('rva_ap')||'',email:email,status:document.getElementById('ys_'+i).value,note:document.getElementById('yn_'+i).value,notify:document.getElementById('ye_'+i).checked};
@@ -591,7 +596,7 @@ function nxSubmit(){
 function adminDocAdd(a){var i=esc(a.id);
   return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;"><select id="xs_'+i+'" aria-label="Document type" style="padding:6px 8px;border:1px solid #d1e8d8;border-radius:6px;font-size:12.5px;">'+
     Object.keys(DOC_NAMES).map(function(k){return '<option value="'+k+'">'+esc(DOC_NAMES[k])+'</option>';}).join('')+'</select>'+
-    '<label class="nx-up" style="margin-top:0;" id="xl_'+i+'"><input type="file" accept="'+DOC_ACCEPT+'" onchange="adminAddDoc(\''+i+'\',\''+esc(a.email)+'\',this)"><i class="fa-solid fa-upload"></i> Add a document</label><span id="xm_'+i+'" style="font-size:12px;color:#566070;"></span></div>';}
+    '<label class="nx-up" style="margin-top:0;" id="xl_'+i+'"><input type="file" accept="'+DOC_ACCEPT+'" onchange="adminAddDoc(\''+i+'\','+jsa(a.email)+',this)"><i class="fa-solid fa-upload"></i> Add a document</label><span id="xm_'+i+'" style="font-size:12px;color:#566070;"></span></div>';}
 function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if(!f)return;var m=document.getElementById('xm_'+id),slot=document.getElementById('xs_'+id).value;
   if(!DOC_EXT.test(f.name)){m.textContent='This file type is not accepted.';return;}if(f.size>DOC_MAX){m.textContent='Larger than 10 MB.';return;}
   m.textContent='Uploading '+f.name+'...';var rd=new FileReader();
@@ -640,7 +645,7 @@ function pvFind(){var em=document.getElementById('pvEmail').value.trim();if(!em)
     document.getElementById('pvOut').innerHTML='<div style="background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:12px 16px;margin-bottom:14px;">'+
       r.tabs.filter(function(t){return t.rows.length;}).map(function(t){return '<details style="margin:4px 0;"><summary style="font-size:13px;cursor:pointer;"><b>'+esc(t.tab)+'</b>: '+t.rows.length+'</summary>'+
         t.rows.map(function(row){return '<div style="font-size:12px;background:#fff;border:1px solid #eef3ef;border-radius:6px;padding:6px 10px;margin:6px 0;">'+row.map(function(v,i){return v?'<div><span style="color:#646c78;">'+esc(t.headers[i]||'')+':</span> '+esc(String(v).slice(0,400))+'</div>':'';}).join('')+'</div>';}).join('')+'</details>';}).join('')+
-      (r.folders.length?'<div style="font-size:13px;margin-top:6px;"><b>Documents</b>: '+r.folders.map(function(f){return '<a href="'+esc(f.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">'+esc(f.name)+'</a> ('+f.files+')';}).join(', ')+'</div>':'')+
+      (r.folders.length?'<div style="font-size:13px;margin-top:6px;"><b>Documents</b>: '+r.folders.map(function(f){return '<a href="'+esc(safeUrl(f.url))+'" target="_blank" rel="noopener" style="color:#2C7C3B;">'+esc(f.name)+'</a> ('+f.files+')';}).join(', ')+'</div>':'')+
       '<button class="tbtn" style="margin-top:10px;background:#fff;border:1px solid #1A472A;color:#1A472A;" onclick="pvDownload()"><i class="fa-solid fa-upload" style="transform:rotate(180deg);"></i> Download a copy (for an access request)</button></div>'+
       '<div id="pvMail" style="background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:12px 16px;margin-bottom:14px;">'+pvMailHtml(r.mailStopped)+'</div>'+
       '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;">'+
@@ -686,8 +691,8 @@ function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.s
 function docsHtml(d,a){d=d||[];var add=a?adminDocAdd(a)+reqDocsBox(a):'';var fo=d.filter(function(x){return x.label==='Folder';})[0],fl=d.filter(function(x){return x.label!=='Folder';});
   if(!fl.length)return '<div style="margin-top:12px;font-size:12px;color:#646c78;"><i class="fa-solid fa-paperclip"></i> No documents uploaded yet.</div>'+add;
   return '<div style="margin-top:12px;background:#f8faf8;border:1px solid #e5efe8;border-radius:8px;padding:10px 14px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#2C7C3B;margin-bottom:6px;"><span><i class="fa-solid fa-paperclip"></i> DOCUMENTS ('+fl.length+')</span>'+
-    (fo?'<a href="'+esc(fo.url)+'" target="_blank" rel="noopener" style="color:#2C7C3B;">Open folder in Drive</a>':'')+'</div>'+
-    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#566070;">'+esc(x.label)+':</span> <a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>'+add;}
+    (fo?'<a href="'+esc(safeUrl(fo.url))+'" target="_blank" rel="noopener" style="color:#2C7C3B;">Open folder in Drive</a>':'')+'</div>'+
+    fl.map(function(x){return '<div style="font-size:12.5px;padding:3px 0;"><span style="color:#566070;">'+esc(x.label)+':</span> <a href="'+esc(safeUrl(x.url))+'" target="_blank" rel="noopener" style="color:#1A472A;font-weight:600;word-break:break-all;">'+esc(x.name)+'</a></div>';}).join('')+'</div>'+add;}
 </script>
 </body>
 </html>

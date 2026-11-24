@@ -812,6 +812,7 @@ function sendChanges(){
       show('vDone');loadAssetDocs();return;}
     if(r&&r.error==='locked')return again('This asset has been published to investors, so it can no longer be changed here. Please contact our team.');
     if(r&&r.error==='missing_docs')return again('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');
+    if(r&&r.error==='bad_answers')return again('Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.');
     if(r&&r.error==='auth')return again('Your session has expired. Your changes are saved: please log out, log in again and send them.');
     if(r&&r.error==='too_big')return again('Some answers are too long to save. Please shorten the longest text answers and send again.');
     again('We could not send your changes. Please check your connection and try again. Your changes are saved.');
@@ -851,6 +852,8 @@ function submitAsset(){
       else if(r&&r.error==='too_big'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';err('Some answers are too long to save. Please shorten the longest text answers and submit again.');}
       else if(r&&r.error==='missing_docs'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');}
+      else if(r&&r.error==='bad_answers'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
+        err('Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.');}
       else{w3f().finally(function(){finish(false);});}})
       .catch(function(){w3f().finally(function(){finish(false);});});
   }else{

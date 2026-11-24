@@ -315,6 +315,8 @@ function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return
   if(H.brevoFailing)w.push('Brevo is refusing emails ('+String(H.brevoFailing).slice(0,60)+'), so they go through Gmail (about 100 a day). Check the Brevo key and plan, then run testEmail');
   if(H.mailLost)w.push(H.mailLost+' email'+(H.mailLost>1?'s':'')+' could not be sent at all in the last 6 hours (sign-up codes or resets may be missing)');
   if(H.errors24h)w.push(H.errors24h+' server error'+(H.errors24h>1?'s':'')+' in the last 24 hours (see the Errors tab of the Sheet)');
+  if(H.siteDown>=2)w.push('The website did not answer the last hourly checks. Open renewablesvault.com and check GitHub Pages and the domain');
+  if(H.siteChecked&&Date.now()-H.siteChecked>3*3600000)w.push('The hourly website check has not run for over 3 hours. Run setupReminders in Apps Script');
   if(H.brevoPaused>=1)w.push('Brevo was too slow or unreachable '+H.brevoPaused+(H.brevoPaused===1?' time':' times')+' in the last 6 hours, so emails went through Gmail for a few minutes (about 100 a day). Check status.brevo.com');
   if(H.permissions===false)w.push('Some Google permissions are missing, so uploads, emails or backups may fail. Open Apps Script, run setupDocuments and tick every box on the permission screen');
   if(H.slow>=1)w.push(H.slow+(H.slow===1?' account':' accounts')+' in the last 6 hours asked for data more than 60 times a minute and were slowed down for a minute. This usually means a script is using the login of one member');

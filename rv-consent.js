@@ -1,6 +1,9 @@
 /* Renewables Vault: cookie consent. Google Analytics loads only after the visitor clicks Accept. The choice is kept
  * in this browser; "Cookie settings" on the Legal page shows the choice again. */
 (function () {
+  // Pages for signed-in people (dashboards) and the login and password pages never load analytics: Google's script
+  // would see what those pages hold. Public pages and the sign-up forms still count visits after consent.
+  if (/(^|\/)(dashboard-[a-z]+|login|forgot-password|admin)(\.html)?$/i.test(location.pathname)) { window.rvCookieSettings = function () {}; return; }
   var ID = 'G-X19FH9Z28D', K = 'rv_consent';
   var get = function () { try { return localStorage.getItem(K); } catch (e) { return null; } };
   var set = function (v) { try { localStorage.setItem(K, v); } catch (e) {} };

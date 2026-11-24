@@ -238,6 +238,8 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 /* A value placed inside an onclick: quoted for script first, then for the page, so no stored text can end the string and run */
 function jsa(s){return esc(JSON.stringify(String(s==null?'':s)));}
 /* Only https links are ever built from stored data */
+/* Why the server refused an upload, in words */
+function whyFile(r){var w=r&&r.reason;return w==='macros'?'it contains macros or embedded objects. Ask for a PDF or a normal .xlsx or .docx.':w==='pdf_active'?'this PDF contains scripts or attached files. Print it to a new PDF first.':w==='csv_formula'?'this CSV contains formulas. Save it as .xlsx or PDF.':w==='content'?'the file is not what its name says.':'';}
 function safeUrl(u){u=String(u||'').trim();return /^https:\/\/[^\s"'<>]+$/i.test(u)?u:'';}
 
 document.getElementById('loginBtn').addEventListener('click',doLogin);
@@ -313,6 +315,8 @@ function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return
   if(H.brevoFailing)w.push('Brevo is refusing emails ('+String(H.brevoFailing).slice(0,60)+'), so they go through Gmail (about 100 a day). Check the Brevo key and plan, then run testEmail');
   if(H.mailLost)w.push(H.mailLost+' email'+(H.mailLost>1?'s':'')+' could not be sent at all in the last 6 hours (sign-up codes or resets may be missing)');
   if(H.errors24h)w.push(H.errors24h+' server error'+(H.errors24h>1?'s':'')+' in the last 24 hours (see the Errors tab of the Sheet)');
+  if(H.brevoPaused>=1)w.push('Brevo was too slow or unreachable '+H.brevoPaused+(H.brevoPaused===1?' time':' times')+' in the last 6 hours, so emails went through Gmail for a few minutes (about 100 a day). Check status.brevo.com');
+  if(H.permissions===false)w.push('Some Google permissions are missing, so uploads, emails or backups may fail. Open Apps Script, run setupDocuments and tick every box on the permission screen');
   if(H.slow>=1)w.push(H.slow+(H.slow===1?' account':' accounts')+' in the last 6 hours asked for data more than 60 times a minute and were slowed down for a minute. This usually means a script is using the login of one member');
   if(H.busy>=20)w.push(H.busy+' requests in the last 6 hours had to wait too long and the visitor was asked to try again (the website does this automatically). If you see this often, the site has outgrown Google Apps Script');
   i.push('Last backup: '+(H.lastBackup||'none'));if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
@@ -561,7 +565,7 @@ function nxPick(k,inp){
     if(f.size>DOC_MAX){NX.derr[k]=f.name+': larger than 10 MB.';return next();}
     NUPL[k]=f.name;nxRender();var rd=new FileReader();
     rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:dev,assetId:NX.id,slot:k,name:f.name,data:String(rd.result||'').split(',')[1]||''})
-      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+(r&&r.error==='too_many'?'this asset already has 60 files.':r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':((r&&r.error)||'upload failed'));})
+      .then(function(r){if(r&&r.ok&&r.file){(NX.docs[k]=NX.docs[k]||[]).push(r.file);NX.locked=true;}else NX.derr[k]=f.name+': '+(r&&r.error==='too_many'?'this asset already has 60 files.':r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':whyFile(r)||((r&&r.error)||'upload failed'));})
       .catch(function(){NX.derr[k]=f.name+': upload failed, please try again.';}).then(next);};
     rd.readAsDataURL(f);};
   next();
@@ -601,7 +605,7 @@ function adminAddDoc(id,email,inp){var f=inp.files&&inp.files[0];inp.value='';if
   if(!DOC_EXT.test(f.name)){m.textContent='This file type is not accepted.';return;}if(f.size>DOC_MAX){m.textContent='Larger than 10 MB.';return;}
   m.textContent='Uploading '+f.name+'...';var rd=new FileReader();
   rd.onload=function(){apost({action:'admin_upload_doc',password:adminPw(),devEmail:email,assetId:id,slot:slot,name:f.name,data:String(rd.result||'').split(',')[1]||''})
-    .then(function(r){if(r&&r.ok){toast('Document added');loadA();}else m.textContent=r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':'Upload failed: '+((r&&r.error)||'');}).catch(function(){m.textContent='Upload failed, please try again.';});};
+    .then(function(r){if(r&&r.ok){toast('Document added');loadA();}else m.textContent=r&&r.error==='storage'?'Google Drive refused the file. Run setupDocuments in Apps Script and approve the Drive permission.':'Upload refused: '+(whyFile(r)||((r&&r.error)||''));}).catch(function(){m.textContent='Upload failed, please try again.';});};
   rd.readAsDataURL(f);}
 
 /* Ask the developer for missing documents: tick what is missing, add a note, one click sends one email */

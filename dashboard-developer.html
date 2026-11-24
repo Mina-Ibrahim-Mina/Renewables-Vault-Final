@@ -601,7 +601,7 @@ function pickLate(k,inp){
     rd.onload=function(){var data=String(rd.result||'').split(',')[1]||'';
       RV.userKey(U).then(function(key){return post({action:'upload_doc',email:U.email,key:key,assetId:LD.id,slot:k,name:f.name,data:data});})
         .then(function(r){if(r&&r.ok&&r.file){LD.docs.push({slot:k,label:DOC_NAMES[k],name:r.file.name});LD.missing=LD.missing.filter(function(x){return x!==k;});LDNEW.push(r.file.name);}
-          else DERR[k]=f.name+': '+upErr(r&&r.error);})
+          else DERR[k]=f.name+': '+upErr(r&&r.error,r&&r.reason);})
         .catch(function(){DERR[k]=f.name+': '+upErr('');}).then(next);};
     rd.onerror=function(){DERR[k]=f.name+': '+upErr('');next();};
     rd.readAsDataURL(f);};
@@ -717,7 +717,11 @@ function setDocMode(k,mode){DRAFT.modes=DRAFT.modes||{};var m=DRAFT.modes[k]||{}
 function setDocWhy(k){var m=dmode(k);m.reason=(document.getElementById('dr_'+k)||{}).value||'';m.note=(document.getElementById('dn_'+k)||{}).value||'';DRAFT.modes[k]=m;lsSet(kD(),DRAFT);
   if(m.reason){var r=document.getElementById('row_'+k);if(r)r.classList.remove('bad');clearDocErr();}}
 function clearDocErr(){var e=document.getElementById('fErr');if(e&&/document/.test(e.textContent)&&docSlots(DRAFT.type,DRAFT.ans,S).every(docOk))e.style.display='none';}
-function upErr(e){return e==='too_big'?'This file is larger than 10 MB. Please upload a smaller copy.':
+function upErr(e,why){return e==='too_big'?'This file is larger than 10 MB. Please upload a smaller copy.':
+  e==='bad_type'&&why==='macros'?'This file contains macros or embedded objects, which we do not accept for safety. Please save it as PDF (or as a normal .xlsx or .docx without macros) and upload again.':
+  e==='bad_type'&&why==='pdf_active'?'This PDF contains scripts or attached files, which we do not accept for safety. Please open it and print it to a new PDF, then upload that copy.':
+  e==='bad_type'&&why==='csv_formula'?'This CSV file contains formulas, which we do not accept for safety. Please save it as Excel (.xlsx) or PDF and upload again.':
+  e==='bad_type'&&why==='content'?'This file is not what its name says (for example a file renamed to .pdf). Please upload the original document.':
   e==='bad_type'?'This file type is not accepted. Please use PDF, Word, Excel or an image.':
   e==='auth'?'Your session has expired. Please log out, log in again and continue.':
   e==='quota'?'You have uploaded a lot of files in the last few hours. Please try again later today, or choose “Send within 30 days” for this document and continue.':
@@ -740,7 +744,7 @@ function pickDocs(k,inp){
         .then(function(r){
           if(r&&r.ok&&r.file){(DRAFT.docs[k]=DRAFT.docs[k]||[]).push(r.file);DRAFT.modes=DRAFT.modes||{};DRAFT.modes[k]={mode:'upload'};lsSet(kD(),DRAFT);
             var row=document.getElementById('row_'+k);if(row)row.classList.remove('bad');clearDocErr();}
-          else DERR[k]=f.name+': '+upErr(r&&r.error);
+          else DERR[k]=f.name+': '+upErr(r&&r.error,r&&r.reason);
         }).catch(function(){DERR[k]=f.name+': '+upErr('');}).then(next);
     };
     rd.onerror=function(){DERR[k]=f.name+': '+upErr('');next();};

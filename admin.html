@@ -239,7 +239,7 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function jsa(s){return esc(JSON.stringify(String(s==null?'':s)));}
 /* Only https links are ever built from stored data */
 /* Why the server refused an upload, in words */
-function whyFile(r){var w=r&&r.reason;return w==='macros'?'it contains macros or embedded objects. Ask for a PDF or a normal .xlsx or .docx.':w==='pdf_active'?'this PDF contains scripts or attached files. Print it to a new PDF first.':w==='csv_formula'?'this CSV contains formulas. Save it as .xlsx or PDF.':w==='content'?'the file is not what its name says.':'';}
+function whyFile(r){var w=r&&r.reason;return w==='macros'?'it contains macros or embedded objects. Ask for a PDF or a normal .xlsx or .docx.':w==='pdf_active'?'this PDF contains scripts or attached files. Print it to a new PDF first.':w==='csv_formula'?'this CSV contains formulas. Save it as .xlsx or PDF.':w==='content'?'the file is not what its name says.':w==='links_out'?'it makes Office fetch something from outside or run a command when opened. Ask for a PDF.':w==='unreadable'?'the file could not be opened to check it. Ask for a fresh copy or a PDF.':'';}
 function safeUrl(u){u=String(u||'').trim();return /^https:\/\/[^\s"'<>]+$/i.test(u)?u:'';}
 
 document.getElementById('loginBtn').addEventListener('click',doLogin);
@@ -263,7 +263,7 @@ function doLogin(){
     if(r&&r.ok&&r.token){sessionStorage.setItem('rva_ap',r.token);resetLogin();enterPanel();loadA();return;}
     if(r&&r.ok&&r.step==='code'){PW=pw;document.getElementById('passIn').value='';document.getElementById('passIn').style.display='none';
       document.getElementById('codeBox').style.display='block';
-      document.getElementById('codeMsg').textContent='We emailed a 6 digit code to '+(r.to||'you')+'. It expires in 10 minutes.';
+      document.getElementById('codeMsg').textContent='We emailed a 6 digit code to '+(r.to||'you')+'. It expires in 10 minutes. If no email arrives within a minute, check the password and log in again. The latest code is also shown in Apps Script under Executions.';
       b.textContent='Verify code';document.getElementById('codeIn').focus();return;}
     var m=r&&r.error;if(m&&/Code expired|Too many/.test(m))resetLogin();
     e.textContent=m==='Incorrect password'?'Incorrect password.':m==='Wrong code'?'Wrong code. Please check the email and try again.':(m||'Could not log in.');e.style.display='block';
@@ -321,9 +321,21 @@ function showHealth(H){var hb=document.getElementById('healthBar');if(!hb)return
   if(H.permissions===false)w.push('Some Google permissions are missing, so uploads, emails or backups may fail. Open Apps Script, run setupDocuments and tick every box on the permission screen');
   if(H.slow>=1)w.push(H.slow+(H.slow===1?' account':' accounts')+' in the last 6 hours asked for data more than 60 times a minute and were slowed down for a minute. This usually means a script is using the login of one member');
   if(H.busy>=20)w.push(H.busy+' requests in the last 6 hours had to wait too long and the visitor was asked to try again (the website does this automatically). If you see this often, the site has outgrown Google Apps Script');
-  i.push('Last backup: '+(H.lastBackup||'none'));if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
-  hb.innerHTML=(w.length?'<div style="color:#b45309;font-weight:600;">Needs attention</div><ul style="margin:2px 0 6px 18px;padding:0;color:#7c4a03;">'+w.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<span style="color:#1A472A;font-weight:600;">All systems running</span> · ')+'<span style="color:#646c78;">'+esc(i.join(' · '))+'</span>';
-  hb.style.display='block';}
+  if(H.lockdown)w.push('Lockdown is on until '+new Date(H.lockdown).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+': sign-ups, the contact form, password resets, new assets and uploads are paused. Logins, dashboards and this panel work');
+  if(H.openPaused)w.push('Emails that anyone can trigger (sign-up codes, password resets, contact messages) reached their limit for now. If this is not a launch day, someone may be flooding the forms: consider the lockdown button below');
+  if(H.mailsAllowance&&H.mailsToday>=0.8*H.mailsAllowance)w.push(H.mailsToday+' emails sent today, close to the day\'s allowance of about '+H.mailsAllowance);
+  if(H.storagePct>=75)w.push('Google storage is '+H.storagePct+'% full (Drive, Gmail and Photos share it). Uploads stop at 85% so your email keeps working. Empty the Drive bin, remove old files or add storage');
+  i.push('Last backup: '+(H.lastBackup||'none'));if(H.mailsAllowance)i.push('Emails today: '+(H.mailsToday||0)+' of about '+H.mailsAllowance);if(H.storagePct>=0)i.push('Storage: '+H.storagePct+'% used');if(H.queue)i.push(H.queue+' email'+(H.queue>1?'s':'')+' waiting to be sent');
+  hb.innerHTML=(w.length?'<div style="color:#b45309;font-weight:600;">Needs attention</div><ul style="margin:2px 0 6px 18px;padding:0;color:#7c4a03;">'+w.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<span style="color:#1A472A;font-weight:600;">All systems running</span> · ')+'<span style="color:#646c78;">'+esc(i.join(' · '))+'</span>'+'<div style="margin-top:6px;"><button id="ldBtn" type="button" style="background:#fff;border:1px solid '+(H.lockdown?'#1A472A;color:#1A472A':'#b45309;color:#7c4a03')+';border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;">'+(H.lockdown?'End lockdown':'Lockdown: pause sign-ups, contact, resets and uploads')+'</button></div>';
+  hb.style.display='block';
+  document.getElementById('ldBtn').onclick=function(){toggleLockdown(H,this);};}
+/* Lockdown during an attack (server v61): pauses sign-ups, contact, resets, new assets and uploads for 24 hours */
+function toggleLockdown(H,btn){var on=!H.lockdown;if(on&&!confirm('Pause sign-ups, the contact form, password resets, new assets and uploads for 24 hours? Logins, dashboards and this panel keep working.'))return;
+  var pw=sessionStorage.getItem('rva_ap')||'';btn.disabled=true;
+  fetch(AAPI,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'admin_lockdown',password:pw,on:on})}).then(function(r){return r.json();}).then(function(r){btn.disabled=false;
+    if(r&&r.ok){H.lockdown=r.lockdown||0;showHealth(H);aMsg(on?'Lockdown is on for 24 hours.':'Lockdown ended.');}
+    else aMsg(r&&r.error==='Unknown action'?'The lockdown needs server v61. Paste the latest script and deploy.':(r&&r.error)||'Could not change the lockdown.');
+  }).catch(function(){btn.disabled=false;aMsg('Connection problem. Please try again.');});}
 function useData(r){
     ADATA=r;r.photos=r.photos||{};aMsg('');document.getElementById('aTools').style.display='flex';
     var sv=document.getElementById('srvVer');sv.textContent='Server '+(r.version||'older than v38: paste the latest script and deploy')+(r.weakPassword?' · Admin password is short: use 12 or more characters':'');sv.style.color=r.weakPassword?'#b45309':'#646c78';

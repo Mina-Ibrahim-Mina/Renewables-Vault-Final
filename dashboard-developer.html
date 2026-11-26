@@ -721,7 +721,7 @@ function upErr(e,why){return e==='too_big'?'This file is larger than 10 MB. Plea
   e==='bad_type'&&why==='macros'?'This file contains macros or embedded objects, which we do not accept for safety. Please save it as PDF (or as a normal .xlsx or .docx without macros) and upload again.':
   e==='bad_type'&&why==='pdf_active'?'This PDF contains scripts or attached files, which we do not accept for safety. Please open it and print it to a new PDF, then upload that copy.':
   e==='bad_type'&&why==='csv_formula'?'This CSV file contains formulas, which we do not accept for safety. Please save it as Excel (.xlsx) or PDF and upload again.':
-  e==='bad_type'&&why==='content'?'This file is not what its name says (for example a file renamed to .pdf). Please upload the original document.':
+  e==='bad_type'&&why==='links_out'?'This file makes Word, Excel or PowerPoint fetch something from outside or run a command when it is opened (for example a remote template, a DDE field or a picture on a network share). We do not accept this for safety. Please save it as PDF and upload again.':   e==='bad_type'&&why==='unreadable'?'We could not open this file to check it. Please save it again from Word, Excel or PowerPoint (or as PDF) and upload again.':   e==='bad_type'&&why==='content'?'This file is not what its name says (for example a file renamed to .pdf). Please upload the original document.':
   e==='bad_type'?'This file type is not accepted. Please use PDF, Word, Excel or an image.':
   e==='auth'?'Your session has expired. Please log out, log in again and continue.':
   e==='quota'?'You have uploaded a lot of files in the last few hours. Please try again later today, or choose “Send within 30 days” for this document and continue.':
@@ -813,6 +813,7 @@ function sendChanges(){
     if(r&&r.error==='locked')return again('This asset has been published to investors, so it can no longer be changed here. Please contact our team.');
     if(r&&r.error==='missing_docs')return again('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');
     if(r&&r.error==='bad_answers')return again('Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.');
+    if(r&&r.error==='too_many_assets')return again('You have sent 10 new assets today, the daily limit. Please send this one tomorrow, or email contact@renewablesvault.com if it is urgent.');
     if(r&&r.error==='auth')return again('Your session has expired. Your changes are saved: please log out, log in again and send them.');
     if(r&&r.error==='too_big')return again('Some answers are too long to save. Please shorten the longest text answers and send again.');
     again('We could not send your changes. Please check your connection and try again. Your changes are saved.');
@@ -854,6 +855,8 @@ function submitAsset(){
         err('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');}
       else if(r&&r.error==='bad_answers'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.');}
+      else if(r&&r.error==='too_many_assets'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
+        err('You have sent 10 new assets today, the daily limit. Please send this one tomorrow, or email contact@renewablesvault.com if it is urgent.');}
       else{w3f().finally(function(){finish(false);});}})
       .catch(function(){w3f().finally(function(){finish(false);});});
   }else{

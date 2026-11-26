@@ -118,6 +118,7 @@ var RV = {
       else if (r && r.error === 'busy') cb('busy');
       else if (r && r.error === 'server_busy') cb('server_busy');
       else if (r && /^(verify|wrong_code|verify_expired)$/.test(r.error)) cb(r.error, null, r);
+      else if (r && typeof r.error === 'string' && /^Please /.test(r.error)) cb('msg', null, r);   // the server's own reason (server v62 checks the form again)
       else cb('offline');
     }).catch(function () { cb('offline'); });
   },

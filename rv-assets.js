@@ -112,4 +112,7 @@ function parseAmount(s){
   var n=parseFloat(m[1]),u=m[2]||'';if(/^(k|thousand|ألف|الف|آلاف|الاف)$/.test(u))n*=1e3;else if(/^(m|mn|million|مليون|ملايين)$/.test(u))n*=1e6;else if(/^(b|bn|billion|مليار|مليارات)$/.test(u))n*=1e9;return n;}
 function isLocalCcy(s){return /egp|\ble\b|l\.e|pound|جنيه/i.test(String(s||''));}
 function fmtUsd(n){return 'USD '+Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
-function amountNote(s){if(!String(s||'').trim())return '';if(isLocalCcy(s))return 'Please enter the amount in US dollars (USD equivalent).';var n=parseAmount(s);return n?'Read as '+fmtUsd(n):'Please enter a number, for example 1,500,000.';}
+/* An amount the server sends back: not a number, zero, below zero, or in local currency (the form asks for US dollars) */
+function amountMinus(s){return /^[\s(]*[-\u2212\u2013\u2014]/.test(String(s==null?'':s));}
+function amountBad(s){var n=parseAmount(s);return !(n>0&&n<1e12)||amountMinus(s)||isLocalCcy(s);}
+function amountNote(s){if(!String(s||'').trim())return '';if(isLocalCcy(s))return 'Please enter the amount in US dollars (USD equivalent).';if(amountMinus(s))return 'Please enter a positive amount, for example 1,500,000.';var n=parseAmount(s);return !n?'Please enter a number, for example 1,500,000.':n<1e12?'Read as '+fmtUsd(n):'Please check the amount, for example 1,500,000.';}

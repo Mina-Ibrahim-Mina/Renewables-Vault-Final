@@ -378,8 +378,8 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 </footer>
 
 <script src="rv-config.js?v=65"></script>
-<script src="rv-auth.js?v=65"></script>
-<script src="rv-assets.js?v=65"></script>
+<script src="rv-auth.js?v=70"></script>
+<script src="rv-assets.js?v=70"></script>
 <script>
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
 var RVAuth={
@@ -534,7 +534,7 @@ function renderAssets(assets){
       '<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
       '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc((TYPES[a.type]||TYPES.solar).label)+' · '+esc(a.location)+'</div>'+
       '<div style="font-size:11px;color:#646c78;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
-      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+docLine(a)+
+      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+(a.stuck&&!a.synced?'<div class="anote" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;"><b>Not received yet:</b> '+esc(a.stuck)+'</div>':'')+docLine(a)+
       '</div></div><span class="chip" style="background:'+c[0]+';color:'+c[1]+';">'+esc(a.status||'Submitted')+'</span></div>';
   }).join('');
 }
@@ -618,7 +618,10 @@ function syncAssets(){
   var assets=lsGet(kA(),[]);if(!API||!assets.length)return;
   // retry any submission that did not reach the server
   assets.filter(function(a){return !a.synced&&a.payload;}).forEach(function(a){
-    RV.userKey(U).then(function(k){a.payload.key=k;return post(a.payload);}).then(function(r){if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===a.id){x.synced=true;delete x.payload;}});lsSet(kA(),L);}}).catch(function(){});
+    if(a.payload.asset&&a.payload.asset.confirm===undefined)a.payload.asset.confirm=true;   // saved by an earlier page, which sent only after both boxes were ticked
+    RV.userKey(U).then(function(k){a.payload.key=k;return post(a.payload);}).then(function(r){
+      if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===a.id){x.synced=true;delete x.payload;delete x.stuck;}});lsSet(kA(),L);renderAssets(L);}
+      else if(r&&refusal(r)){var L2=lsGet(kA(),[]);L2.forEach(function(x){if(x.id===a.id)x.stuck='Our server could not accept this profile'+(r.fields&&r.fields.length?' ('+r.fields.join('; ')+')':'')+'. Please email contact@renewablesvault.com quoting the reference, and our team will complete it with you.';});lsSet(kA(),L2);renderAssets(L2);}}).catch(function(){});
   });
   RV.userKey(U).then(function(k){return k?post({action:'asset_status',email:U.email,key:k,ids:assets.map(function(a){return a.id;}).join(',')}):null;})
     .then(function(r){
@@ -658,9 +661,9 @@ function renderStep(){
   document.getElementById('qBox').innerHTML=s.qs.map(function(q){
     var lab='<label class="qlab"'+(q.t==='radio'?' id="lb_'+q.k+'"':' for="'+q.k+'"')+'>'+esc(q.q)+(q.req&&q.t!=='check'?' <span style="color:#dc2626">*</span>':'')+'</label>'+(q.hint?'<div class="qhint">'+esc(q.hint)+'</div>':'');
     var slot=q.doc?'<div id="slot_'+q.doc+'"></div>':'',h;
-    if(q.t==='text')h='<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);autosave()"></div>';
-    else if(q.t==='num')h='<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" inputmode="decimal" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);amtNote(this);autosave()" aria-describedby="pv_'+q.k+'"><div class="amt" id="pv_'+q.k+'">'+esc(amountNote(a[q.k]))+'</div></div>';
-    else if(q.t==='area')h='<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
+    if(q.t==='text')h='<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" maxlength="200" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);autosave()"></div>';
+    else if(q.t==='num')h='<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" inputmode="decimal" maxlength="60" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);amtNote(this);autosave()" aria-describedby="pv_'+q.k+'"><div class="amt" id="pv_'+q.k+'">'+esc(amountNote(a[q.k]))+'</div></div>';
+    else if(q.t==='area')h='<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" maxlength="2000" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
     else if(q.t==='check')h='<div class="qrow" id="row_'+q.k+'"><label class="chk"><input type="checkbox" id="'+q.k+'"'+(a[q.k]?' checked':'')+' onchange="clr(this);autosave()"> <span>'+esc(q.q)+'</span></label></div>';
     else h='<div class="qrow" id="row_'+q.k+'">'+lab+'<div class="pills" role="radiogroup" aria-labelledby="lb_'+q.k+'">'+q.o.map(function(o){var on=a[q.k]===o.v;
       return '<label class="pill'+(on?' sel':'')+'"><input type="radio" name="'+q.k+'" value="'+o.v+'"'+(on?' checked':'')+' onchange="pick(this)"><span>'+esc(o.t)+'</span></label>';}).join('')+'</div></div>';
@@ -778,8 +781,8 @@ function validate(){
   collect();var s=steps(DRAFT.type)[S],bad=[],badNum=[];
   s.qs.forEach(function(q){var v=DRAFT.ans[q.k],row=document.getElementById('row_'+q.k);row.classList.remove('bad');
     if(q.req&&(v===undefined||v===''||v===false)){bad.push(q);row.classList.add('bad');}
-    else if(q.t==='num'&&v&&(!parseAmount(v)||isLocalCcy(v))){badNum.push(q);row.classList.add('bad');}});
-  if(!bad.length&&badNum.length){err(badNum.some(function(q){return isLocalCcy(DRAFT.ans[q.k]);})?'Please enter the amounts in US dollars (USD equivalent), for example 3,000,000.':'Please enter the amounts as numbers, for example 3,000,000.');document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
+    else if(q.t==='num'&&v&&amountBad(v)){badNum.push(q);row.classList.add('bad');}});
+  if(!bad.length&&badNum.length){err(badNum.some(function(q){return isLocalCcy(DRAFT.ans[q.k]);})?'Please enter the amounts in US dollars (USD equivalent), for example 3,000,000.':badNum.some(function(q){return amountMinus(DRAFT.ans[q.k]);})?'Please enter the amounts as positive numbers, for example 3,000,000.':'Please enter the amounts as numbers, for example 3,000,000.');document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   if(bad.length){err(bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.');
     document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   if(Object.keys(UPL).some(function(k){return UPL[k];})){err('Please wait until your files finish uploading.');return false;}
@@ -790,6 +793,17 @@ function validate(){
   return true;
 }
 function err(m){var e=document.getElementById('fErr');e.textContent=m;e.style.display='block';}
+/* Reasons the server sends a profile back (server v62 checks every answer again, as this page does) */
+function refusal(r){if(!r)return '';
+  if(r.error==='confirm')return 'Please tick the box confirming that the information is accurate, on the last step, and send again.';
+  if(r.error==='share')return 'Please tick the box agreeing that an anonymised summary may be shared with approved investors, on the last step, and send again.';
+  if(r.error==='bad_answers')return r.fields&&r.fields.length?'Please check '+(r.fields.length===1?'this answer':'these answers')+': '+r.fields.join('; ')+'.':'Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.';
+  return '';}
+/* Opens the first step with an answer the server sent back, and highlights it */
+function goToBad(r){if(!DRAFT)return;var f=r&&r.error==='bad_answers'?(r.fields||[]):r&&(r.error==='confirm'||r.error==='share')?null:[],st=steps(DRAFT.type);
+  for(var i=0;i<st.length;i++){var hit=st[i].qs.filter(function(q){return f?f.indexOf(q.q)>=0:q.k===r.error;});
+    if(hit.length){if(i!==S){S=i;DRAFT.step=S;lsSet(kD(),DRAFT);renderStep();}hit.forEach(function(q){var row=document.getElementById('row_'+q.k);if(row)row.classList.add('bad');});
+      var first=document.getElementById('row_'+hit[0].k);if(first)first.scrollIntoView({behavior:'smooth',block:'center'});return;}}}
 function nextS(){if(!validate())return;var st=steps(DRAFT.type);
   if(S<st.length-1){S++;DRAFT.step=S;lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}else submitAsset();}
 function prevS(){collect();if(S>0){S--;DRAFT.step=S;lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}}
@@ -802,7 +816,7 @@ function sendChanges(){
     if(q.t==='radio'){var o=q.o.filter(function(x){return x.v===v;})[0];items.push({sec:s.title,q:q.q,a:o?o.t:''});answers[q.k]=v;}
     else{items.push({sec:s.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
   var again=function(m){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Send changes';err(m);};
-  RV.userKey(U).then(function(k){return post({action:'update_asset',email:U.email,key:k,asset:{id:id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,answers:answers,items:items,modes:draftModes()}});})
+  RV.userKey(U).then(function(k){return post({action:'update_asset',email:U.email,key:k,asset:{id:id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,confirm:!!a.confirm,answers:answers,items:items,modes:draftModes()}});})
   .then(function(r){
     if(r&&r.ok){var L=lsGet(kA(),[]);L.forEach(function(x){if(x.id===id){x.name=r.name||x.name;x.location=r.location||x.location;x.status=r.status||x.status;}});lsSet(kA(),L);
       lsSet(kD(),null);DRAFT=null;EDITING=false;
@@ -812,7 +826,7 @@ function sendChanges(){
       show('vDone');loadAssetDocs();return;}
     if(r&&r.error==='locked')return again('This asset has been published to investors, so it can no longer be changed here. Please contact our team.');
     if(r&&r.error==='missing_docs')return again('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');
-    if(r&&r.error==='bad_answers')return again('Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.');
+    if(r&&refusal(r)){var m=refusal(r);goToBad(r);return again(m);}
     if(r&&r.error==='too_many_assets')return again('You have sent 10 new assets today, the daily limit. Please send this one tomorrow, or email contact@renewablesvault.com if it is urgent.');
     if(r&&r.error==='auth')return again('Your session has expired. Your changes are saved: please log out, log in again and send them.');
     if(r&&r.error==='too_big')return again('Some answers are too long to save. Please shorten the longest text answers and send again.');
@@ -830,7 +844,7 @@ function submitAsset(){
     else{items.push({sec:s.title,q:q.q,a:v||''});answers[q.k]=v||'';}});});
   var rec={id:DRAFT.id||newId(),type:type,name:a.a_name,location:a.a_loc,submitted:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),status:'Submitted',note:'',synced:false};
   var payload={action:'submit_asset',dev:{firstName:U.firstName,lastName:U.lastName,email:U.email,phone:toAscii(U.phone||''),company:U.company||''},
-    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,answers:answers,items:items,docs:allDocs(),modes:draftModes()}};
+    asset:{id:rec.id,type:type,name:a.a_name,location:a.a_loc,share:!!a.share,confirm:!!a.confirm,answers:answers,items:items,docs:allDocs(),modes:draftModes()}};
   var finish=function(synced){
     rec.synced=synced;if(!synced)rec.payload=payload;
     var L=lsGet(kA(),[]);L.push(rec);lsSet(kA(),L);lsSet(kD(),null);DRAFT=null;
@@ -853,8 +867,8 @@ function submitAsset(){
       else if(r&&r.error==='too_big'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';err('Some answers are too long to save. Please shorten the longest text answers and submit again.');}
       else if(r&&r.error==='missing_docs'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('Some documents still need an upload or an explanation: '+(r.missing||[]).join(', ')+'. Please go back to the step where they are asked.');}
-      else if(r&&r.error==='bad_answers'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
-        err('Some answers could not be read. Please refresh the page, check that every question has a choice, and send again.');}
+      else if(r&&refusal(r)){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
+        var m=refusal(r);goToBad(r);err(m);}
       else if(r&&r.error==='too_many_assets'){b.disabled=false;b.innerHTML='<i class="fa-solid fa-paper-plane"></i> Submit asset profile';
         err('You have sent 10 new assets today, the daily limit. Please send this one tomorrow, or email contact@renewablesvault.com if it is urgent.');}
       else{w3f().finally(function(){finish(false);});}})

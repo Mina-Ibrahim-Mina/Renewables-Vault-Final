@@ -323,7 +323,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 </footer>
 
 <script src="rv-config.js?v=65"></script>
-<script src="rv-auth.js?v=65"></script>
+<script src="rv-auth.js?v=70"></script>
 <script>
 var RVAuth={
   get:function(){try{var u=JSON.parse(localStorage.getItem('rv_user')),n=Date.now();if(!u)return null;if(u.seen&&n-u.seen>2592e6){RVAuth.forget(u);return null;}if(!u.seen||n-u.seen>864e5){u.seen=n;localStorage.setItem('rv_user',JSON.stringify(u));}return u;}catch(e){return null;}},
@@ -641,8 +641,8 @@ function renderStep(){
   document.getElementById('fErr').style.display='none';
   document.getElementById('qBox').innerHTML=visibleQs(s).map(function(q){
     var lab='<label class="qlab">'+esc(q.q)+(q.req&&q.t!=='check'?' <span style="color:#dc2626">*</span>':'')+'</label>';
-    if(q.t==='text')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);autosave()"></div>';
-    if(q.t==='area')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
+    if(q.t==='text')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<input class="field" id="'+q.k+'" type="text" maxlength="'+(q.k==='dob'?10:200)+'" placeholder="'+esc(q.ph||'')+'" value="'+esc(a[q.k]||'')+'" oninput="clr(this);autosave()"></div>';
+    if(q.t==='area')return '<div class="qrow" id="row_'+q.k+'">'+lab+'<textarea class="field" id="'+q.k+'" rows="3" maxlength="2000" placeholder="'+esc(q.ph||'')+'" oninput="clr(this);autosave()">'+esc(a[q.k]||'')+'</textarea></div>';
     if(q.t==='check')return '<div class="qrow" id="row_'+q.k+'"><label class="chk"><input type="checkbox" id="'+q.k+'"'+(a[q.k]?' checked':'')+' onchange="clr(this);autosave()"> <span>'+esc(q.q)+'</span></label></div>';
     var multi=q.t==='multi',cur=a[q.k]||(multi?[]:'');
     return '<div class="qrow" id="row_'+q.k+'">'+lab+(multi?'<div style="font-size:12px;color:#646c78;margin:-4px 0 10px;">Choose one or more.</div>':'')+'<div class="pills">'+q.o.map(function(o){var on=multi?cur.indexOf(o.v)>=0:cur===o.v;
@@ -671,17 +671,27 @@ function collect(){
   });
 }
 var asT=null;function autosave(){clearTimeout(asT);asT=setTimeout(function(){if(!DRAFT||MODE!=='kyc')return;collect();DRAFT.step=S;lsSet(kD(),DRAFT);},300);}
+/* Date of birth, read as the server reads it: DD/MM/YYYY (also 3/2/1980, 03-02-1980, 1980-02-03), a real date, age 18 to 110 */
+function dobOk(v){var a=String(v||'').trim(),m=a.match(/^(\d{1,2})[\/.\- ](\d{1,2})[\/.\- ](\d{4})$/),y,mo,d;
+  if(m){d=+m[1];mo=+m[2];y=+m[3];}else if((m=a.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))){y=+m[1];mo=+m[2];d=+m[3];}else return false;
+  var dt=new Date(Date.UTC(y,mo-1,d));if(dt.getUTCFullYear()!==y||dt.getUTCMonth()!==mo-1||dt.getUTCDate()!==d)return false;
+  var n=new Date(),age=n.getUTCFullYear()-y-((n.getUTCMonth()<mo-1||(n.getUTCMonth()===mo-1&&n.getUTCDate()<d))?1:0);return age>=18&&age<=110;}
 function validate(){
-  collect();var bad=[],liBad=false;
+  collect();var bad=[],liBad=false,dobBad=false;
   visibleQs(steps()[S]).forEach(function(q){var v=DRAFT.ans[q.k],row=document.getElementById('row_'+q.k);row.classList.remove('bad');
     if(q.req&&(v===undefined||v===''||v===false||(Array.isArray(v)&&!v.length))){bad.push(q);row.classList.add('bad');}
-    else if(q.k==='linkedin'&&v&&!RV.linkedin(v)){bad.push(q);row.classList.add('bad');liBad=true;}});
-  if(bad.length){var e=document.getElementById('fErr');e.textContent=(liBad&&bad.length===1)?'Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.':bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.';e.style.display='block';
+    else if(q.k==='linkedin'&&v&&!RV.linkedin(v)){bad.push(q);row.classList.add('bad');liBad=true;}
+    else if(q.k==='dob'&&v&&!dobOk(v)){bad.push(q);row.classList.add('bad');dobBad=true;}});
+  if(bad.length){var e=document.getElementById('fErr');e.textContent=(liBad&&bad.length===1)?'Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.':(dobBad&&bad.length===1)?'Please enter your date of birth as DD/MM/YYYY. Investors must be 18 or over.':bad.length===1?'Please answer the highlighted question.':'Please answer the '+bad.length+' highlighted questions.';e.style.display='block';
     document.querySelector('.qrow.bad').scrollIntoView({behavior:'smooth',block:'center'});return false;}
   return true;
 }
 function nextS(){if(!validate())return;var st=steps();if(S<st.length-1){S++;DRAFT.step=S;if(MODE==='kyc')lsSet(kD(),DRAFT);renderStep();window.scrollTo(0,0);}else submitForm();}
 function prevS(){collect();if(S>0){S--;DRAFT.step=S;renderStep();window.scrollTo(0,0);}}
+/* Opens the first KYC step with an answer the server sent back, and highlights it */
+function kycGoTo(f){if(!f||!f.length||!DRAFT||MODE!=='kyc')return;
+  for(var i=0;i<KYC_STEPS.length;i++){var hit=visibleQs(KYC_STEPS[i]).filter(function(q){return f.indexOf(q.q)>=0;});
+    if(hit.length){if(i!==S){S=i;DRAFT.step=S;renderStep();}hit.forEach(function(q){var row=document.getElementById('row_'+q.k);if(row)row.classList.add('bad');});return;}}}
 function prefsOf(a){return {types:a.p_types||[],countries:a.p_countries||[],ticket:a.p_ticket||'',tenor:a.p_tenor||'',currency:a.p_currency||''};}
 function submitForm(){
   clearTimeout(asT);
@@ -723,11 +733,11 @@ function submitForm(){
       if(r.interest&&LIST)LIST.interested=(LIST.interested||[]).concat([pend.id]);
       if(r.interest)done('KYC received and interest registered','Thank you. We have registered your interest in '+pend.title+'. Our team will verify your information and contact you with the next steps, including an NDA. A confirmation has been sent to '+U.email+'.');
       else done('KYC submitted','Thank you. Our team will verify your information and contact you shortly. A confirmation has been sent to '+U.email+'.');}
-    else fail((r&&r.error==='not_approved')?'Your access is not active. Please return to the dashboard.':((r&&r.error)||'Could not submit. Please try again.'));
+    else{var m=(r&&r.error==='not_approved')?'Your access is not active. Please return to the dashboard.':((r&&r.error)||'Could not submit. Please try again.');kycGoTo(r&&r.fields);fail(m);}
   }).catch(function(){fail('Connection problem. Please check your internet connection and try again.');});
 }
 function lastLabel(){return MODE==='prefs'?'<i class="fa-solid fa-check"></i> Save preferences':MODE==='access'?'<i class="fa-solid fa-paper-plane"></i> Send my request':'<i class="fa-solid fa-paper-plane"></i> '+(PENDING?'Submit KYC and register interest':'Submit KYC');}
-function renderStepButtons(){var b=document.getElementById('bNext');b.disabled=false;b.innerHTML=lastLabel();}
+function renderStepButtons(){var b=document.getElementById('bNext'),last=!DRAFT||S===steps().length-1;b.disabled=false;b.innerHTML=last?lastLabel():'Next <i class="fa-solid fa-arrow-right"></i>';b.className=last?'btn-lime':'btn-green';}
 </script>
 <script>(function(){var n=document.querySelector('.nav-inner'),l=n&&n.querySelector('.nav-links');if(!l||n.querySelector('.rv-burger'))return;var b=document.createElement('button');b.className='rv-burger';b.type='button';b.setAttribute('aria-label','Open menu');b.innerHTML='<span></span><span></span><span></span>';n.appendChild(b);b.addEventListener('click',function(e){e.stopPropagation();document.body.classList.toggle('rv-menu-open');});document.addEventListener('click',function(e){if(!l.contains(e.target))document.body.classList.remove('rv-menu-open');});})();</script>
 <script>function rvPlay(el){if(el.dataset.on)return;el.dataset.on=1;el.style.cursor="default";el.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/gokb3uesYTM?autoplay=1&rel=0&playsinline=1" title="Renewables Vault introduction" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;border:0;"></iframe>';}</script>

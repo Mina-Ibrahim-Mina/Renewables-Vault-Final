@@ -101,9 +101,9 @@ function allDocSlots(type,a){var out=[];for(var i=0;i<7;i++)out=out.concat(docSl
 var CORE_DOCS=['d_cr','d_contract','d_payments','d_fs','d_lic'];
 var DOC_NAMES={d_photos:'Photos or company presentation',d_contract:'Signed main contract',d_payments:'Proof of buyer payments (last 12 months)',d_cr:'Commercial register and tax card',d_fs:'Audited financial statements',d_lic:'Licence and permits',d_loan:'Existing loan agreement or lender letter',d_val:'Valuation report',
   d_offfin:'Buyer financial statements or credit rating',d_cod:'Commissioning certificate',d_scada:'Production report (12 months)',d_ins:'Insurance certificate',d_mgmt:'Management CVs, tax clearance and legal declaration',d_legal:'Legal opinion or title document',d_fx:'Currency indexation clause',d_ce:'Guarantee or credit insurance policy'};
-/* Amounts, read the same way as the server: 1,500,000 · 1.5 million · 300k · 3.000.000 · 3 000 000 · Arabic digits */
+/* Amounts, read the same way as the server (its first 100 characters): 1,500,000 · 1.5 million · 300k · 3.000.000 · 3 000 000 · Arabic digits */
 function parseAmount(s){
-  var t=String(s==null?'':s).replace(/[٠-٩]/g,function(d){return String(d.charCodeAt(0)-0x0660);}).replace(/[۰-۹]/g,function(d){return String(d.charCodeAt(0)-0x06F0);}).replace(/\u066C/g,',').replace(/\u066B/g,'.').toLowerCase().replace(/ /g,' '),prev;
+  var t=String(s==null?'':s).slice(0,100).replace(/[٠-٩]/g,function(d){return String(d.charCodeAt(0)-0x0660);}).replace(/[۰-۹]/g,function(d){return String(d.charCodeAt(0)-0x06F0);}).replace(/\u066C/g,',').replace(/\u066B/g,'.').toLowerCase().replace(/ /g,' '),prev;
   do{prev=t;t=t.replace(/(\d) (?=\d{3}(\D|$))/g,'$1');}while(t!==prev);
   if(/\d{1,3}(\.\d{3}){2,}/.test(t))t=t.replace(/\.(?=\d{3}(\D|$))/g,'');
   t=t.replace(/(\d),(?=\d{3}(\D|$))/g,'$1').replace(/(\d),(\d{1,2})(?!\d)/g,'$1.$2').replace(/\s+/g,' ');

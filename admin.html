@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-src 'none'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Admin Panel | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png?v=2">
@@ -232,7 +232,7 @@ body{font-family:'Inter',sans-serif;margin:0;background:#f0f5f2;}
 
 <script src="rv-config.js?v=65"></script>
 <script src="rv-auth.js?v=70"></script>
-<script src="rv-assets.js?v=70"></script>
+<script src="rv-assets.js?v=71"></script>
 <script>
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 /* A value placed inside an onclick: quoted for script first, then for the page, so no stored text can end the string and run */
@@ -574,7 +574,7 @@ function nxAns(k,v){NX.ans[k]=v;nxRender();}
 function nxPick(k,inp){
   var files=Array.prototype.slice.call(inp.files||[]).slice(0,DOC_PER_SLOT);inp.value='';if(!files.length)return;
   var dev=nxDevEmail();NX.derr[k]='';
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(dev)){NX.derr[k]='Choose the developer (or enter the new developer email) before uploading.';nxRender();return;}
+  if(!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/.test(dev)){NX.derr[k]='Choose the developer (or enter the new developer email) before uploading.';nxRender();return;}
   var next=function(){var f=files.shift();if(!f){NUPL[k]='';nxRender();return;}
     if(!DOC_EXT.test(f.name)){NX.derr[k]=f.name+': this file type is not accepted.';return next();}
     if(f.size>DOC_MAX){NX.derr[k]=f.name+': larger than 10 MB.';return next();}
@@ -590,7 +590,7 @@ function nxSubmit(){
   document.querySelectorAll('#nxBox .nx-row.bad').forEach(function(x){x.classList.remove('bad');});
   if(!NX.dev)bad.push('dev');
   if(NX.dev==='new'){['firstName','company','email'].forEach(function(k){if(!String(NX.nd[k]||'').trim())bad.push('nd_'+k);});
-    if(NX.nd.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(NX.nd.email).trim()))bad.push('nd_email');}
+    if(NX.nd.email&&!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/.test(String(NX.nd.email).trim()))bad.push('nd_email');}
   var items=[],answers={};
   steps(NX.type).forEach(function(st){st.qs.forEach(function(q){if(q.t==='check')return;var v=NX.ans[q.k];
     if(q.req&&(v===undefined||String(v).trim()===''))bad.push(q.k);
@@ -691,7 +691,8 @@ function pvDelete(){if(!PV)return;var b=document.getElementById('pvDel'),c=docum
   apost({action:'admin_person_delete',password:adminPw(),email:PV.email,confirm:c,withAssets:!!(wa&&wa.checked)}).then(function(r){
     b.disabled=false;b.textContent='Delete their data';
     if(!r||!r.ok)return pvMsg((r&&r.error)||'Could not delete.','#b91c1c');
-    document.getElementById('pvOut').innerHTML='';pvMsg('Deleted. '+r.summary+'. Recorded in the Data requests tab. Backups older than today expire within 30 days.','#166534');PV=null;loadA();
+    var kept=r.kept&&typeof r.kept==='object'?' Kept on purpose: '+Object.keys(r.kept).map(function(k){return k+' ('+r.kept[k]+')';}).join('. ')+'.':' Backups older than today expire within 30 days.';
+    document.getElementById('pvOut').innerHTML='';pvMsg('Deleted. '+r.summary+'. Recorded in the Data requests tab.'+kept,'#166534');PV=null;loadA();
   }).catch(function(){b.disabled=false;b.textContent='Delete their data';pvMsg('Could not reach the server. Please try again.','#b91c1c');});}
 
 /* Jacob RARE™ breakdown on the asset card (internal only) */

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-src 'none'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script src="rv-consent.js?v=1"></script>
 <link rel="stylesheet" href="rv-icons.css?v=1">
@@ -268,7 +268,7 @@ function subInv() {
   if(!first||!last||!email||!phone||!pass||!itype){return fail('Please fill in all required fields.');}
   if(g('i_li').value.trim()&&!li){return fail('Please enter your LinkedIn profile link, for example linkedin.com/in/yourname.');}
   var pd=phone.replace(/\D/g,'').length;if(!/^[0-9+()\-. ]+$/.test(phone)||pd<8||pd>15){return fail('Please enter a valid mobile or WhatsApp number, including the country code.');}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return fail('Please enter a valid email address.');}
+  if(!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)){return fail('Please enter a valid email address.');}
   if(!(email.length<=200&&/^[A-Za-z0-9_+'-]+(\.[A-Za-z0-9_+'-]+)*@([A-Za-z0-9]+(-+[A-Za-z0-9]+)*\.)+([A-Za-z]{2,}|xn--[A-Za-z0-9-]{2,})$/.test(email))){return fail('Please check the email address. Before the @ sign use only letters, numbers and the signs . _ + - with no dot at the start or end and never two dots in a row.');}
   if(pass.length<8){return fail('Password must be at least 8 characters.');}
   var WEAK=/^(password|passw0rd|12345678|123456789|1234567890|87654321|11111111|00000000|qwertyui|qwerty123|abc12345|abcd1234|iloveyou|letmein1|welcome1|admin123|egypt123|cairo123|renewables)/i;if(WEAK.test(pass)||/^(.)\1+$/.test(pass)||pass.toLowerCase()===email.toLowerCase().split('@')[0]){return fail('This password is too easy to guess. Please choose a different one.');}

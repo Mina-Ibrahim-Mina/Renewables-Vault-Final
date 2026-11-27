@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com https://i.ytimg.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
+<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><script>if(location.protocol==='http:'&&!/^(localhost|127\.)/.test(location.hostname))location.replace('https:'+location.href.slice(5));</script><script>if(window.top!==window.self){try{window.top.location.replace(window.self.location.href);}catch(e){}document.documentElement.style.visibility='hidden';}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Developer Dashboard | Renewables Vault</title>
 <link rel="icon" type="image/png" href="favicon.png?v=2">
@@ -163,6 +163,9 @@ body{font-family:'Inter',sans-serif;margin:0;padding:0;background:#f0f5f2;}
 .adoc.warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
 .adoc.okd{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
 .adoc-btn{margin-top:8px;font-size:12.5px;padding:7px 14px;}
+.ashare{font-size:12.5px;margin-top:8px;line-height:1.5;border-radius:6px;padding:7px 10px;background:#f0f9ff;color:#075985;border:1px solid #bae6fd;}
+.ashare.off{background:#f8fafc;color:#475569;border-color:#e2e8f0;}
+.ashare-err{color:#991b1b;margin-top:6px;}
 .dreq{display:inline-block;background:#fef3c7;color:#92400e;font-size:10.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:middle;}
 .prep{background:#f0f7f2;border:1px solid #d1e8d8;border-radius:12px;padding:16px 20px;margin:0 0 24px;font-size:13.5px;color:#374151;line-height:1.6;}
 .prep b{color:#1A472A;}
@@ -379,7 +382,7 @@ body.rv-menu-open .rv-burger span:nth-child(3){transform:translateY(-7px) rotate
 
 <script src="rv-config.js?v=65"></script>
 <script src="rv-auth.js?v=70"></script>
-<script src="rv-assets.js?v=70"></script>
+<script src="rv-assets.js?v=71"></script>
 <script>
 var API=(typeof RV_API==='string'&&/^https:\/\//.test(RV_API))?RV_API:'';
 var RVAuth={
@@ -534,9 +537,31 @@ function renderAssets(assets){
       '<div style="font-size:15px;font-weight:700;color:#1A472A;">'+esc(a.name)+'</div>'+
       '<div style="font-size:12px;color:#566070;margin-top:2px;">'+esc((TYPES[a.type]||TYPES.solar).label)+' · '+esc(a.location)+'</div>'+
       '<div style="font-size:11px;color:#646c78;margin-top:4px;">Ref '+esc(a.id)+' · Submitted '+esc(a.submitted)+'</div>'+
-      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+(a.stuck&&!a.synced?'<div class="anote" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;"><b>Not received yet:</b> '+esc(a.stuck)+'</div>':'')+docLine(a)+
+      (a.note?'<div class="anote"><b>Note from our team:</b> '+esc(a.note)+'</div>':'')+(a.stuck&&!a.synced?'<div class="anote" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;"><b>Not received yet:</b> '+esc(a.stuck)+'</div>':'')+docLine(a)+shareLine(a)+
       '</div></div><span class="chip" style="background:'+c[0]+';color:'+c[1]+';">'+esc(a.status||'Submitted')+'</span></div>';
   }).join('');
+}
+/* ───────────── Sharing with investors: the developer can withdraw consent at any time ───────────── */
+var SHAREMSG={},SHAREERR={};
+function shareOf(a){var d=ADOCS[a.id];if(d&&d.shared!==undefined)return {shared:d.shared,published:d.published};
+  return a.shared!==undefined?{shared:a.shared,published:a.published}:null;}   /* null: the server is older and does not say */
+function shareLine(a){var s=shareOf(a);if(!s)return '';
+  if(s.shared)return '<div class="ashare"><i class="fa-solid fa-eye"></i> '+(s.published?'Listed for investors as an anonymised summary.':'You agreed that our team may share an anonymised summary with investors.')+
+    '<div><button class="btn-out adoc-btn" onclick="stopSharing('+jsa(a.id)+',this)"><i class="fa-solid fa-eye-slash"></i> Stop sharing with investors</button></div>'+
+    (SHAREERR[a.id]?'<div class="ashare-err" role="alert">'+esc(SHAREERR[a.id])+'</div>':'')+'</div>';
+  return '<div class="ashare off" role="status"><i class="fa-solid fa-eye-slash"></i> '+esc(SHAREMSG[a.id]||'Not shared with investors. If you want it shared, please contact our team.')+'</div>';}
+function stopSharing(id,btn){
+  if(!confirm('Stop sharing this asset with investors?\n\nIf it is listed for investors, the listing is taken down straight away. Our team keeps reviewing your asset as usual.'))return;
+  if(btn){btn.disabled=true;btn.textContent='Saving...';}
+  var fail=function(m){SHAREERR[id]=m;renderAssets(lsGet(kA(),[]));};
+  RV.userKey(U).then(function(k){return k?post({action:'share_withdraw',email:U.email,key:k,id:id}):{ok:false,error:'auth'};}).then(function(r){
+    if(r&&r.ok){delete SHAREERR[id];SHAREMSG[id]=r.unpublished?'Done: the listing was taken down and this asset is no longer shared with investors.':'Done: this asset is no longer shared with investors.';
+      if(ADOCS[id]){ADOCS[id].shared=false;ADOCS[id].published=false;}
+      var L=lsGet(kA(),[]);L.forEach(function(a){if(a.id===id){a.shared=false;a.published=false;}});lsSet(kA(),L);renderAssets(L);return;}
+    fail(r&&r.error==='Unknown action'?'This option is not available yet. Please email contact@renewablesvault.com and our team will stop sharing it for you.'
+      :r&&r.error==='auth'?'Please log in again, then try once more.'
+      :'We could not change this just now. Please try again, or email contact@renewablesvault.com.');
+  }).catch(function(){fail('We could not reach our server. Please check your connection and try again.');});
 }
 /* ───────────── Documents for submitted assets ───────────── */
 var ADOCS={},LD=null,LDNEW=[];
@@ -626,7 +651,9 @@ function syncAssets(){
   RV.userKey(U).then(function(k){return k?post({action:'asset_status',email:U.email,key:k,ids:assets.map(function(a){return a.id;}).join(',')}):null;})
     .then(function(r){
       if(!r||!r.ok||!r.assets)return;var L=lsGet(kA(),[]),changed=false;
-      r.assets.forEach(function(s){L.forEach(function(a){if(a.id===s.id&&(a.status!==s.status||a.note!==s.note)){a.status=s.status;a.note=s.note;changed=true;}});});
+      r.assets.forEach(function(s){L.forEach(function(a){if(a.id!==s.id)return;
+        if(a.status!==s.status||a.note!==s.note){a.status=s.status;a.note=s.note;changed=true;}
+        if(s.shared!==undefined&&(a.shared!==s.shared||a.published!==s.published)){a.shared=s.shared;a.published=s.published;changed=true;}});});
       if(changed){lsSet(kA(),L);if(document.getElementById('vMain').classList.contains('on'))renderAssets(L);}
     }).catch(function(){});
 }
@@ -833,7 +860,9 @@ function sendChanges(){
     again('We could not send your changes. Please check your connection and try again. Your changes are saved.');
   }).catch(function(){again('We could not send your changes. Please check your connection and try again. Your changes are saved.');});
 }
-function newId(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='';for(var i=0;i<6;i++)r+=c[Math.floor(Math.random()*c.length)];return 'RV-'+r;}
+function newId(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='',b=new Uint8Array(6);   /* 32 letters: each random byte maps evenly */
+  try{crypto.getRandomValues(b);}catch(e){for(var j=0;j<6;j++)b[j]=Math.floor(Math.random()*256);}
+  for(var i=0;i<6;i++)r+=c[b[i]%32];return 'RV-'+r;}
 function submitAsset(){
   clearTimeout(asT);
   if(DRAFT&&DRAFT.edit)return sendChanges();
